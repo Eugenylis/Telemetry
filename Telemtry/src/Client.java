@@ -29,7 +29,9 @@ public class Client{
 	// Create a socket object that will be used for communications
 	public static Socket socket;
 	
-		
+	
+	//https://github.com/Titanius22/Telemetry.git
+	
 	
 	
 	// No-argument constructor
