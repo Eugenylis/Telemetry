@@ -13,7 +13,7 @@ public class Sender {
 	/**
 	 * @param IPaddress The IP of the Master side
 	 * @param portNum The socket number on the master side
-	 * @throws IOException 
+	 * @throws IOException Something when wrong
 	 */
 	public Sender(String IPaddress, int portNum) throws IOException {
 		
