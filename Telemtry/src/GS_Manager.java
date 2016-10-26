@@ -11,7 +11,6 @@ import java.io.*;
  *
  */
 public class GS_Manager{
-//testing commit git
     static public Sender SimClient;
     static public GS_GUI GUIwindow;
     //static public String listenerDir;
