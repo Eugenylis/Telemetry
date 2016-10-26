@@ -40,6 +40,7 @@ public class Sender {
 		System.out.println("Sending Files...");
 		os.write(bytearray1,0,bytearray1.length);
 		os.flush();
+		fin.close();
 		bin.close();
 		System.out.println("File transfer complete");
 	}
