@@ -30,6 +30,10 @@ public class Client{
 	public static Socket socket;
 	
 	
+	//https://github.com/Titanius22/Telemetry.git
+	
+	
+	
 	// No-argument constructor
 	public Client(){
 	}
