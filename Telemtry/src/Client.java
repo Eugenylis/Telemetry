@@ -31,7 +31,7 @@ public class Client{
 	
 	
 	//https://github.com/Titanius22/Telemetry.git
-	
+
 	
 	
 	// No-argument constructor
