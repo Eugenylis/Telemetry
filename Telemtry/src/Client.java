@@ -29,6 +29,8 @@ public class Client{
 	// Create a socket object that will be used for communications
 	public static Socket socket;
 	
+		
+	
 	
 	// No-argument constructor
 	public Client(){
