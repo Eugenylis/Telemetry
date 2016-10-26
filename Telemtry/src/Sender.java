@@ -9,7 +9,7 @@ import java.io.*;
  */
 public class Sender {
 	private Socket socket;
-	
+	//made change
 	/**
 	 * @param IPaddress The IP of the Master side
 	 * @param portNum The socket number on the master side
@@ -33,7 +33,7 @@ public class Sender {
 		// TODO change this part
 		File transferFile = new File (fileLocation);
 		byte [] bytearray1  = new byte [(int)transferFile.length()];
-		FileInputStream fin = new FileInputStream(transferFile);
+		FileInputStream fin = new FileInputStream(transferFile); // I am looking into this
 		BufferedInputStream bin = new BufferedInputStream(fin);
 		bin.read(bytearray1,0,bytearray1.length);
 		OutputStream os = socket.getOutputStream();
