@@ -41,6 +41,7 @@ import javafx.stage.Stage;
 public class MasterGUI extends Application {
 	
 
+	//testcommit
 	public Client client;
 	
 	// Pane
