@@ -29,7 +29,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 /**
  * Master GUI class is a display of the main GUI seen by the user of the program. 
@@ -45,7 +47,7 @@ public class MasterGUI extends Application {
 	
 	// Pane
 	private BorderPane borderPane, startBorderPane;
-	private Button btOpen, btConnect;
+	private Button btOpen, btConnect, btBrowse;
 	private TextField txFileName, txFileType;
 	
 	// Menu
@@ -84,8 +86,8 @@ public class MasterGUI extends Application {
 		startGridPane = new GridPane();
 		lbFileName = new Label("File Name:");
 		txFileName = new TextField();
-		lbFileType = new Label("File Type:");
-		txFileType = new TextField();
+		btBrowse = new Button("Browse");
+		btBrowse.setOnAction(arg0 -> openFileDirectory());
 		btConnect = new Button("Connect");
 		btConnect.setOnAction(args0 -> {
 			try {
@@ -101,10 +103,9 @@ public class MasterGUI extends Application {
 		startGridPane.setVgap(10);
 		startGridPane.add(lbFileName, 1, 1);
 		startGridPane.add(txFileName, 2, 1);
-		startGridPane.add(lbFileType, 1, 2);
-		startGridPane.add(txFileType, 2, 2);
-		startGridPane.add(btConnect, 1, 3);
-		startGridPane.add(btOpen, 1, 4);
+		startGridPane.add(btBrowse, 3, 1);
+		startGridPane.add(btConnect, 1, 2);
+		startGridPane.add(btOpen, 1, 3);
 		startBorderPane.setCenter(startGridPane);
 		
 	
@@ -292,5 +293,11 @@ public class MasterGUI extends Application {
 		}
 		client.closeSocket();
 		
+	}
+	public void openFileDirectory() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Choose Data File");
+		Stage stage = new Stage();
+		fileChooser.showOpenDialog(stage);
 	}
 }
