@@ -46,6 +46,7 @@ public class Client{
 	 */
 	public Client(int port){
 		
+		System.out.println("Client Created");
 		setPortNum(port);
 		currentTot = 0;
 		fileSize = 1022386;
@@ -63,6 +64,7 @@ public class Client{
 	 */
 	public void startComm() throws IOException{
 		
+		System.out.println("Starting accepting incoming connnections");
 		// Create a server socket with specified port number
 		ServerSocket serverSocket = new ServerSocket(portNum); 
 		// Allow socket to accept connections
@@ -84,6 +86,7 @@ public class Client{
 		// Get input stream of data
 		InputStream inputStream = socket.getInputStream();
 		
+		// Create file and buffered stream to read incoming bytes
 		FileOutputStream fos = new FileOutputStream(fileName);
 		BufferedOutputStream bos = new BufferedOutputStream(fos);
 		bytesRead = inputStream.read(bytearray,0,bytearray.length); 
@@ -192,23 +195,6 @@ public class Client{
 	 */
 	public String getDataType(){
 		return dataType;
-	}
-	
-	
-	
-	// Main to test communications
-	public static void main (String [] args ) throws IOException { 
-		
-		System.out.println("Starting");
-		
-		Client client = new Client(9040);
-		
-		client.startComm();
-		
-		client.writeToFile();
-		
-		client.closeSocket();
-		
 	}
 	
 	

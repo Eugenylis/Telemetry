@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.Axis;
@@ -44,7 +45,7 @@ import javafx.stage.Window;
 public class MasterGUI extends Application {
 	
 
-	public Client client;
+	public static Client client;
 	
 	// Pane
 	private BorderPane borderPane, startBorderPane;
@@ -54,7 +55,7 @@ public class MasterGUI extends Application {
 	// Menu
 	private MenuBar menuBar; // MenuBar
 	private Menu menuHelp, menuFile, menuSettings, menuConnections; // Menus
-	private MenuItem miSave, miOpen, miHelp, miPlotData, miConnect;
+	private MenuItem miSave, miOpen, miClose, miHelp, miPlotData, miConnect, miStartComm;
 	//VBox for Status Display
 	private VBox vBox;
 	private Label lbTitle, lbFileName, lbFileType;
@@ -83,6 +84,7 @@ public class MasterGUI extends Application {
 	 */
 	public MasterGUI(){
 		
+		/* CREATE EVERYTHING */
 		// Create the BorderPane
 		borderPane = new BorderPane();
 		//menu
@@ -93,22 +95,41 @@ public class MasterGUI extends Application {
 		menuConnections = new Menu("Connection");
 		miSave = new MenuItem("Save");
 		miOpen = new MenuItem("Open");
+		miClose = new MenuItem("Close");
 		miHelp = new MenuItem("Help");
 		miConnect = new MenuItem("Connect");
+		miStartComm = new MenuItem("Start Communications");
 		miPlotData = new MenuItem("Plot");
-		menuFile.getItems().addAll(miSave, miOpen);
+		menuFile.getItems().addAll(miSave, miOpen, miClose);
 		menuHelp.getItems().addAll(miHelp);
-		menuConnections.getItems().addAll(miConnect);
+		menuConnections.getItems().addAll(miConnect,miStartComm);
 		menuSettings.getItems().addAll(miPlotData);
 		menuBar.getMenus().addAll(menuFile, menuSettings, menuConnections, menuHelp);
 		borderPane.setTop(menuBar);
 		
+		
+		/* EVENT HANDLERS */
+		// Show help window
 		miHelp.setOnAction(arg0 -> showHelp());
+		
+		miClose.setOnAction(arg0 -> {
+			Platform.exit();
+		});
+		
+		// Create a socket for communications
 		miConnect.setOnAction(arg0 -> {
 			try {
 				Connect();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		
+		// Start listening for incoming connections
+		miStartComm.setOnAction(arg0 -> {
+			try {
+				startComm();
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		});
@@ -180,8 +201,7 @@ public class MasterGUI extends Application {
 		stage.setScene(scene);
 		stage.setTitle("Telemetry Master Interface");
 		stage.setResizable(false);
-		
-		
+	
 				
 		// Display the GUI
 		stage.show();
@@ -242,14 +262,19 @@ public class MasterGUI extends Application {
 	/**
 	 * @throws IOException
 	 * 
-	 * Allows connection to the Ground Station
+	 * Creates the socket to accept incoming connections
 	 */
 	public void Connect() throws IOException{
-		
 		client = new Client(9040);
+	}
+	
+	
+	/**
+	 * @throws IOException
+	 * 
+	 * Starts listening and accepting incoming connections
+	 */
+	public void startComm() throws IOException{
 		client.startComm();
-		client.writeToFile();
-		client.closeSocket();
-		
 	}
 }
