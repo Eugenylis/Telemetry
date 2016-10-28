@@ -32,17 +32,32 @@ public class Sender {
 		
 		// TODO change this part
 		File transferFile = new File (fileLocation);
-		byte [] bytearray1  = new byte [(int)transferFile.length()];
-		FileInputStream fin = new FileInputStream(transferFile); // I am looking into this
-		BufferedInputStream bin = new BufferedInputStream(fin);
-		bin.read(bytearray1,0,bytearray1.length);
-		OutputStream os = socket.getOutputStream();
-		System.out.println("Sending Files...");
-		os.write(bytearray1,0,bytearray1.length);
-		os.flush();
-		fin.close();
-		bin.close();
-		System.out.println("File transfer complete");
+		byte [] bytearray  = new byte [(int)transferFile.length()];
+		FileInputStream fin = null;
+
+        try {
+            fin = new FileInputStream(transferFile);
+        } catch (FileNotFoundException ex) {
+            // Do exception handling
+        }
+        BufferedInputStream bin = new BufferedInputStream(fin);
+
+        try {
+            bin.read(bytearray, 0, bytearray.length);
+            OutputStream os = socket.getOutputStream();
+            System.out.println("Sending Files...");
+            os.write(bytearray, 0, bytearray.length);
+            os.flush();
+            os.close();
+            fin.close();
+            bin.close();
+            System.out.println("File transfer complete");
+
+            // File sent, exit the main method
+            return;
+        } catch (IOException ex) {
+            // Do exception handling
+        }
 	}
 		
 	//This method safely closes the peer-to-peer connection	
