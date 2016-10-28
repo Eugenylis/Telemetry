@@ -16,8 +16,10 @@ import java.net.Socket;
  * @author Lischuk Yevgeniy
  *
  */
+
 public class Client{ 
-	private static int portNum;	// Port number
+	
+	private static int portNum;		// Port number
 	private static int fileSize;	// Size of the file in bytes
 	
 	private int bytesRead;
