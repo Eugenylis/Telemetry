@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
@@ -52,8 +53,8 @@ public class MasterGUI extends Application {
 	
 	// Menu
 	private MenuBar menuBar; // MenuBar
-	private Menu menuHelp, menuFile, menuSettings; // Menus
-	private MenuItem miSave, miOpen, miHelp, miConnections, miPlotData;
+	private Menu menuHelp, menuFile, menuSettings, menuConnections; // Menus
+	private MenuItem miSave, miOpen, miHelp, miPlotData, miConnect;
 	//VBox for Status Display
 	private VBox vBox;
 	private Label lbTitle, lbFileName, lbFileType;
@@ -82,34 +83,6 @@ public class MasterGUI extends Application {
 	 */
 	public MasterGUI(){
 		
-		startBorderPane = new BorderPane();
-		startGridPane = new GridPane();
-		lbFileName = new Label("File Name:");
-		txFileName = new TextField();
-		btBrowse = new Button("Browse");
-		btBrowse.setOnAction(arg0 -> openFileDirectory());
-		btConnect = new Button("Connect");
-		btConnect.setOnAction(args0 -> {
-			try {
-				Connect();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
-		btOpen = new Button("Open Program");
-		btOpen.setOnAction(arg0 -> showMainUI());
-		startGridPane.setHgap(10);
-		startGridPane.setVgap(10);
-		startGridPane.add(lbFileName, 1, 1);
-		startGridPane.add(txFileName, 2, 1);
-		startGridPane.add(btBrowse, 3, 1);
-		startGridPane.add(btConnect, 1, 2);
-		startGridPane.add(btOpen, 1, 3);
-		startBorderPane.setCenter(startGridPane);
-		
-	
-		
 		// Create the BorderPane
 		borderPane = new BorderPane();
 		//menu
@@ -117,19 +90,28 @@ public class MasterGUI extends Application {
 		menuHelp = new Menu("Help");
 		menuFile = new Menu("File");
 		menuSettings = new Menu("Settings");
+		menuConnections = new Menu("Connection");
 		miSave = new MenuItem("Save");
 		miOpen = new MenuItem("Open");
 		miHelp = new MenuItem("Help");
-		miConnections = new MenuItem("Connections");
+		miConnect = new MenuItem("Connect");
 		miPlotData = new MenuItem("Plot");
 		menuFile.getItems().addAll(miSave, miOpen);
 		menuHelp.getItems().addAll(miHelp);
-		menuSettings.getItems().addAll(miConnections, miPlotData);
-		menuBar.getMenus().addAll(menuFile, menuSettings, menuHelp);
+		menuConnections.getItems().addAll(miConnect);
+		menuSettings.getItems().addAll(miPlotData);
+		menuBar.getMenus().addAll(menuFile, menuSettings, menuConnections, menuHelp);
 		borderPane.setTop(menuBar);
 		
 		miHelp.setOnAction(arg0 -> showHelp());
-		miConnections.setOnAction(arg0 -> showConnections());
+		miConnect.setOnAction(arg0 -> {
+			try {
+				Connect();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 		
 		//Status Display
 		vBox = new VBox();
@@ -189,12 +171,12 @@ public class MasterGUI extends Application {
 	/* 
 	 * @see javafx.application.Application#start(javafx.stage.Stage)
 	 * 
-	 * Displays the first window when user runs program
+	 * Displays the main window with plots and data
 	 */
 	public void start(Stage stage) throws Exception {
 	
 		// Set the scene and the stage
-		Scene scene = new Scene(startBorderPane, 500, 300);
+		Scene scene = new Scene(borderPane, 1000, 600);
 		stage.setScene(scene);
 		stage.setTitle("Telemetry Master Interface");
 		stage.setResizable(false);
@@ -205,20 +187,6 @@ public class MasterGUI extends Application {
 		stage.show();
 	}
 	
-	/**
-	 * Displays the main window with plots and data
-	 */
-	public void showMainUI(){
-		// Set the scene and the stage
-				Scene scene = new Scene(borderPane, 1000, 600);
-				Stage stage = new Stage();
-				stage.setScene(scene);
-				stage.setTitle("Telemetry Master Interface");
-				stage.setResizable(false);
-						
-				// Display the GUI
-				stage.show();
-	}
 	
 	/**
 	 * Displays Help window
@@ -281,23 +249,7 @@ public class MasterGUI extends Application {
 		client = new Client(9040);
 		client.startComm();
 		client.writeToFile();
-		
-		//Changes the color of Open button when connection is made
-		if (client.isConnected()){
-			System.out.println(client.isConnected());
-			btOpen.setStyle("-fx-base: #b6e7c9");
-		}
-		else{
-			System.out.println(client.isConnected());
-			btOpen.setStyle("-fx-base: #b6e7c9");
-		}
 		client.closeSocket();
 		
-	}
-	public void openFileDirectory() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Choose Data File");
-		Stage stage = new Stage();
-		fileChooser.showOpenDialog(stage);
 	}
 }
