@@ -84,18 +84,18 @@ public class Client{
 		byte [] bytearray = new byte [fileSize];
 		
 		// Get input stream of data
-		InputStream is = socket.getInputStream();
+		InputStream inputStream = socket.getInputStream();
 		
 		FileOutputStream fos = new FileOutputStream(fileName);
 		BufferedOutputStream bos = new BufferedOutputStream(fos);
-		bytesRead = is.read(bytearray,0,bytearray.length); 
+		bytesRead = inputStream.read(bytearray,0,bytearray.length); 
 		currentTot = bytesRead; 
 		
 		// Write received streak of bytes to a new file and save it locally
 		System.out.println("Writing to a new file");
 		do { 
 			
-			bytesRead = is.read(bytearray, currentTot, (bytearray.length-currentTot)); 
+			bytesRead = inputStream.read(bytearray, currentTot, (bytearray.length-currentTot)); 
 			if(bytesRead >= 0) currentTot += bytesRead; 
 			
 		} while(bytesRead != -1); 
