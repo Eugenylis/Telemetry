@@ -1,4 +1,6 @@
 import java.net.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import java.io.*;
 
 /**
@@ -30,34 +32,64 @@ public class Sender {
 	 */
 	public void send(String fileLocation) throws IOException {
 		
-		// TODO change this part
 		File transferFile = new File (fileLocation);
 		byte [] bytearray  = new byte [(int)transferFile.length()];
 		FileInputStream fin = null;
+///////////////////////
+//        try {
+//            fin = new FileInputStream(transferFile);
+//        } catch (FileNotFoundException ex) {
+//            // Do exception handling
+//        }
+//        BufferedInputStream bin = new BufferedInputStream(fin);
+//
+//        try {
+//            bin.read(bytearray, 0, bytearray.length);
+//            OutputStream os = socket.getOutputStream();
+//            System.out.println("Sending Files...");
+//            os.write(bytearray, 0, bytearray.length);
+//            os.flush();
+//            os.close();
+//            fin.close();
+//            bin.close();
+//            System.out.println("File transfer complete");
+//
+//            // File sent, exit the main method
+//            return;
+//        } catch (IOException ex) {
+//            // Do exception handling
+//        }
+/////////////////////////////////////
+		ZipEntry ze= new ZipEntry(fileLocation);
 
-        try {
-            fin = new FileInputStream(transferFile);
-        } catch (FileNotFoundException ex) {
-            // Do exception handling
-        }
-        BufferedInputStream bin = new BufferedInputStream(fin);
+		try {
+			fin = new FileInputStream(transferFile);
+		} catch (FileNotFoundException ex) {
+			// Do exception handling
+		}
 
-        try {
-            bin.read(bytearray, 0, bytearray.length);
-            OutputStream os = socket.getOutputStream();
+		try {
+			fin.read(bytearray, 0, bytearray.length);
+			OutputStream os = socket.getOutputStream();
+			ZipOutputStream zos= new ZipOutputStream(os);
+            zos.putNextEntry(ze);
             System.out.println("Sending Files...");
-            os.write(bytearray, 0, bytearray.length);
+            zos.write(bytearray, 0, bytearray.length);
             os.flush();
             os.close();
             fin.close();
-            bin.close();
+            zos.flush();
+            zos.close();
             System.out.println("File transfer complete");
 
-            // File sent, exit the main method
-            return;
+            return; // File sent, exit the main method
+            
         } catch (IOException ex) {
             // Do exception handling
         }
+        
+        //begins writing a new zip file and sets the the position to the start of data
+        
 	}
 		
 	//This method safely closes the peer-to-peer connection	
