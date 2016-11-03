@@ -1,4 +1,8 @@
+//Some code pulled from https://examples.javacodegeeks.com/core-java/util/zip/zipoutputstream/java-zip-file-example/
+
+
 package Groundstation;
+
 import java.net.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -35,61 +39,32 @@ public class Sender {
 		
 		File transferFile = new File (fileLocation);
 		byte [] bytearray  = new byte [(int)transferFile.length()];
-		FileInputStream fin = null;
-///////////////////////
-//        try {
-//            fin = new FileInputStream(transferFile);
-//        } catch (FileNotFoundException ex) {
-//            // Do exception handling
-//        }
-//        BufferedInputStream bin = new BufferedInputStream(fin);
-//
-//        try {
-//            bin.read(bytearray, 0, bytearray.length);
-//            OutputStream os = socket.getOutputStream();
-//            System.out.println("Sending Files...");
-//            os.write(bytearray, 0, bytearray.length);
-//            os.flush();
-//            os.close();
-//            fin.close();
-//            bin.close();
-//            System.out.println("File transfer complete");
-//
-//            // File sent, exit the main method
-//            return;
-//        } catch (IOException ex) {
-//            // Do exception handling
-//        }
-/////////////////////////////////////
-		ZipEntry ze= new ZipEntry(fileLocation);
-
+		FileInputStream fin;
 		try {
 			fin = new FileInputStream(transferFile);
-		} catch (FileNotFoundException ex) {
-			// Do exception handling
-		}
+        } catch (FileNotFoundException ex) {
+            // Do exception handling
+        	System.out.println("File transfer failed...");
+        	return;
+        }
+        BufferedInputStream bin = new BufferedInputStream(fin);
 
-		try {
-			fin.read(bytearray, 0, bytearray.length);
-			OutputStream os = socket.getOutputStream();
-			ZipOutputStream zos= new ZipOutputStream(os);
-            zos.putNextEntry(ze);
+        try {
+            bin.read(bytearray, 0, bytearray.length);
+            OutputStream os = socket.getOutputStream();
             System.out.println("Sending Files...");
-            zos.write(bytearray, 0, bytearray.length);
+            os.write(bytearray, 0, bytearray.length);
             os.flush();
             os.close();
             fin.close();
-            zos.flush();
-            zos.close();
+            bin.close();
             System.out.println("File transfer complete");
 
-            return; // File sent, exit the main method
-            
+            // File sent, exit the main method
+            return;
         } catch (IOException ex) {
             // Do exception handling
         }
-        
-        //begins writing a new zip file and sets the the position to the start of data
         
 	}
 		
@@ -101,6 +76,44 @@ public class Sender {
 		socket.close();
 		System.out.println("Link disconnected");
 	}
+	
+	public void zipFile(File inputFile, String zipFilePath) {
+        try {
+
+            // Wrap a FileOutputStream around a ZipOutputStream
+            // to store the zip stream to a file. Note that this is
+            // not absolutely necessary
+            //FileOutputStream fileOutputStream = new FileOutputStream(zipFilePath);
+            ZipOutputStream zipOutputStream = new ZipOutputStream(os);//fileOutputStream);
+
+            // a ZipEntry represents a file entry in the zip archive
+            // We name the ZipEntry after the original file's name
+            ZipEntry zipEntry = new ZipEntry(inputFile.getName());
+            zipOutputStream.putNextEntry(zipEntry);
+
+            FileInputStream fileInputStream = new FileInputStream(inputFile);
+            byte[] buf = new byte[1024];
+            int bytesRead;
+
+            // Read the input file by chucks of 1024 bytes
+            // and write the read bytes to the zip stream
+            while ((bytesRead = fileInputStream.read(buf)) > 0) {
+                zipOutputStream.write(buf, 0, bytesRead);
+            }
+
+            // close ZipEntry to store the stream to the file
+            zipOutputStream.closeEntry();
+
+            zipOutputStream.close();
+            //fileOutputStream.close();
+
+            System.out.println("Regular file :" + inputFile.getCanonicalPath()+" is zipped to archive :"+zipFilePath);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
 
 
