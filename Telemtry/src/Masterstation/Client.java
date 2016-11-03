@@ -1,3 +1,4 @@
+package Masterstation;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,8 +17,10 @@ import java.net.Socket;
  * @author Lischuk Yevgeniy
  *
  */
+
 public class Client{ 
-	private static int portNum;	// Port number
+	
+	private static int portNum;		// Port number
 	private static int fileSize;	// Size of the file in bytes
 	
 	private int bytesRead;
@@ -44,6 +47,7 @@ public class Client{
 	 */
 	public Client(int port){
 		
+		System.out.println("Client Created");
 		setPortNum(port);
 		currentTot = 0;
 		fileSize = 1022386;
@@ -61,6 +65,7 @@ public class Client{
 	 */
 	public void startComm() throws IOException{
 		
+		System.out.println("Starting accepting incoming connnections");
 		// Create a server socket with specified port number
 		ServerSocket serverSocket = new ServerSocket(portNum); 
 		// Allow socket to accept connections
@@ -80,18 +85,19 @@ public class Client{
 		byte [] bytearray = new byte [fileSize];
 		
 		// Get input stream of data
-		InputStream is = socket.getInputStream();
+		InputStream inputStream = socket.getInputStream();
 		
+		// Create file and buffered stream to read incoming bytes
 		FileOutputStream fos = new FileOutputStream(fileName);
 		BufferedOutputStream bos = new BufferedOutputStream(fos);
-		bytesRead = is.read(bytearray,0,bytearray.length); 
+		bytesRead = inputStream.read(bytearray,0,bytearray.length); 
 		currentTot = bytesRead; 
 		
 		// Write received streak of bytes to a new file and save it locally
 		System.out.println("Writing to a new file");
 		do { 
 			
-			bytesRead = is.read(bytearray, currentTot, (bytearray.length-currentTot)); 
+			bytesRead = inputStream.read(bytearray, currentTot, (bytearray.length-currentTot)); 
 			if(bytesRead >= 0) currentTot += bytesRead; 
 			
 		} while(bytesRead != -1); 
@@ -190,23 +196,6 @@ public class Client{
 	 */
 	public String getDataType(){
 		return dataType;
-	}
-	
-	
-	
-	// Main to test communications
-	public static void main (String [] args ) throws IOException { 
-		
-		System.out.println("Starting");
-		
-		Client client = new Client(9040);
-		
-		client.startComm();
-		
-		client.writeToFile();
-		
-		client.closeSocket();
-		
 	}
 	
 	
