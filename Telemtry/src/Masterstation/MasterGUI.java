@@ -61,9 +61,9 @@ public class MasterGUI extends Application {
 	private Menu menuHelp, menuFile, menuSettings, menuConnections, menuGroundStation; // Menus
 	private MenuItem miSave, miOpen, miHelp, miPlotData, miConnect, miAddStation, miRemoveStation, miStationSettings;
 	//VBox for Status Display
-	private VBox stationVBox;
+	private VBox stationVBox, stationDetailsVBox;
 	private Label lbTitle, lbFileName, lbFileType;
-	private CheckBox cbStation1;
+	private CheckBox cbStation1, cbSelectStation;
 	
 	// TabPane
 	private TabPane tabPanePlots;
@@ -134,9 +134,7 @@ public class MasterGUI extends Application {
 		stationVBox.setBorder(new Border(new BorderStroke(Color.SKYBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5) )));
 		stationVBox.setMinWidth(200);
 		borderPane.setLeft(stationVBox);
-		if (stationVBox.equals(btStation)){
-			btStation.setOnMousePressed(arg0 -> showAddStation());;
-		}
+	
 		
 		//tabs for plot display/ data/ 
 		tabPanePlots = new TabPane();
@@ -177,6 +175,7 @@ public class MasterGUI extends Application {
       		plotGridPane = new GridPane();
       		Plot1.setContent(plotGridPane);
       		plotGridPane.add(lineChart, 1, 1);
+      		lineChart.setVisible(false);
 	}
 	
 	
@@ -230,17 +229,22 @@ public class MasterGUI extends Application {
 	
 	public void addStations(){
 		
-		VBox stationDetailsVBox = new VBox();
+		stationDetailsVBox = new VBox();
 		HBox stationHBox = new HBox();
 		HBox stationDetailsHBox = new HBox();
-		stationHBox.setSpacing(5);
+		stationHBox.setSpacing(30);
 		stationDetailsVBox.setSpacing(10);
-		stationDetailsVBox.setPadding(new Insets (5, 6, 5, 40));
+		stationDetailsVBox.setPadding(new Insets (5, 2, 5, 16));
 		stationDetailsHBox.setSpacing(5);;
 		Label lbStationDetails = new Label();
 		btStation = new Button();
+		btStation.setOnAction(arg0 -> btStationActions());
 		Label lbGPS = new Label("GPS number:");
-		stationHBox.getChildren().addAll(btStation);
+		cbSelectStation = new CheckBox();
+		if (cbSelectStation.isSelected()){
+			miRemoveStation.setOnAction(arg0 -> removeSelectedStation());
+		}
+		stationHBox.getChildren().addAll(cbSelectStation, btStation);
 		stationDetailsHBox.getChildren().addAll(lbGPS, lbStationDetails);
 		stationDetailsVBox.getChildren().addAll(stationHBox, stationDetailsHBox);
 		btStation.setText(txNameOfStation.getText());
@@ -248,6 +252,19 @@ public class MasterGUI extends Application {
 		stationVBox.getChildren().addAll(stationDetailsVBox);
 				
 		
+	}
+	public void removeSelectedStation(){
+		System.out.print("jhgf");
+			VBox.clearConstraints(stationDetailsVBox);
+	}
+	
+	public void btStationActions(){
+		if (lineChart.isVisible() == true){
+			lineChart.setVisible(false);
+		}
+		else {
+			lineChart.setVisible(true);
+		};
 	}
 	/**
 	 * Displays Help window
