@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.Axis;
@@ -23,7 +24,9 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -48,23 +51,23 @@ public class MasterGUI extends Application {
 	
 	// Pane
 	private BorderPane borderPane, startBorderPane;
-	private Button btOpen, btConnect, btBrowse;
-	private TextField txFileName, txFileType;
+	private Button btOpen, btConnect, btBrowse, btStation;
+	private TextField txFileName, txFileType, txNameOfStation, txGPSNum;
 	
 	// Menu
 	private MenuBar menuBar; // MenuBar
-	private Menu menuHelp, menuFile, menuSettings, menuConnections; // Menus
-	private MenuItem miSave, miOpen, miHelp, miPlotData, miConnect;
+	private Menu menuHelp, menuFile, menuSettings, menuConnections, menuGroundStation; // Menus
+	private MenuItem miSave, miOpen, miHelp, miPlotData, miConnect, miAddStation, miRemoveStation, miStationSettings;
 	//VBox for Status Display
-	private VBox vBox;
+	private VBox stationVBox;
 	private Label lbTitle, lbFileName, lbFileType;
-	private CheckBox cbConnection;
+	private CheckBox cbStation1;
 	
 	// TabPane
 	private TabPane tabPanePlots;
 	private Tab Plot1, Plot2;
 	//plotGridPane
-	private GridPane plotGridPane, startGridPane;
+	private GridPane plotGridPane, startGridPane, stationGridPane;
 
 	
 	private Axis<Number> xAxis;
@@ -91,6 +94,10 @@ public class MasterGUI extends Application {
 		menuFile = new Menu("File");
 		menuSettings = new Menu("Settings");
 		menuConnections = new Menu("Connection");
+		menuGroundStation = new Menu("Settup Ground Stations");
+		miAddStation = new MenuItem("Add Station");
+		miRemoveStation = new MenuItem("Remove Station");
+		miStationSettings = new MenuItem("Settings");
 		miSave = new MenuItem("Save");
 		miOpen = new MenuItem("Open");
 		miHelp = new MenuItem("Help");
@@ -100,9 +107,11 @@ public class MasterGUI extends Application {
 		menuHelp.getItems().addAll(miHelp);
 		menuConnections.getItems().addAll(miConnect);
 		menuSettings.getItems().addAll(miPlotData);
-		menuBar.getMenus().addAll(menuFile, menuSettings, menuConnections, menuHelp);
+		menuGroundStation.getItems().addAll(miAddStation, miRemoveStation, miStationSettings);
+		menuBar.getMenus().addAll(menuFile, menuSettings, menuConnections, menuGroundStation, menuHelp);
 		borderPane.setTop(menuBar);
 		
+		miAddStation.setOnAction(arg0 -> showAddStation());
 		miHelp.setOnAction(arg0 -> showHelp());
 		miConnect.setOnAction(arg0 -> {
 			try {
@@ -114,17 +123,18 @@ public class MasterGUI extends Application {
 		});
 		
 		//Status Display
-		vBox = new VBox();
-		lbTitle = new Label("Status"); 
+		stationVBox = new VBox();
+		lbTitle = new Label("Stations"); 
 		lbTitle.setStyle("-fx-padding: 8 30 10 50; -fx-background-color: #f8ecc2; -fx-border-style: solid; -fx-border-width: 3");
-		lbTitle.setFont(Font.font("Ariel", FontWeight.BOLD, 30));
+		lbTitle.setFont(Font.font("Ariel", FontWeight.BOLD, 25));
 		lbTitle.setMaxWidth(200);
-		cbConnection = new CheckBox("Connection Status");
-		cbConnection.setStyle("-fx-padding: 5 10 5 30");
-		vBox.getChildren().addAll(lbTitle, cbConnection);
-		vBox.setBorder(new Border(new BorderStroke(Color.SKYBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5) )));
-		vBox.setMinWidth(200);
-		borderPane.setLeft(vBox);
+		stationVBox.getChildren().addAll(lbTitle);
+		stationVBox.setBorder(new Border(new BorderStroke(Color.SKYBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5) )));
+		stationVBox.setMinWidth(200);
+		borderPane.setLeft(stationVBox);
+		if (stationVBox.equals(btStation)){
+			btStation.setOnMousePressed(arg0 -> showAddStation());;
+		}
 		
 		//tabs for plot display/ data/ 
 		tabPanePlots = new TabPane();
@@ -187,7 +197,56 @@ public class MasterGUI extends Application {
 		stage.show();
 	}
 	
+	public void showAddStation(){
+		
+		Label lbNameOfStation = new Label("Name of Station:");
+		Label lbGPSNum = new Label("GPS Number:");
+		txNameOfStation = new TextField();
+		txGPSNum = new TextField();
+		Button btAddStation = new Button("Add");
+		btAddStation.setOnAction(arg0 -> addStations());
+		
+		
+		GridPane addStationPane = new GridPane();
+		addStationPane.setHgap(10);
+		addStationPane.setVgap(10);
+		addStationPane.add(lbNameOfStation, 1, 1);
+		addStationPane.add(txNameOfStation, 2, 1);
+		addStationPane.add(lbGPSNum, 1, 2);
+		addStationPane.add(txGPSNum, 2, 2);
+		addStationPane.add(btAddStation, 1, 3);
+
+		
+		// Create and display said the aforementioned pane in a new stage
+		Scene scene = new Scene(addStationPane, 550, 100);
+		Stage stage = new Stage();
+		stage.setScene(scene);
+		stage.setTitle("Add Station to View");
+		stage.setResizable(false);
+		stage.show();
+	}
 	
+	public void addStations(){
+		
+		VBox stationDetailsVBox = new VBox();
+		HBox stationHBox = new HBox();
+		HBox stationDetailsHBox = new HBox();
+		stationHBox.setSpacing(5);
+		stationDetailsVBox.setSpacing(10);
+		stationDetailsVBox.setPadding(new Insets (5, 6, 5, 40));
+		stationDetailsHBox.setSpacing(5);;
+		Label lbStationDetails = new Label();
+		btStation = new Button();
+		Label lbGPS = new Label("GPS number:");
+		stationHBox.getChildren().addAll(btStation);
+		stationDetailsHBox.getChildren().addAll(lbGPS, lbStationDetails);
+		stationDetailsVBox.getChildren().addAll(stationHBox, stationDetailsHBox);
+		btStation.setText(txNameOfStation.getText());
+		lbStationDetails.setText(txGPSNum.getText());
+		stationVBox.getChildren().addAll(stationDetailsVBox);
+				
+		
+	}
 	/**
 	 * Displays Help window
 	 */
