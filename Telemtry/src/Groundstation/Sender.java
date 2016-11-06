@@ -40,6 +40,7 @@ public class Sender {
 		File transferFile = new File (fileLocation);
 		byte [] bytearray  = new byte [(int)transferFile.length()];
 		FileInputStream fin;
+		ZipOutputStream zipOutputStream;
 		try {
 			fin = new FileInputStream(transferFile);
         } catch (FileNotFoundException ex) {
@@ -47,13 +48,22 @@ public class Sender {
         	System.out.println("File transfer failed...");
         	return;
         }
-        BufferedInputStream bin = new BufferedInputStream(fin);
+		
+		BufferedInputStream bin = new BufferedInputStream(fin);
 
         try {
             bin.read(bytearray, 0, bytearray.length);
             OutputStream os = socket.getOutputStream();
+            zipOutputStream = new ZipOutputStream(os);
+            ZipEntry zipEntry = new ZipEntry(transferFile.getName());
+            zipOutputStream.putNextEntry(zipEntry);
             System.out.println("Sending Files...");
-            os.write(bytearray, 0, bytearray.length);
+            zipOutputStream.write(bytearray, 0, bytearray.length);
+            
+            // close ZipEntry to store the stream to the file
+            zipOutputStream.closeEntry();
+
+            zipOutputStream.close();
             os.flush();
             os.close();
             fin.close();
@@ -65,7 +75,6 @@ public class Sender {
         } catch (IOException ex) {
             // Do exception handling
         }
-        
 	}
 		
 	//This method safely closes the peer-to-peer connection	
@@ -76,44 +85,6 @@ public class Sender {
 		socket.close();
 		System.out.println("Link disconnected");
 	}
-	
-	public void zipFile(File inputFile, String zipFilePath) {
-        try {
-
-            // Wrap a FileOutputStream around a ZipOutputStream
-            // to store the zip stream to a file. Note that this is
-            // not absolutely necessary
-            //FileOutputStream fileOutputStream = new FileOutputStream(zipFilePath);
-            ZipOutputStream zipOutputStream = new ZipOutputStream(os);//fileOutputStream);
-
-            // a ZipEntry represents a file entry in the zip archive
-            // We name the ZipEntry after the original file's name
-            ZipEntry zipEntry = new ZipEntry(inputFile.getName());
-            zipOutputStream.putNextEntry(zipEntry);
-
-            FileInputStream fileInputStream = new FileInputStream(inputFile);
-            byte[] buf = new byte[1024];
-            int bytesRead;
-
-            // Read the input file by chucks of 1024 bytes
-            // and write the read bytes to the zip stream
-            while ((bytesRead = fileInputStream.read(buf)) > 0) {
-                zipOutputStream.write(buf, 0, bytesRead);
-            }
-
-            // close ZipEntry to store the stream to the file
-            zipOutputStream.closeEntry();
-
-            zipOutputStream.close();
-            //fileOutputStream.close();
-
-            System.out.println("Regular file :" + inputFile.getCanonicalPath()+" is zipped to archive :"+zipFilePath);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 }
 
 
