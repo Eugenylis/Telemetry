@@ -15,6 +15,10 @@ import java.io.*;
  *
  */
 public class Sender {
+	
+	String IPaddress;
+	int portNum;
+	
 	private Socket socket;
 	//made change
 	/**
@@ -25,7 +29,9 @@ public class Sender {
 	public Sender(String IPaddress, int portNum) throws IOException {
 		
 		//System.out.println("With in sender " + IPaddress + " " + portNum);
-		this.socket = new Socket(IPaddress, portNum);
+		//this.socket = new Socket(IPaddress, portNum);
+		this.IPaddress = IPaddress;
+		this.portNum = portNum;
 		//this.socket = new Socket("155.31.132.40", 8748);
 		//InputStream is = socket.getInputStream();
 	}
@@ -37,6 +43,7 @@ public class Sender {
 	 */
 	public void send(String fileLocation) throws IOException {
 		
+		this.socket = new Socket(this.IPaddress, this.portNum);
 		File transferFile = new File (fileLocation);
 		byte [] bytearray  = new byte [(int)transferFile.length()];
 		FileInputStream fin;
@@ -75,16 +82,18 @@ public class Sender {
         } catch (IOException ex) {
             // Do exception handling
         }
+        socket.close();
+		System.out.println("Link disconnected");
 	}
 		
 	//This method safely closes the peer-to-peer connection	
 	/**
 	 * @throws IOException
 	 */
-	public void close() throws IOException {
-		socket.close();
-		System.out.println("Link disconnected");
-	}
+//	public void close() throws IOException {
+//		socket.close();
+//		System.out.println("Link disconnected");
+//	}
 }
 
 
