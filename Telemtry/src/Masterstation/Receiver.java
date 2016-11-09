@@ -1,204 +1,110 @@
 package Masterstation;
+
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/**
- * Client class to created for the Master Station of the Telemetry project
- * Acts as a client to receive data from the ground station
- * Creates a socket to receive data
- * Accepts incoming connections
- * Writes incoming data to a new file 
- * Saves the file in the source code folder
- * 
- * @author Lischuk Yevgeniy
- *
- */
+public class Receiver extends Thread {
 
-public class Client{ 
-	
-	private static int portNum;		// Port number
-	private static int fileSize;	// Size of the file in bytes
-	
-	private int bytesRead;
-	private int currentTot;
-	
-	public static String dataType = " ";	// Type of file
-	public static String fileName = " ";	// Name of the file
-	
-	// Create a socket object that will be used for communications
-	public static Socket socket;
-	
-	
-	// No-argument constructor
-	public Client(){
-	}
-	
-	
-	/**
-	 * Constructor to make an object with specified port number
-	 * Sets incoming data type to .txt by default
-	 * Sets file name to newFile.txt
-	 * Sets max file size to be about 5 MB
-	 * @param port number
-	 */
-	public Client(int port){
-		
-		System.out.println("Client Created");
-		setPortNum(port);
-		currentTot = 0;
-		fileSize = 1022386;
-		setDataType(".txt");
-		setFileName("newFile");
-		
-	}
-	
-	
-	
-	/**
-	 * Method that starts communications by creating server socket object
-	 * Allow to accept incoming connections
-	 * @throws IOException
-	 */
-	public void startComm() throws IOException{
-		
-		System.out.println("Starting accepting incoming connnections");
-		// Create a server socket with specified port number
-		ServerSocket serverSocket = new ServerSocket(portNum); 
-		// Allow socket to accept connections
-		socket = serverSocket.accept(); 
-		System.out.println("Accepted connection : " + socket);
-	}
-	
-	
-	/**
-	 * Method that receives data in terms of bytes from a ground station
-	 * Writes received data to a new file and saves it locally
-	 * @throws IOException
-	 */
-	public void writeToFile() throws IOException{
-	
-		// Create new byte array based on a file type
-		byte [] bytearray = new byte [fileSize];
-		
-		// Get input stream of data
-		InputStream inputStream = socket.getInputStream();
-		
-		// Create file and buffered stream to read incoming bytes
-		FileOutputStream fos = new FileOutputStream(fileName);
-		BufferedOutputStream bos = new BufferedOutputStream(fos);
-		bytesRead = inputStream.read(bytearray,0,bytearray.length); 
-		currentTot = bytesRead; 
-		
-		// Write received streak of bytes to a new file and save it locally
-		System.out.println("Writing to a new file");
-		do { 
-			
-			bytesRead = inputStream.read(bytearray, currentTot, (bytearray.length-currentTot)); 
-			if(bytesRead >= 0) currentTot += bytesRead; 
-			
-		} while(bytesRead != -1); 
-		
-		System.out.println("Done writing to file");
-		
-		bos.write(bytearray, 0 , currentTot); 
-		
-		bos.flush(); 
-		bos.close(); 
-		
-		System.out.println("Done cleaning up");
-	}
-	
-	
-	/**
-	 * Method to close the socket
-	 * @throws IOException
-	 */
-	public void closeSocket() throws IOException{
-		socket.close(); 
-	}
-	
-	
-	/**
-	 * Method to check if the socket is connected
-	 * @return connection state of the socket 
-	 */
-	public boolean isConnected(){
-		return socket.isConnected();
-	}
-	
-	
-	/**
-	 * Method to set the port number
-	 * @param newPort specified new port number
-	 */
-	public void setPortNum(int newPort){
-		portNum = newPort;
-	}
-	
-	
-	/**
-	 * Method to set the maximum size of the incoming file
-	 * File size is set in bits
-	 * @param newSize selected new size of the file
-	 */
-	public void setFileSize(int newSize){
-		fileSize = newSize;
-	}
-	
-	
-	/**
-	 * Method to set the type of the incoming data
-	 * Replaces old string with a new string
-	 * @param newType - a string, .txt for example
-	 */
-	public void setDataType(String newType){
-		dataType = dataType.replace(dataType, newType);
-	}
-	
-	
-	/**
-	 * Method to set the name of the file
-	 * Whole file name is set to have new name + data type
-	 * Replaces old string with a new string
-	 * Ex. FileName.txt
-	 * @param newName selected new name for the file
-	 */
-	public void setFileName(String newName){
-		fileName = fileName.replace(fileName, newName + dataType);
-	}
-	
-	
-	/**
-	 * Method to get the port number
-	 * @return port number
-	 */
-	public int getPortNum(){
-		return portNum;
-	}
-	
-	
-	/**
-	 * Method to get the file size
-	 * @return size of the file
-	 */
-	public int getFileSize(){
-		return fileSize;
-	}
-	
-	
-	/**
-	 * Method to get the data type of the file that is being received
-	 * @return the data type as a string
-	 */
-	public String getDataType(){
-		return dataType;
-	}
-	
-	
+    protected DatagramSocket socket = null;
+    protected boolean moreQuotes = true;
+
+   
+    ServerSocket serverSocket;
+    Socket socket2;
+    
+    
+    public static int counter = 0;
+    
+    public Receiver() throws IOException {
+	this("Receiver");
+    }
+
+    public Receiver(String name) throws IOException {
+        super(name);
+        //socket = new DatagramSocket(4445);
+        serverSocket = new ServerSocket(9040); 
+        socket2 = new Socket();
+    }
+
+    public void run() {
+
+        while (moreQuotes) {
+            try {
+              
+
+                // THIS LINES ARE FOR RECEIVING REQUEST FROM THE GS
+                // receive request
+            	//byte[] buf = new byte[256];
+            	//DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                //socket.receive(packet);
+
+            	
+            	
+            	
+            	// CODE BELOW IS COPIED FROM STABLE VERSION OF CLIENT
+            	//Socket socket2 = new Socket();
+                int filesize = 1022386;
+            	int bytesRead = 0;
+            	int currentTot = 0;
+            	
+            	socket2 = serverSocket.accept();
+                
+                System.out.println("test");
+
+        		System.out.println("Accepted connection : " + socket2);
+                byte [] bytearray = new byte [filesize];
+    			
+    			System.out.println("1");
+    			InputStream inputStream = socket2.getInputStream();
+    			
+    			System.out.println("2");
+    			FileOutputStream fos = new FileOutputStream("test_" + counter + ".txt");
+    			
+    			System.out.println("3");
+    			BufferedOutputStream bos = new BufferedOutputStream(fos);
+    			
+    			System.out.println("4");
+    			bytesRead = inputStream.read(bytearray,0,bytearray.length); 
+    			
+    			System.out.println("5");
+    			currentTot = bytesRead; 
+    			
+    			System.out.println("Writing to a file");
+    			do{    				
+    				System.out.println("6");
+    				bytesRead = inputStream.read(bytearray, currentTot, (bytearray.length-currentTot)); 
+    				
+    				System.out.println("7");
+    				if(bytesRead >= 0) currentTot += bytesRead; 
+    				
+    				System.out.println("8");
+    			} while(bytesRead != -1);
+
+    			System.out.println("9");
+    			bos.write(bytearray, 0 , currentTot);
+    			System.out.println("10");
+    			bos.flush();
+    			System.out.println("11");
+    			bos.close();
+    			
+    			socket2.close();
+
+    			System.out.println("--------------------------------------Done");
+    			counter++;
+    			System.out.println("Counter is: " + counter);
+            } catch (IOException e) {
+                e.printStackTrace();
+		moreQuotes = false;
+            }
+           
+        }
+       // socket.close();
+    }
+
+   
 }
-
- 
