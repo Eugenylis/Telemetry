@@ -1,6 +1,7 @@
 package Masterstation;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -44,7 +45,38 @@ public class DataHandler {
 	        }
 	    }
 	
-	
+/*	public void ScanData() throws IOException {
+		//Scans in data from the text document test.txt
+			//Here are the File Objects
+			double[] dataPacket = new double[5]; //define number array
+			File inputFile = new File("test.txt");
+			int i; //general counting
+			
+	    	
+			if(inputFile.exists()) {
+				
+				//Reads in characters from text document
+				BufferedReader br = new BufferedReader(new FileReader(inputFile));
+
+				//this reads everything character by character
+				String line;
+				String[] numLine;
+				
+				while ((line = br.readLine()) != null)  {
+					numLine = line.split(" ");
+					
+					//dataPacket defined on line 24
+					dataPacket = new double[numLine.length];
+					for(i = 0; i < numLine.length; i++) {
+						dataPacket[i] = Double.parseDouble(numLine[i]);
+					}
+					//Saves parsed data line and new objects
+					BalloonData packet = new BalloonData(dataPacket);
+					Manager.packetArray.add(packet);
+				}
+				br.close();
+			}
+		}
 	
 	
 	
