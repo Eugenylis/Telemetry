@@ -59,7 +59,7 @@ public class MasterGUI extends Application {
 	// Menu
 	private MenuBar menuBar; // MenuBar
 	private Menu menuHelp, menuFile, menuSettings, menuConnections, menuGroundStation; // Menus
-	private MenuItem miSave, miOpen, miHelp, miPlotData, miConnect, miAddStation, miRemoveStation, miStationSettings;
+	private MenuItem miSave, miOpen, miHelp, miPlotData, miConnect, miAddStation, miRemoveStation, miStationSettings, miDataSincFreq;
 	//VBox for Status Display
 	private VBox stationVBox, stationDetailsVBox;
 	private Label lbTitle, lbFileName, lbFileType;
@@ -104,15 +104,17 @@ public class MasterGUI extends Application {
 		miOpen = new MenuItem("Open");
 		miHelp = new MenuItem("Help");
 		miConnect = new MenuItem("Connect");
+		miDataSincFreq = new MenuItem("Data Sinc Freguency");
 		miPlotData = new MenuItem("Plot");
 		menuFile.getItems().addAll(miSave, miOpen);
 		menuHelp.getItems().addAll(miHelp);
-		menuConnections.getItems().addAll(miConnect);
+		menuConnections.getItems().addAll(miConnect, miDataSincFreq);
 		menuSettings.getItems().addAll(miPlotData);
 		menuGroundStation.getItems().addAll(miAddStation, miRemoveStation, miStationSettings);
 		menuBar.getMenus().addAll(menuFile, menuSettings, menuConnections, menuGroundStation, menuHelp);
 		borderPane.setTop(menuBar);
 		
+		miDataSincFreq.setOnAction(arg0 -> DataSincFerq());
 		miAddStation.setOnAction(arg0 -> showAddStation());
 		miHelp.setOnAction(arg0 -> showHelp());
 		miConnect.setOnAction(arg0 -> {
@@ -266,10 +268,41 @@ public class MasterGUI extends Application {
 			lineChart.setVisible(true);
 		};
 	}
+	
+	/**
+	 * Displays DataSincFreq window
+	 * @return 
+	 */
+	public void DataSincFerq(){
+		
+		final String descriptionText = "Input the value for the time equal to the amount of data rcieved from ground station:";
+		// Create the text label
+				Label aboutLabel = new Label();
+				aboutLabel.setWrapText(true);
+				aboutLabel.setTextAlignment(TextAlignment.CENTER);
+				aboutLabel.setFont(Font.font("Times New Roman", 14));
+				aboutLabel.setText(descriptionText);
+				TextField tfInput = new TextField();
+				tfInput.setMaxWidth(100);
+		
+		VBox pane = new VBox();
+		pane.setPadding(new Insets (20, 2, 5, 20));
+		pane.setSpacing(10);
+		pane.getChildren().addAll(aboutLabel, tfInput);
+		
+		
+		// Create and display said the aforementioned pane in a new stage
+		Scene scene = new Scene(pane, 550, 100);
+		Stage stage = new Stage();
+		stage.setScene(scene);
+		stage.setTitle("Data Sinc Frequency");
+		stage.setResizable(false);
+		stage.show();
+	}
 	/**
 	 * Displays Help window
 	 */
-	private void showHelp(){
+	public void showHelp(){
 		final String aboutText = "blah blah blah";
 	
 		// Create the text label
