@@ -52,9 +52,9 @@ public class MasterGUI extends Application {
 	public Client client;
 	
 	// Pane
-	private BorderPane borderPane, startBorderPane;
-	private Button btOpen, btConnect, btBrowse, btStation;
-	private TextField txFileName, txFileType, txNameOfStation, txGPSNum;
+	private BorderPane borderPane;
+	private Button btStation;
+	private TextField txNameOfStation, txGPSNum;
 	
 	// Menu
 	private MenuBar menuBar; // MenuBar
@@ -62,14 +62,14 @@ public class MasterGUI extends Application {
 	private MenuItem miSave, miOpen, miHelp, miPlotData, miConnect, miAddStation, miRemoveStation, miStationSettings, miDataSincFreq;
 	//VBox for Status Display
 	private VBox stationVBox, stationDetailsVBox;
-	private Label lbTitle, lbFileName, lbFileType;
-	private CheckBox cbStation1, cbSelectStation;
+	private Label lbTitle;
+	private CheckBox cbSelectStation;
 	
 	// TabPane
 	private TabPane tabPanePlots;
 	private Tab Plot1, Plot2;
 	//plotGridPane
-	private GridPane plotGridPane, startGridPane, stationGridPane;
+	private GridPane plotGridPane;
 
 	
 	private Axis<Number> xAxis;
