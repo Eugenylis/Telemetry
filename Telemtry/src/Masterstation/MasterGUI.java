@@ -114,6 +114,7 @@ public class MasterGUI extends Application {
 		menuBar.getMenus().addAll(menuFile, menuSettings, menuConnections, menuGroundStation, menuHelp);
 		borderPane.setTop(menuBar);
 		
+				
 		miDataSincFreq.setOnAction(arg0 -> DataSincFerq());
 		miAddStation.setOnAction(arg0 -> showAddStation());
 		miHelp.setOnAction(arg0 -> showHelp());
@@ -252,12 +253,22 @@ public class MasterGUI extends Application {
 		btStation.setText(txNameOfStation.getText());
 		lbStationDetails.setText(txGPSNum.getText());
 		stationVBox.getChildren().addAll(stationDetailsVBox);
+		
+		//testing remove function
+		miRemoveStation.setOnAction(arg0 -> removeSelectedStation());
 				
 		
 	}
 	public void removeSelectedStation(){
-		System.out.print("jhgf");
-			VBox.clearConstraints(stationDetailsVBox);
+			
+		if(cbSelectStation.isSelected()){
+		
+		stationDetailsVBox.getChildren().clear();
+		}
+	//	VBox.clearConstraints(stationDetailsVBox);
+
+			System.out.print("jhgf");
+
 	}
 	
 	public void btStationActions(){
