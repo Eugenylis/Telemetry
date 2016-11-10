@@ -4,63 +4,86 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * Receiver is a class that allows to receive files sent from another computer (ground station)
+ * It creates a thread that allows parallel running with another programs
+ * It also allows to receive multiple files and store each at a different name
+ * All communication is done through the use of sockets like server socket with specified port number
+ * 
+ * @author Eugene Lischuk
+ * @version 2.0
+ */
+
+
 public class Receiver extends Thread {
 
-    protected DatagramSocket socket = null;
-    protected boolean moreQuotes = true;
-
-   
-    ServerSocket serverSocket;
-    Socket socket2;
+	//Socket for communication
+	protected Socket socket;
+	//ServerSocket to accept incoming connections
+    protected ServerSocket serverSocket;
+    
+	//value for controlling while loop
+    protected boolean moreData = true;
+    
+    //counter to count how many times file was received
+    protected static int counter = 0;
+    
+    //port number
+    private int portNum;
+    //maximum file size to be received in bytes
+    private int fileSize = 1022386;
     
     
-    public static int counter = 0;
-    
+    //no-argument constructor for the thread with specified object name
     public Receiver() throws IOException {
 	this("Receiver");
     }
 
+    
+    /*
+     * Constructor which creates socket with specified port number and specified name
+     */
     public Receiver(String name) throws IOException {
         super(name);
-        //socket = new DatagramSocket(4445);
-        serverSocket = new ServerSocket(9040); 
-        socket2 = new Socket();
+        
+        //set the port number
+        setPortNum(9040);
+        //set port number to server socket
+        serverSocket = new ServerSocket(portNum); 
+        //create socket for communication
+        socket = new Socket();
     }
 
+    
+    /**
+	 * Method to implement the thread
+	 * Accepts incoming connections
+	 * Creates new InputStream, FileOutputStream, BufferedOutputStream each time a file is sent
+	 * Allows to continuously run and receive files
+	 * @override run method in Thread class
+	 * @throws IOException Something when wrong
+	 */
     public void run() {
 
-        while (moreQuotes) {
+        while (moreData) {
             try {
               
-
-                // THIS LINES ARE FOR RECEIVING REQUEST FROM THE GS
-                // receive request
-            	//byte[] buf = new byte[256];
-            	//DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                //socket.receive(packet);
-
-            	
-            	
-            	
-            	// CODE BELOW IS COPIED FROM STABLE VERSION OF CLIENT
-            	//Socket socket2 = new Socket();
-                int filesize = 1022386;
             	int bytesRead = 0;
             	int currentTot = 0;
             	
-            	socket2 = serverSocket.accept();
+            	//allow to accept incoming connections
+            	socket = serverSocket.accept();
                 
                 System.out.println("test");
 
-        		System.out.println("Accepted connection : " + socket2);
-                byte [] bytearray = new byte [filesize];
+        		System.out.println("Accepted connection : " + socket);
+                byte [] bytearray = new byte [fileSize];
     			
     			System.out.println("1");
-    			InputStream inputStream = socket2.getInputStream();
+    			InputStream inputStream = socket.getInputStream();
     			
     			System.out.println("2");
     			FileOutputStream fos = new FileOutputStream("test_" + counter + ".txt");
@@ -92,19 +115,39 @@ public class Receiver extends Thread {
     			System.out.println("11");
     			bos.close();
     			
-    			socket2.close();
+    			//close the socket
+    			socket.close();
 
     			System.out.println("--------------------------------------Done");
     			counter++;
     			System.out.println("Counter is: " + counter);
+    			
             } catch (IOException e) {
                 e.printStackTrace();
-		moreQuotes = false;
+                //stop the loop
+                moreData = false;
             }
-           
         }
-       // socket.close();
-    }
 
+    } // end of run()
+
+    
+    /**
+     * Method to set the port number to a new value
+     * @param portNum number of the port
+     */
+    public void setPortNum(int portNum){
+    	this.portNum = portNum;
+    }
+    
+
+    /**
+     * Method to get the port number
+     * @return port number for the specified object
+     */
+    public int getPortNum(){
+    	return this.portNum;
+    }
+    
    
-}
+} // end of class

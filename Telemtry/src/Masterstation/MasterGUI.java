@@ -49,7 +49,7 @@ import javafx.stage.Window;
 public class MasterGUI extends Application {
 	
 
-	public Client client;
+	public Receiver receiver;
 	
 	// Pane
 	private BorderPane borderPane;
@@ -357,10 +357,10 @@ public class MasterGUI extends Application {
 	 */
 	public void Connect() throws IOException{
 		
-		client = new Client(9040);
-		client.startComm();
-		client.writeToFile();
-		client.closeSocket();
+//		client = new Client(9040);
+//		client.startComm();
+//		client.writeToFile();
+//		client.closeSocket();
 		
 	}
 }
