@@ -357,10 +357,9 @@ public class MasterGUI extends Application {
 	 */
 	public void Connect() throws IOException{
 		
-//		client = new Client(9040);
-//		client.startComm();
-//		client.writeToFile();
-//		client.closeSocket();
+		//Start receiving files
+		System.out.println("Starting Server");
+        new Receiver().start();
 		
 	}
 }
