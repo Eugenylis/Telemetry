@@ -12,8 +12,9 @@ import java.io.*;
  *
  */
 public class GS_Manager{
-    static public Sender SimClient;
+    static public Sender zipSender;
     static public GS_GUI GUIwindow;
+    static public ZipFileTimer Timer;
     //static public String listenerDir;
     //static public String IPaddress;
     //static public int socketNum;
@@ -41,19 +42,10 @@ public class GS_Manager{
 	 * @throws IOException
 	 */
 	public static void setSettings(String listenerDir, String IPaddress, int socketNum) throws IOException{
-		//this.listenerDir = listenerDir;
-		//this.IPaddress = IPaddress;
-		//this.socketNum = socketNum;
-		
 		Path dir = Paths.get(listenerDir);
-		//System.out.println("Passed1");
-		
-		//System.out.println("Within setSetting " + listenerDir + " " + IPaddress + " " + socketNum);
-		
-		SimClient = new Sender(IPaddress, socketNum);
-		//System.out.println("Passed2");
-		//new WatchDir(dir, true).processEvents();
+		zipSender = new Sender(IPaddress, socketNum);
+		Timer = new ZipFileTimer();
 		new WatchDir(dir, false).processEvents();
-		//System.out.println("Passed3");
+				
 	}
 }

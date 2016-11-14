@@ -151,12 +151,12 @@ public class WatchDir {
                 if (event.kind().name() == ENTRY_CREATE.toString()){ //Triggers when new file is created
                 	
                 	System.out.format("%s: %s\n", event.kind().name(), child);
-                	GS_Manager.SimClient.send(child.toString());//Sends file
+                	GS_Manager.Timer.addFile(child.toString());//Adds file to list to be sent
                 
                 }else if (event.kind().name() == ENTRY_MODIFY.toString()){ //Triggers when new file is modified
                 
                 	System.out.format("%s\n", event.kind().name());
-                	GS_Manager.SimClient.send(child.toString());
+                	GS_Manager.Timer.addFile(child.toString());//Adds file to list to be sent
                 	
                 }else { //Probably ENTRY_DELETE
                     
