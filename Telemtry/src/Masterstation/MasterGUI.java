@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,6 +14,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -67,14 +69,14 @@ public class MasterGUI extends Application {
 	
 	// TabPane
 	private TabPane tabPanePlots;
-	private Tab Plot1, Plot2;
+	private Tab Plot;
 	//plotGridPane
 	private GridPane plotGridPane;
 
 	
-	private Axis<Number> xAxis;
-	private Axis<Number> yAxis;
-	private LineChart<Number,Number> lineChart;
+	private Axis<Number> xAxis1, xAxis2, xAxis3, xAxis4;
+	private Axis<Number> yAxis1, yAxis2, yAxis3, yAxis4;
+	private LineChart<Number,Number> lineChart1, lineChart2, lineChart3, lineChart4;
 	
 	/**
 	 * @param args
@@ -99,7 +101,6 @@ public class MasterGUI extends Application {
 		menuGroundStation = new Menu("Settup Ground Stations");
 		miAddStation = new MenuItem("Add Station");
 		miRemoveStation = new MenuItem("Remove Station");
-		miStationSettings = new MenuItem("Settings");
 		miSave = new MenuItem("Save");
 		miOpen = new MenuItem("Open");
 		miHelp = new MenuItem("Help");
@@ -110,7 +111,7 @@ public class MasterGUI extends Application {
 		menuHelp.getItems().addAll(miHelp);
 		menuConnections.getItems().addAll(miConnect, miDataSincFreq);
 		menuSettings.getItems().addAll(miPlotData);
-		menuGroundStation.getItems().addAll(miAddStation, miRemoveStation, miStationSettings);
+		menuGroundStation.getItems().addAll(miAddStation, miRemoveStation);
 		menuBar.getMenus().addAll(menuFile, menuSettings, menuConnections, menuGroundStation, menuHelp);
 		borderPane.setTop(menuBar);
 		
@@ -141,44 +142,118 @@ public class MasterGUI extends Application {
 		
 		//tabs for plot display/ data/ 
 		tabPanePlots = new TabPane();
-		Plot1 = new Tab("Plot1");		
-		Plot2 = new Tab("Plot2");
-		tabPanePlots.getTabs().addAll(Plot1, Plot2);
-		Plot1.setClosable(false);
-		borderPane.setCenter(tabPanePlots);
+		
+		
 		
 		
 		/****SAMPLE PLOT*********************************/
 		//defining the axes
-	    xAxis = new NumberAxis();
-	    yAxis = new NumberAxis();
-	    yAxis.setLabel("Velocity");
-	    xAxis.setLabel("Time");
+	    xAxis1 = new NumberAxis();
+	    yAxis1 = new NumberAxis();
+	    yAxis1.setLabel("Velocity");
+	    xAxis1.setLabel("Time");
 	    //creating the chart
-	    lineChart = new LineChart<Number,Number>(xAxis,yAxis);
-	    lineChart.setTitle("Velocity vs Time");
+	    lineChart1 = new LineChart<Number,Number>(xAxis1,yAxis1);
+	    lineChart1.setTitle("Velocity vs Time");
 	    //defining a series
-	    XYChart.Series series = new XYChart.Series();
+	    XYChart.Series series1 = new XYChart.Series();
         //populating the series with data
-        series.getData().add(new XYChart.Data(1, 23));
-        series.getData().add(new XYChart.Data(2, 14));
-        series.getData().add(new XYChart.Data(3, 15));
-        series.getData().add(new XYChart.Data(4, 24));
-        series.getData().add(new XYChart.Data(5, 34));
-        series.getData().add(new XYChart.Data(6, 36));
-        series.getData().add(new XYChart.Data(7, 22));
-        series.getData().add(new XYChart.Data(8, 45));
-        series.getData().add(new XYChart.Data(9, 43));
-        series.getData().add(new XYChart.Data(10, 17));
-        series.getData().add(new XYChart.Data(11, 29));
-        series.getData().add(new XYChart.Data(12, 25));
+        series1.getData().add(new XYChart.Data(1, 23));
+        series1.getData().add(new XYChart.Data(2, 14));
+        series1.getData().add(new XYChart.Data(3, 15));
+        series1.getData().add(new XYChart.Data(4, 24));
+        series1.getData().add(new XYChart.Data(5, 34));
+        series1.getData().add(new XYChart.Data(6, 36));
+        series1.getData().add(new XYChart.Data(7, 22));
+        series1.getData().add(new XYChart.Data(8, 45));
+        series1.getData().add(new XYChart.Data(9, 43));
+        series1.getData().add(new XYChart.Data(10, 17));
+        series1.getData().add(new XYChart.Data(11, 29));
+        series1.getData().add(new XYChart.Data(12, 25));
 	        
-        lineChart.getData().add(series);
-      //Plots in tabPane Plot1
-      		plotGridPane = new GridPane();
-      		Plot1.setContent(plotGridPane);
-      		plotGridPane.add(lineChart, 1, 1);
-      		lineChart.setVisible(false);
+        lineChart1.getData().add(series1);
+        
+        /****SAMPLE PLOT*********************************/
+		//defining the axes
+	    xAxis2 = new NumberAxis();
+	    yAxis2 = new NumberAxis();
+	    yAxis2.setLabel("Velocity");
+	    xAxis2.setLabel("Time");
+	    //creating the chart
+	    lineChart2 = new LineChart<Number,Number>(xAxis2,yAxis2);
+	    lineChart2.setTitle("Velocity vs Time");
+	    //defining a series
+	    XYChart.Series series2 = new XYChart.Series();
+        //populating the series with data
+        series2.getData().add(new XYChart.Data(1, 23));
+        series2.getData().add(new XYChart.Data(2, 14));
+        series2.getData().add(new XYChart.Data(3, 15));
+        series2.getData().add(new XYChart.Data(4, 24));
+        series2.getData().add(new XYChart.Data(5, 34));
+        series2.getData().add(new XYChart.Data(6, 36));
+        series2.getData().add(new XYChart.Data(7, 22));
+        series2.getData().add(new XYChart.Data(8, 45));
+        series2.getData().add(new XYChart.Data(9, 43));
+        series2.getData().add(new XYChart.Data(10, 17));
+        series2.getData().add(new XYChart.Data(11, 29));
+        series2.getData().add(new XYChart.Data(12, 25));
+	        
+        lineChart2.getData().add(series2);
+        
+        /****SAMPLE PLOT*********************************/
+		//defining the axes
+	    xAxis3 = new NumberAxis();
+	    yAxis3 = new NumberAxis();
+	    yAxis3.setLabel("Velocity");
+	    xAxis3.setLabel("Time");
+	    //creating the chart
+	    lineChart3 = new LineChart<Number,Number>(xAxis3,yAxis3);
+	    lineChart3.setTitle("Velocity vs Time");
+	    //defining a series
+	    XYChart.Series series3 = new XYChart.Series();
+        //populating the series with data
+        series3.getData().add(new XYChart.Data(1, 23));
+        series3.getData().add(new XYChart.Data(2, 14));
+        series3.getData().add(new XYChart.Data(3, 15));
+        series3.getData().add(new XYChart.Data(4, 24));
+        series3.getData().add(new XYChart.Data(5, 34));
+        series3.getData().add(new XYChart.Data(6, 36));
+        series3.getData().add(new XYChart.Data(7, 22));
+        series3.getData().add(new XYChart.Data(8, 45));
+        series3.getData().add(new XYChart.Data(9, 43));
+        series3.getData().add(new XYChart.Data(10, 17));
+        series3.getData().add(new XYChart.Data(11, 29));
+        series3.getData().add(new XYChart.Data(12, 25));
+	        
+        lineChart3.getData().add(series3);
+        
+        /****SAMPLE PLOT*********************************/
+		//defining the axes
+	    xAxis4 = new NumberAxis();
+	    yAxis4 = new NumberAxis();
+	    yAxis4.setLabel("Velocity");
+	    xAxis4.setLabel("Time");
+	    //creating the chart
+	    lineChart4 = new LineChart<Number,Number>(xAxis4,yAxis4);
+	    lineChart4.setTitle("Velocity vs Time");
+	    //defining a series
+	    XYChart.Series series4 = new XYChart.Series();
+        //populating the series with data
+        series4.getData().add(new XYChart.Data(1, 23));
+        series4.getData().add(new XYChart.Data(2, 14));
+        series4.getData().add(new XYChart.Data(3, 15));
+        series4.getData().add(new XYChart.Data(4, 24));
+        series4.getData().add(new XYChart.Data(5, 34));
+        series4.getData().add(new XYChart.Data(6, 36));
+        series4.getData().add(new XYChart.Data(7, 22));
+        series4.getData().add(new XYChart.Data(8, 45));
+        series4.getData().add(new XYChart.Data(9, 43));
+        series4.getData().add(new XYChart.Data(10, 17));
+        series4.getData().add(new XYChart.Data(11, 29));
+        series4.getData().add(new XYChart.Data(12, 25));
+	        
+        lineChart4.getData().add(series4);
+     
 	}
 	
 	
@@ -272,15 +347,85 @@ public class MasterGUI extends Application {
 	}
 	
 	public void btStationActions(){
-		if (lineChart.isVisible() == true){
-			lineChart.setVisible(false);
-		}
-		else {
-			lineChart.setVisible(true);
-		};
+		
+		Label lbXAxis = new Label("X Axis");
+		Label lbYAxis = new Label("Y Axis");
+		Label lbPlot1 = new Label("Plot 1:");
+		Label lbPlot2 = new Label("Plot 2:");
+		Label lbPlot3 = new Label("Plot 3:");
+		Label lbPlot4 = new Label("Plot 4:");
+		ChoiceBox cbPlot1XAxis = new ChoiceBox();
+		ChoiceBox cbPlot2XAxis = new ChoiceBox();
+		ChoiceBox cbPlot3XAxis = new ChoiceBox();
+		ChoiceBox cbPlot4XAxis = new ChoiceBox();
+		ChoiceBox cbPlot1YAxis = new ChoiceBox();
+		ChoiceBox cbPlot2YAxis = new ChoiceBox();
+		ChoiceBox cbPlot3YAxis = new ChoiceBox();
+		ChoiceBox cbPlot4YAxis = new ChoiceBox();
+		
+		cbPlot1XAxis.setItems(FXCollections.observableArrayList("Velocity", "Pressure"));
+		cbPlot2XAxis.setItems(FXCollections.observableArrayList("Velocity", "Pressure"));
+		cbPlot3XAxis.setItems(FXCollections.observableArrayList("Velocity", "Pressure"));
+		cbPlot4XAxis.setItems(FXCollections.observableArrayList("Velocity", "Pressure"));
+		cbPlot1YAxis.setItems(FXCollections.observableArrayList("Altitude"));
+		cbPlot2YAxis.setItems(FXCollections.observableArrayList("Altitude"));
+		cbPlot3YAxis.setItems(FXCollections.observableArrayList("Altitude"));
+		cbPlot4YAxis.setItems(FXCollections.observableArrayList("Altitude"));
+
+		
+		Button btAddPlots = new Button("Add Plots");
+		btAddPlots.setOnAction(arg0 -> addPlotsToGUI());
+		
+		
+		GridPane addPlotGridPane = new GridPane();
+		addPlotGridPane.setHgap(10);
+		addPlotGridPane.setVgap(10);
+		addPlotGridPane.add(lbXAxis, 2, 1);
+		addPlotGridPane.add(lbYAxis, 3, 1);		
+		addPlotGridPane.add(lbPlot1, 1, 2);
+		addPlotGridPane.add(lbPlot2, 1, 3);
+		addPlotGridPane.add(lbPlot3, 1, 4);
+		addPlotGridPane.add(lbPlot4, 1, 5);
+		addPlotGridPane.add(cbPlot1XAxis, 2, 2);
+		addPlotGridPane.add(cbPlot2XAxis, 2, 3);
+		addPlotGridPane.add(cbPlot3XAxis, 2, 4);
+		addPlotGridPane.add(cbPlot4XAxis, 2, 5);
+		addPlotGridPane.add(cbPlot1YAxis, 3, 2);
+		addPlotGridPane.add(cbPlot2YAxis, 3, 3);
+		addPlotGridPane.add(cbPlot3YAxis, 3, 4);
+		addPlotGridPane.add(cbPlot4YAxis, 3, 5);
+		addPlotGridPane.add(btAddPlots, 1, 6);
+		
+
+		
+		// Create and display said the aforementioned pane in a new stage
+		Scene scene = new Scene(addPlotGridPane, 550, 300);
+		Stage stage = new Stage();
+		stage.setScene(scene);
+		stage.setTitle("Choose Plot Settings");
+		stage.setResizable(false);
+		stage.show();
 	}
 	
+	public void addPlotsToGUI(){
+		Plot = new Tab(btStation.getText());		
+		tabPanePlots.getTabs().addAll(Plot);
+		Plot.setClosable(true);
+		borderPane.setCenter(tabPanePlots);
+		 //Plots in tabPane Plot1
+  		plotGridPane = new GridPane();
+  		plotGridPane.setHgap(10);
+		plotGridPane.setVgap(10);
+  		Plot.setContent(plotGridPane);
+  		plotGridPane.add(lineChart1, 1, 1);
+  		plotGridPane.add(lineChart2, 1, 2);
+  		plotGridPane.add(lineChart3, 2, 1);
+  		plotGridPane.add(lineChart4, 2, 2);
+  		
+  		//lineChart.setVisible(true);
+	}
 	/**
+	}
 	 * Displays DataSincFreq window
 	 * @return 
 	 */
