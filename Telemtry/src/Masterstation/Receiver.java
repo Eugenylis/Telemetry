@@ -32,7 +32,7 @@ public class Receiver extends Thread {
     protected static int counter = 0;
     
     //port number
-    private int portNum;
+    private int portNum = 9040; //TODO ---------------------------------------delete and put into GUI
     //maximum file size to be received in bytes
     private int fileSize = 1022386;
     
@@ -48,13 +48,12 @@ public class Receiver extends Thread {
      */
     public Receiver(String name) throws IOException {
         super(name);
-        
-        //set the port number
-        setPortNum(9040);
+ 
         //set port number to server socket
         serverSocket = new ServerSocket(portNum); 
         //create socket for communication
         socket = new Socket();
+        
     }
 
     
@@ -67,10 +66,10 @@ public class Receiver extends Thread {
 	 * @throws IOException Something when wrong
 	 */
     public void run() {
-
+    
         while (moreData) {
             try {
-              
+            	
             	int bytesRead = 0;
             	int currentTot = 0;
             	

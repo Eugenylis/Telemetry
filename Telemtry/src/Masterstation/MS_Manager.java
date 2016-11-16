@@ -33,6 +33,7 @@ package Masterstation;
 //	 */
 //	public static void setSettings(int portNum) throws IOException{
 //		
+//		fileReceiver = new Receiver();
 //		fileReceiver.setPortNum(portNum);
 //				
 //	}

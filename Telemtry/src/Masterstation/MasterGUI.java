@@ -515,6 +515,7 @@ public class MasterGUI extends Application {
 		
 		//Start receiving files
 		System.out.println("Starting Server");
+		//execute run() method in Receiver thread
         new Receiver().start();
 		
 	}
