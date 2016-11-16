@@ -69,49 +69,6 @@ public class Sender {
         } catch (IOException ex) {
             // Do exception handling
         }
-        
-		
-		
-//		this.socket = new Socket(this.IPaddress, this.portNum);
-//		byte [] bytearray  = new byte [(int)transferFile.length()];
-//		FileInputStream fin;
-//		ZipOutputStream zipOutputStream;
-//		try {
-//			fin = new FileInputStream(transferFile);
-//        } catch (FileNotFoundException ex) {
-//            // Do exception handling
-//        	System.out.println("File transfer failed...");
-//        	return;
-//        }
-//		
-//		BufferedInputStream bin = new BufferedInputStream(fin);
-//
-//        try {
-//            bin.read(bytearray, 0, bytearray.length);
-//            OutputStream os = socket.getOutputStream();
-//            zipOutputStream = new ZipOutputStream(os);
-//            ZipEntry zipEntry = new ZipEntry(transferFile.getName());
-//            zipOutputStream.putNextEntry(zipEntry);
-//            System.out.println("Sending Files...");
-//            zipOutputStream.write(bytearray, 0, bytearray.length);
-//            
-//            // close ZipEntry to store the stream to the file
-//            zipOutputStream.closeEntry();
-//
-//            zipOutputStream.close();
-//            os.flush();
-//            os.close();
-//            fin.close();
-//            bin.close();
-//            System.out.println("File transfer complete");
-//
-//            // File sent, exit the main method
-//            return;
-//        } catch (IOException ex) {
-//            // Do exception handling
-//        }
-//        socket.close();
-//		System.out.println("Link disconnected");
 	}
 	
 	public static void zipFile(File inputFile, ZipOutputStream zipOutputStream) {
@@ -141,15 +98,6 @@ public class Sender {
         }
 
     }
-		
-	//This method safely closes the peer-to-peer connection	
-	/**
-	 * @throws IOException
-	 */
-//	public void close() throws IOException {
-//		socket.close();
-//		System.out.println("Link disconnected");
-//	}
 }
 
 
