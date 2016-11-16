@@ -27,7 +27,7 @@ public class GS_Manager{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GS_GUI GUIwindow = new GS_GUI();
+					GUIwindow = new GS_GUI();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
