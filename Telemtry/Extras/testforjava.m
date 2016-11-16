@@ -5,6 +5,8 @@ close all;
 Velocity=0;
 Altitude=0;
 Temperature=24;
+Humidity=100;
+Pressure=100000;
 x=0;
 y=0;
 tic;
@@ -13,6 +15,8 @@ while x~=1000
    Velocity=Velocity+1;
    Altitude=Altitude+10;
    Temperature=Temperature-0.1;
+   Humidity=Humidity-0.05;
+   Pressure=(100000)*exp(-Altitude/1000);
    Time_int=clock;
    fix(Time_int);
    Time1=Time_int(4);
@@ -21,20 +25,41 @@ while x~=1000
    t=floor(toc);   
    x=x+1;
    y=y+1;
-   foldername= sprintf('test%d.txt', y);
-   file = fopen(foldername,'w');   
-   header1='%4.2f,';
-   header2='%4.2f,';
-   header3='%4.2f,';
-   header4='%4.2f,';
-   header5='%4.2f,';
+   
+   tempFileName= sprintf('temp%d.txt', y);
+   tempFile = fopen(tempFileName,'w');
+   velocityFileName= sprintf('velocity%d.txt', y);
+   velocityFile = fopen(velocityFileName,'w');
+   humidityFileName= sprintf('humidity%d.txt', y);
+   humidityFile = fopen(humidityFileName,'w');
+   pressureFileName= sprintf('pressure%d.txt', y);
+   pressureFile = fopen(pressureFileName,'w');
   
-   fprintf(file, header1 , Velocity);
-   fprintf(file, header2 , Altitude);
-   fprintf(file, header3, Temperature);
-   fprintf(file, header4, Time);
-   fprintf(file, header5, t);
-   fclose(file);
-   pause(2);  
+   fprintf(tempFile, '%s\n' , 'temperature');
+   fprintf(tempFile, '%4.2f\n' , Altitude);
+   fprintf(tempFile, '%4.2f\n' , Temperature);
+   fprintf(tempFile, '%4.2f' , Temperature+20);
+   
+   fprintf(velocityFile, '%s\n' , 'velocity');
+   fprintf(velocityFile, '%4.2f\n' , Altitude);
+   fprintf(velocityFile, '%4.2f\n' , Velocity);
+   fprintf(velocityFile, '%4.2f' , Velocity+40);
+   
+   fprintf(humidityFile, '%s\n' , 'humidity');
+   fprintf(humidityFile, '%4.2f\n' , Altitude);
+   fprintf(humidityFile, '%4.2f\n' , Humidity);
+   fprintf(humidityFile, '%4.2f' , Humidity+10);
+   
+   fprintf(pressureFile, '%s\n' , 'pressure');
+   fprintf(pressureFile, '%4.2f\n' , Altitude);
+   fprintf(pressureFile, '%4.2f\n' , Pressure);
+   fprintf(pressureFile, '%4.2f' , Pressure+1000);
+   
+   fclose(tempFile);
+   fclose(velocityFile);
+   fclose(humidityFile);
+   fclose(pressureFile);
+   
+   pause(1);  
    
 end
