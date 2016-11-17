@@ -26,6 +26,7 @@ public class DataHandler {
 		
 	        // create a buffer to improve copy performance later.
 	        byte[] buffer = new byte[2048];
+	        int len;
 
 	        // open the zip file stream
 	        ZipInputStream stream = new ZipInputStream(inputStream);
@@ -47,21 +48,20 @@ public class DataHandler {
 	                // Once we get the entry from the stream, the stream is
 	                // positioned to read the raw data, and we keep
 	                // reading until read returns 0 or less.
-	                File dataFile = null;
+	                //File dataFile = null;
 	                String outpath = plotDataLocation + "/" + entry.getName();
 	                FileOutputStream output = null;
-	                FileOutputStream testPut = null;
+	                //FileOutputStream testPut = null;
 	                try
 	                {
 	                    output = new FileOutputStream(outpath);
-	                    testPut = new FileOutputStream(dataFile);
-	                    int len;
+	                    //testPut = new FileOutputStream(dataFile);
 						len = stream.read(buffer);
 
-	                    while (len != 0)
+	                    while (len > 0)
 	                    {
 	                        output.write(buffer, 0, len);
-	                        testPut.write(buffer, 0, len);
+	                        //testPut.write(buffer, 0, len);
 	                        len = stream.read(buffer);
 	                    }
 	                }
@@ -70,7 +70,7 @@ public class DataHandler {
 	                    // we must always close the output file
 	                    if(output!=null) {
 							output.close();
-							testPut.close();
+							//testPut.close();
 	                    }
 	                }
 	            }

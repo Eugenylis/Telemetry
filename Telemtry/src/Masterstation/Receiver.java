@@ -20,6 +20,9 @@ import java.net.Socket;
 
 public class Receiver extends Thread {
 
+
+	public DataHandler dataHandler;
+	
 	//Socket for communication
 	protected Socket socket;
 	//ServerSocket to accept incoming connections
@@ -32,7 +35,7 @@ public class Receiver extends Thread {
     protected static int counter = 0;
     
     //port number
-    private int portNum = 9040; //TODO ---------------------------------------delete and put into GUI
+    private int portNum = 9050; //TODO ---------------------------------------delete and put into GUI
     //maximum file size to be received in bytes
     private int fileSize = 1022386;
     
@@ -48,6 +51,8 @@ public class Receiver extends Thread {
      */
     public Receiver(String name) throws IOException {
         super(name);
+        
+        dataHandler = new DataHandler("C:\\Users\\GAZDAE\\Documents\\DataStuff");
  
         //set port number to server socket
         serverSocket = new ServerSocket(portNum); 
@@ -83,48 +88,55 @@ public class Receiver extends Thread {
     			
     			System.out.println("1");
     			InputStream inputStream = socket.getInputStream();
+    			dataHandler.addNewData(inputStream);
     			
     			System.out.println("2");
-    			FileOutputStream fos = new FileOutputStream("test_" + counter + ".txt");
+    			FileOutputStream fos = new FileOutputStream("test_" + counter + ".zip");
     			
     			System.out.println("3");
     			BufferedOutputStream bos = new BufferedOutputStream(fos);
     			
     			System.out.println("4");
-    			bytesRead = inputStream.read(bytearray,0,bytearray.length); 
-    			
-    			System.out.println("5");
-    			currentTot = bytesRead; 
-    			
-    			System.out.println("Writing to a file");
-    			do{    				
-    				System.out.println("6");
-    				bytesRead = inputStream.read(bytearray, currentTot, (bytearray.length-currentTot)); 
-    				
-    				System.out.println("7");
-    				if(bytesRead >= 0) currentTot += bytesRead; 
-    				
-    				System.out.println("8");
-    			} while(bytesRead != -1);
+    			//bytesRead = inputStream.read(bytearray,0,bytearray.length);
+//    			
+//    			System.out.println("5");
+//    			currentTot = bytesRead; 
+//    			
+//    			System.out.println("Writing to a file");
+//    			do{    				
+//    				System.out.println("6");
+//    				//bytesRead = inputStream.read(bytearray, currentTot, (bytearray.length-currentTot)); 
+//    				
+//    				System.out.println("7");
+//    				if(bytesRead >= 0) currentTot += bytesRead; 
+//    				
+//    				System.out.println("8");
+//    			} while(bytesRead != -1);
 
     			System.out.println("9");
-    			bos.write(bytearray, 0 , currentTot);
+    			//bos.write(bytearray, 0 , currentTot);
     			System.out.println("10");
     			bos.flush();
     			System.out.println("11");
     			bos.close();
     			
     			//close the socket
-    			socket.close();
+    			
 
     			System.out.println("--------------------------------------Done");
     			counter++;
     			System.out.println("Counter is: " + counter);
     			
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 //stop the loop
                 moreData = false;
+                try {
+					socket.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
             }
         }
 
