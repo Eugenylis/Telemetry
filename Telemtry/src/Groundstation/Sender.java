@@ -64,7 +64,7 @@ public class Sender {
             os.close();
             System.out.println("File transfer complete");
 
-            socket.close();
+            //socket.close();
             
         } catch (IOException ex) {
             // Do exception handling
