@@ -435,12 +435,15 @@ public class MasterGUI extends Application {
         plotGridPane = new GridPane();        		
 		plotGridPane.setHgap(10);
         plotGridPane.setVgap(10);
-        plotGridPane.getChildren().add(swingNode);  
-		Plot.setContent(plotGridPane);	
+        Plot.setContent(plotGridPane);
+        FlowPane  plotter = new FlowPane();
+        plotter.getChildren().add(swingNode);
+        plotGridPane.add(plotter,1,1);  
+			
 //		plotGridPane.add(lineChart1, 1, 1);
 //		plotGridPane.add(lineChart2, 1, 2);
 //		plotGridPane.add(lineChart3, 2, 1);
-//  		plotGridPane.add(lineChart4, 2, 2); 	
+//      plotGridPane.add(lineChart4, 2, 2); 	
   
 //lineChart.setVisible(true);
 	}
