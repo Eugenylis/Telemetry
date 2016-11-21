@@ -42,4 +42,37 @@ public abstract class MS_Manager{
 		fileReceiver.setPortNum(portNum);
 				
 	}
+	
+	
+	/**
+	 * Method to check if the text typed in a box is a 4-digit integer
+	 * Checks if the string is empty
+	 * Checks if string is not equal to 4
+	 * Checks each character in a string for being an integer
+	 * 
+	 * @param str - a string to check
+	 * @param radix - length of a string
+	 * @return verify that string is a 4-digit integer number
+	 */
+	public static boolean isInteger(String str, int radix) {
+		
+		boolean verify = true;
+		//check is string is empty
+	    if(str.isEmpty()){ verify = false;}
+	    
+	    //check is the string is less than 4 characters long
+	    if(str.length() != 4) {verify = false;}
+	    
+	    //check each charter for being a number
+	    for(int i = 0; i < str.length(); i++) {
+	        if(i == 0 && str.charAt(i) == '-') {
+	            if(str.length() == 1 ) { verify = false;}
+	        }
+	        if(Character.digit(str.charAt(i),radix) < 0) {
+	        	verify = false;
+	        }
+	    }
+	    
+		return verify;
+	}
 }
