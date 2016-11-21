@@ -1,14 +1,13 @@
 package Masterstation;
 
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.zip.ZipEntry;
@@ -94,6 +93,7 @@ public class DataHandler {
 	
 	private String[] filterData(String filePath) throws IOException {
 		String[] filteredData = null; ///////////////////////////////////////////////////////////////////////////////////
+		String line;
 		int i;
 		
 		FileInputStream fis = new FileInputStream(filePath);
@@ -101,7 +101,7 @@ public class DataHandler {
 		//Construct BufferedReader from InputStreamReader
 		BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 	 
-		String line;
+		
 		for(i=0; i<3; i++) {
 			line = br.readLine();
 			System.out.println(line);
@@ -113,21 +113,25 @@ public class DataHandler {
 		return filteredData;
 	}
 	
-	private void addPlotdata(String[] dataArray){
+	private void addPlotdata(String[] dataArray) throws IOException{
 		
-		String fileDataWillBeAddedTo = plotDataLocation + "//" + dataArray + savedDataExt;
+		String fileDataWillBeAddedTo = plotDataLocation + "//" + dataArray[0] + savedDataExt;
+		BufferedWriter writer;
 		
 		if(Files.exists(Paths.get(fileDataWillBeAddedTo))){
-			//Add to the file
+			writer = Files.newBufferedWriter(Paths.get(fileDataWillBeAddedTo));
+			writer.write(dataArray[1] + "," + dataArray[2] + "\n");
 		}else{
-			//Create the file
+			writer = Files.newBufferedWriter(Paths.get(fileDataWillBeAddedTo));
+			writer.write(dataArray[1] + "," + dataArray[2] + "\n");
 		}
+		writer.close();
 		
-		
 	}
 	
 	
 	
+}
 	
 	
 	
@@ -136,142 +140,3 @@ public class DataHandler {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	//	public static void main(String[] args) {
-//
-//	        // The name of the file to open.
-//	        String fileName = "Temp.txt";
-//
-//	        // This will reference one line at a time
-//	        String line = null;
-//
-//	        try {
-//	            // FileReader reads text files in the default encoding.
-//	            FileReader fileReader = new FileReader(fileName);
-//
-//	            // Always wrap FileReader in BufferedReader.
-//	            BufferedReader bufferedReader = new BufferedReader(fileReader);
-//
-//	            while((line = bufferedReader.readLine()) != null) {
-//	                System.out.println(line);
-//	            }   
-//
-//	            // Always close files.
-//	            bufferedReader.close();         
-//	        }
-//	        
-//	        catch(FileNotFoundException ex) {
-//	            System.out.println(
-//	                "Unable to open file '" + 
-//	                fileName + "'");                
-//	        }
-//	        catch(IOException ex) {
-//	            System.out.println(
-//	                "Error reading file '" 
-//	                + fileName + "'");                  
-//	            
-//	        }
-//	    }
-	
-/*	public void ScanData() throws IOException {
-		//Scans in data from the text document test.txt
-			//Here are the File Objects
-			double[] dataPacket = new double[5]; //define number array
-			File inputFile = new File("test.txt");
-			int i; //general counting
-			
-	    	
-			if(inputFile.exists()) {
-				
-				//Reads in characters from text document
-				BufferedReader br = new BufferedReader(new FileReader(inputFile));
-
-				//this reads everything character by character
-				String line;
-				String[] numLine;
-				
-				while ((line = br.readLine()) != null)  {
-					numLine = line.split(" ");
-					
-					//dataPacket defined on line 24
-					dataPacket = new double[numLine.length];
-					for(i = 0; i < numLine.length; i++) {
-						dataPacket[i] = Double.parseDouble(numLine[i]);
-					}
-					//Saves parsed data line and new objects
-					BalloonData packet = new BalloonData(dataPacket);
-					Manager.packetArray.add(packet);
-				}
-				br.close();
-			}
-		}
-	
-	
-	
-	/*public DataHandler(double[] dataArray){
-
-		Altitude = dataArray[0];
-		Temp = dataArray[1];
-		Pressure = dataArray[2];
-		Density = dataArray[3];
-		SoundSpeed = dataArray[4];
-	
-	}
-	private double
-	Altitude, //meter
-	Temp, //celsius
-	Pressure, //bar
-	Density, //Relative density P/(P of ground) 
-	SoundSpeed; //m per s
-	
-
-
-
-	public double getAltitude() {
-		return 	Altitude;
-	}
-
-	public double getTemp() {
-		return Temp;
-	}
-
-	public double getPressure() {
-		return Pressure;
-	}
-
-	public double getDensity() {
-		return Density;
-	}
-
-	
-	public double getSoundSpeed() {
-		return SoundSpeed;
-	}
-
-	public void setTime(double altitude) {
-		Altitude = altitude;
-	}
-
-	public void setTemp(double temp) {
-		Temp = temp;
-	}
-
-	public void setPressure(double pressure) {
-		Pressure = pressure;
-	}
-
-	public void setDensity(double density) {
-		Density = density;
-	}
-
-	
-	public void setSoundSpeed(double speed) {
-		SoundSpeed = speed;
-	}*/
-	
-}//end DataHandler
