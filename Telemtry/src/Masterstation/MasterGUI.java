@@ -371,7 +371,6 @@ public class MasterGUI extends Application {
 		}
 	//	VBox.clearConstraints(stationDetailsVBox);
 
-			System.out.print("jhgf");
 
 	}
 	
