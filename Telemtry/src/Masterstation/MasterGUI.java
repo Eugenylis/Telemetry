@@ -61,8 +61,6 @@ import javafx.stage.Window;
 public class MasterGUI extends Application {
 	
 
-	public Receiver receiver;
-	
 	// Pane
 	private BorderPane borderPane;
 	private Button btStation;
@@ -618,7 +616,7 @@ public class MasterGUI extends Application {
 		//Start receiving files
 		System.out.println("Starting Server");
 		//execute run() method in Receiver thread
-		MS_Manager.fileReceiver.start();
+		MS_Manager.fileReceiverThread.start();
 		
 	}
 	

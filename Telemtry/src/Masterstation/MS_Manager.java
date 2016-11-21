@@ -18,7 +18,7 @@ import javafx.application.Application;
 public abstract class MS_Manager{
    
 	//class for receiving incoming data
-	public static Receiver fileReceiver;
+	public static Receiver fileReceiverThread;
 	
 	
 	/**
@@ -38,8 +38,8 @@ public abstract class MS_Manager{
 	 */
 	public static void setSettings(int portNum) throws IOException{
 		
-		fileReceiver = new Receiver();
-		fileReceiver.setPortNum(portNum);
+		fileReceiverThread = new Receiver();
+		fileReceiverThread.setPortNum(portNum);
 				
 	}
 	
