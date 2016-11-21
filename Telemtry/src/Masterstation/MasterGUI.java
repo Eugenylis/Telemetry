@@ -491,17 +491,17 @@ public class MasterGUI extends Application {
         			        	// if the number of new line is added then do it 
         			            if( Xcount == count ) {	     			    
         							        
-        						            if( Ycount == count ) {
-        						            double number = Double.parseDouble(line);
-        									System.out.println(number);				
-        									double number2 = Double.parseDouble(line2);
-        						            System.out.println(number2);	
-        									series.add(number, number2);
-        									plot.repaint();
-        									Ycount++;
-        									Xcount++;
-        									counter++;
-        					                }
+						            if( Ycount == count ) {
+							            double number = Double.parseDouble(line);
+										System.out.println(number);				
+										double number2 = Double.parseDouble(line2);
+							            System.out.println(number2);	
+										series.add(number, number2);
+										plot.repaint();
+										Ycount++;
+										Xcount++;
+										counter++;
+    					            }
         			            }    
         			        }
         					}catch(IOException e){
