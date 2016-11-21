@@ -35,24 +35,24 @@ while x~=1000
    pressureFileName= sprintf('pressure%d.txt', y);
    pressureFile = fopen(pressureFileName,'w');
   
-   fprintf(tempFile, '%s\n' , 'temperature');
-   fprintf(tempFile, '%4.2f\n' , Altitude);
-   fprintf(tempFile, '%4.2f\n' , Temperature);
+   fprintf(tempFile, '%s,' , 'temperature');
+   fprintf(tempFile, '%4.2f,' , Altitude);
+   fprintf(tempFile, '%4.2f,' , Temperature);
    fprintf(tempFile, '%4.2f' , Temperature+20);
    
-   fprintf(velocityFile, '%s\n' , 'velocity');
-   fprintf(velocityFile, '%4.2f\n' , Altitude);
-   fprintf(velocityFile, '%4.2f\n' , Velocity);
+   fprintf(velocityFile, '%s,' , 'velocity');
+   fprintf(velocityFile, '%4.2f,' , Altitude);
+   fprintf(velocityFile, '%4.2f,' , Velocity);
    fprintf(velocityFile, '%4.2f' , Velocity+40);
    
-   fprintf(humidityFile, '%s\n' , 'humidity');
-   fprintf(humidityFile, '%4.2f\n' , Altitude);
-   fprintf(humidityFile, '%4.2f\n' , Humidity);
+   fprintf(humidityFile, '%s,' , 'humidity');
+   fprintf(humidityFile, '%4.2f,' , Altitude);
+   fprintf(humidityFile, '%4.2f,' , Humidity);
    fprintf(humidityFile, '%4.2f' , Humidity+10);
    
-   fprintf(pressureFile, '%s\n' , 'pressure');
-   fprintf(pressureFile, '%4.2f\n' , Altitude);
-   fprintf(pressureFile, '%4.2f\n' , Pressure);
+   fprintf(pressureFile, '%s,' , 'pressure');
+   fprintf(pressureFile, '%4.2f,' , Altitude);
+   fprintf(pressureFile, '%4.2f,' , Pressure);
    fprintf(pressureFile, '%4.2f' , Pressure+1000);
    
    fclose(tempFile);

@@ -93,7 +93,7 @@ public class DataHandler {
 	
 	private String[] filterData(String filePath) throws IOException {
 		String[] filteredData = null; ///////////////////////////////////////////////////////////////////////////////////
-		String line;
+		String[] linePart;
 		int i;
 		
 		FileInputStream fis = new FileInputStream(filePath);
@@ -101,12 +101,11 @@ public class DataHandler {
 		//Construct BufferedReader from InputStreamReader
 		BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 	 
+		linePart = br.readLine().split(",");
 		
-		for(i=0; i<3; i++) {
-			line = br.readLine();
-			System.out.println(line);
-			filteredData[i] = line;
-		}
+		filteredData[0] = linePart[0];
+		filteredData[1] = linePart[1];
+		filteredData[2] = linePart[2];
 	 
 		br.close();
 		
