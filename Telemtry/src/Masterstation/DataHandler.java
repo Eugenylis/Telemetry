@@ -1,9 +1,15 @@
 package Masterstation;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -12,13 +18,14 @@ public class DataHandler {
 	
 	String dataLocation;
 	String plotDataLocation;
+	String savedDataExt = ".txt";
 
 
 
 	
 	public DataHandler(String dataSaveLocation) {
 		
-		this.dataLocation = dataSaveLocation;
+		this.dataLocation = dataSaveLocation; //assumed to not have an ending //
 		this.plotDataLocation = dataLocation + "//plotData";
 	}
 	
@@ -49,20 +56,20 @@ public class DataHandler {
 	                // positioned to read the raw data, and we keep
 	                // reading until read returns 0 or less.
 	                //File dataFile = null;
-	                String outpath = plotDataLocation + "/" + entry.getName();
+	                String outpath = dataLocation + "/" + entry.getName();
 	                FileOutputStream output = null;
 	                //FileOutputStream testPut = null;
 	                try
 	                {
 	                    output = new FileOutputStream(outpath);
 	                    //testPut = new FileOutputStream(dataFile);
-						len = stream.read(buffer);
+						
 
-	                    while (len > 0)
+	                    while ((len = stream.read(buffer)) > 0)
 	                    {
 	                        output.write(buffer, 0, len);
 	                        //testPut.write(buffer, 0, len);
-	                        len = stream.read(buffer);
+	                        //len = stream.read(buffer);
 	                    }
 	                }
 	                finally
@@ -70,6 +77,7 @@ public class DataHandler {
 	                    // we must always close the output file
 	                    if(output!=null) {
 							output.close();
+							addPlotdata(filterData(outpath));
 							//testPut.close();
 	                    }
 	                }
@@ -80,6 +88,40 @@ public class DataHandler {
 	            // we must always close the zip file.
 	            stream.close();
 	        }
+		
+		
+	}
+	
+	private String[] filterData(String filePath) throws IOException {
+		String[] filteredData = null; ///////////////////////////////////////////////////////////////////////////////////
+		int i;
+		
+		FileInputStream fis = new FileInputStream(filePath);
+		 
+		//Construct BufferedReader from InputStreamReader
+		BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+	 
+		String line;
+		for(i=0; i<3; i++) {
+			line = br.readLine();
+			System.out.println(line);
+			filteredData[i] = line;
+		}
+	 
+		br.close();
+		
+		return filteredData;
+	}
+	
+	private void addPlotdata(String[] dataArray){
+		
+		String fileDataWillBeAddedTo = plotDataLocation + "//" + dataArray + savedDataExt;
+		
+		if(Files.exists(Paths.get(fileDataWillBeAddedTo))){
+			//Add to the file
+		}else{
+			//Create the file
+		}
 		
 		
 	}
