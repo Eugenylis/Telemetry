@@ -66,7 +66,7 @@ public class MasterGUI extends Application {
 	// Pane
 	private BorderPane borderPane;
 	private Button btStation;
-	private TextField txNameOfStation, txGPSNum;
+	private TextField txNameOfStation, txPortNum;
 	
 	// Menu
 	private MenuBar menuBar; // MenuBar
@@ -94,12 +94,16 @@ public class MasterGUI extends Application {
 	private Axis<Number> yAxis1, yAxis2, yAxis3, yAxis4;
 	private LineChart<Number,Number> lineChart1, lineChart2, lineChart3, lineChart4;
 	
+	//for Communications
+	int portNumber;
+	
+	
 	/**
 	 * @param args
 	 * 
 	 * Launches the GUI
 	 */
-	public static void main(String[] args) { launch(args);}
+	//public static void main(String[] args) { launch(args);}
 	
 	/**
 	 *  The method that contains all GUI details
@@ -114,7 +118,7 @@ public class MasterGUI extends Application {
 		menuFile = new Menu("File");
 		menuSettings = new Menu("Settings");
 		menuConnections = new Menu("Connection");
-		menuGroundStation = new Menu("Settup Ground Stations");
+		menuGroundStation = new Menu("Setup Ground Stations");
 		miAddStation = new MenuItem("Add Station");
 		miRemoveStation = new MenuItem("Remove Station");
 		miSave = new MenuItem("Save");
@@ -295,9 +299,9 @@ public class MasterGUI extends Application {
 	public void showAddStation(){
 		
 		Label lbNameOfStation = new Label("Name of Station:");
-		Label lbGPSNum = new Label("GPS Number:");
+		Label lbGPSNum = new Label("Port Number:");
 		txNameOfStation = new TextField();
-		txGPSNum = new TextField();
+		txPortNum = new TextField();
 		Button btAddStation = new Button("Add");
 		btAddStation.setOnAction(arg0 -> addStations());
 		
@@ -308,7 +312,7 @@ public class MasterGUI extends Application {
 		addStationPane.add(lbNameOfStation, 1, 1);
 		addStationPane.add(txNameOfStation, 2, 1);
 		addStationPane.add(lbGPSNum, 1, 2);
-		addStationPane.add(txGPSNum, 2, 2);
+		addStationPane.add(txPortNum, 2, 2);
 		addStationPane.add(btAddStation, 1, 3);
 
 		
@@ -323,33 +327,42 @@ public class MasterGUI extends Application {
 	
 	public void addStations(){
 		
-		stationDetailsVBox = new VBox();
-		HBox stationHBox = new HBox();
-		HBox stationDetailsHBox = new HBox();
-		stationHBox.setSpacing(30);
-		stationDetailsVBox.setSpacing(10);
-		stationDetailsVBox.setPadding(new Insets (5, 2, 5, 16));
-		stationDetailsHBox.setSpacing(5);;
-		Label lbStationDetails = new Label();
-		btStation = new Button();
-		btStation.setOnAction(arg0 -> btStationActions());
-		Label lbGPS = new Label("GPS number:");
-		cbSelectStation = new CheckBox();
-		if (cbSelectStation.isSelected()){
+		//check if text typed in textbox txProtNum is a 4-digit integer number
+		if(isInteger(txPortNum.getText(),4)){
+			stationDetailsVBox = new VBox();
+			HBox stationHBox = new HBox();
+			HBox stationDetailsHBox = new HBox();
+			stationHBox.setSpacing(30);
+			stationDetailsVBox.setSpacing(10);
+			stationDetailsVBox.setPadding(new Insets (5, 2, 5, 16));
+			stationDetailsHBox.setSpacing(5);;
+			Label lbStationDetails = new Label();
+			btStation = new Button();
+			btStation.setOnAction(arg0 -> btStationActions());
+			Label lbPortNum = new Label("Port number:");
+			cbSelectStation = new CheckBox();
+			
+			if (cbSelectStation.isSelected()){
+				miRemoveStation.setOnAction(arg0 -> removeSelectedStation());
+			}
+			
+			stationHBox.getChildren().addAll(cbSelectStation, btStation);
+			stationDetailsHBox.getChildren().addAll(lbPortNum, lbStationDetails);
+			stationDetailsVBox.getChildren().addAll(stationHBox, stationDetailsHBox);
+			btStation.setText(txNameOfStation.getText());
+			lbStationDetails.setText(txPortNum.getText());
+			stationVBox.getChildren().addAll(stationDetailsVBox);
+			
+
+			//testing remove function
 			miRemoveStation.setOnAction(arg0 -> removeSelectedStation());
+			
+			
+			//assign port number to the station
+			portNumber = Integer.parseInt(txPortNum.getText());
 		}
-		stationHBox.getChildren().addAll(cbSelectStation, btStation);
-		stationDetailsHBox.getChildren().addAll(lbGPS, lbStationDetails);
-		stationDetailsVBox.getChildren().addAll(stationHBox, stationDetailsHBox);
-		btStation.setText(txNameOfStation.getText());
-		lbStationDetails.setText(txGPSNum.getText());
-		stationVBox.getChildren().addAll(stationDetailsVBox);
-		
-		//testing remove function
-		miRemoveStation.setOnAction(arg0 -> removeSelectedStation());
-				
-		
 	}
+	
 	public void removeSelectedStation(){
 			
 		if(cbSelectStation.isSelected()){
@@ -596,16 +609,55 @@ public class MasterGUI extends Application {
 	}
 	
 	/**
+	 * Method starts executing thread in receiver class to start communication
+	 * Allows connection to the Ground Station
 	 * @throws IOException
 	 * 
-	 * Allows connection to the Ground Station
 	 */
 	public void Connect() throws IOException{
-		
+		MS_Manager.setSettings(portNumber);
 		//Start receiving files
 		System.out.println("Starting Server");
 		//execute run() method in Receiver thread
-        new Receiver().start();
+		MS_Manager.fileReceiver.start();
 		
+	}
+	
+	
+	/**
+	 * Method to check if the text typed in a box is a 4-digit integer
+	 * Checks if the string is empty
+	 * Checks if string is not equal to 4
+	 * Checks each character in a string for being an integer
+	 * 
+	 * @param str - a string to check
+	 * @param radix - length of a string
+	 * @return verify that string is a 4-digit integer number
+	 */
+	public static boolean isInteger(String str, int radix) {
+		boolean verify = true;
+		
+		//check is string is empty
+	    if(str.isEmpty()){ 
+	    	verify = false;
+	    }
+	    
+	    //check is the string is less than 4 characters long
+	    if(str.length() != 4) {
+        	verify = false;
+        }
+	    
+	    //check each charter for being a number
+	    for(int i = 0; i < str.length(); i++) {
+	        if(i == 0 && str.charAt(i) == '-') {
+	            if(str.length() == 1 ) {
+	            	verify = false;
+	            }
+	        }
+	        if(Character.digit(str.charAt(i),radix) < 0) {
+	        	verify = false;
+	        }
+	    }
+		return verify;
 	}
 }

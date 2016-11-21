@@ -80,20 +80,17 @@ public class Receiver extends Thread {
             	
             	//allow to accept incoming connections
             	socket = serverSocket.accept();
-                
-                System.out.println("test");
-
+                  
         		System.out.println("Accepted connection : " + socket);
                 byte [] bytearray = new byte [fileSize];
     			
-    			System.out.println("1");
+                //get input stream from a socket
     			InputStream inputStream = socket.getInputStream();
     			dataHandler.addNewData(inputStream);
     			
-    			System.out.println("2");
+    			//create new zip file
     			FileOutputStream fos = new FileOutputStream("test_" + counter + ".zip");
-    			
-    			System.out.println("3");
+    			//create buffered output stream for writing data into a file
     			BufferedOutputStream bos = new BufferedOutputStream(fos);
     			
     			System.out.println("4");
@@ -113,11 +110,10 @@ public class Receiver extends Thread {
 //    				System.out.println("8");
 //    			} while(bytesRead != -1);
 
-    			System.out.println("9");
     			//bos.write(bytearray, 0 , currentTot);
-    			System.out.println("10");
+    			
+    			//cleanup buffered output stream
     			bos.flush();
-    			System.out.println("11");
     			bos.close();
     			
     			//close the socket
@@ -138,8 +134,8 @@ public class Receiver extends Thread {
 					e1.printStackTrace();
 				}
             }
-        }
-
+            
+        } // end of while(moreData)
     } // end of run()
 
     
@@ -158,6 +154,19 @@ public class Receiver extends Thread {
      */
     public int getPortNum(){
     	return this.portNum;
+    }
+    
+    
+    /**
+     * Method to close the socket to stop communication
+     */
+    public void closeSocket(){
+    	try {
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
    
