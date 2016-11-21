@@ -328,7 +328,7 @@ public class MasterGUI extends Application {
 	public void addStations(){
 		
 		//check if text typed in textbox txProtNum is a 4-digit integer number
-		if(MS_Manager.isInteger(txPortNum.getText(),4)){
+		if(MS_Manager.isInteger(txPortNum.getText(),10)){
 			stationDetailsVBox = new VBox();
 			HBox stationHBox = new HBox();
 			HBox stationDetailsHBox = new HBox();

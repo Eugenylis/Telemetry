@@ -51,7 +51,7 @@ public abstract class MS_Manager{
 	 * Checks each character in a string for being an integer
 	 * 
 	 * @param str - a string to check
-	 * @param radix - length of a string
+	 * @param radix - radix, range
 	 * @return verify that string is a 4-digit integer number
 	 */
 	public static boolean isInteger(String str, int radix) {
