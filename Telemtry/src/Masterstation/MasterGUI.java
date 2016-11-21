@@ -330,7 +330,7 @@ public class MasterGUI extends Application {
 			stationDetailsVBox = new VBox();
 			HBox stationHBox = new HBox();
 			HBox stationDetailsHBox = new HBox();
-			stationHBox.setSpacing(30);
+			stationHBox.setSpacing(10);
 			stationDetailsVBox.setSpacing(10);
 			stationDetailsVBox.setPadding(new Insets (5, 2, 5, 16));
 			stationDetailsHBox.setSpacing(5);;
@@ -344,7 +344,18 @@ public class MasterGUI extends Application {
 				miRemoveStation.setOnAction(arg0 -> removeSelectedStation());
 			}
 			
-			stationHBox.getChildren().addAll(cbSelectStation, btStation);
+			Button btConnect = new Button("Connect");
+			btConnect.setStyle("-fx-background-color: mediumseagreen ");
+			btConnect.setOnAction(arg0 -> {
+				try {
+					Connect();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+			
+			stationHBox.getChildren().addAll(cbSelectStation, btConnect, btStation);
 			stationDetailsHBox.getChildren().addAll(lbPortNum, lbStationDetails);
 			stationDetailsVBox.getChildren().addAll(stationHBox, stationDetailsHBox);
 			btStation.setText(txNameOfStation.getText());
