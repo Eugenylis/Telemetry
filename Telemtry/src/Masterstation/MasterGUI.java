@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import javax.swing.SwingUtilities;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -71,9 +74,8 @@ public class MasterGUI extends Application {
 	private Menu menuHelp, menuFile, menuSettings, menuConnections, menuGroundStation; // Menus
 	private MenuItem miSave, miOpen, miHelp, miPlotData, miConnect, miAddStation, miRemoveStation, miStationSettings, miDataSincFreq;
 	//VBox for Status Display
-	private VBox stationVBox, stationDetailsVBox;
+	private VBox stationVBox;
 	private Label lbTitle;
-	private CheckBox cbSelectStation;
 	
 	// TabPane
 	private TabPane tabPanePlots;
@@ -164,113 +166,32 @@ public class MasterGUI extends Application {
 		
 		
 		
-		/****SAMPLE PLOT*********************************/
-		//defining the axes
-	    xAxis1 = new NumberAxis();
-	    yAxis1 = new NumberAxis();
-	    yAxis1.setLabel("Velocity");
-	    xAxis1.setLabel("Time");
-	    //creating the chart
-	    lineChart1 = new LineChart<Number,Number>(xAxis1,yAxis1);
-	    lineChart1.setTitle("Velocity vs Time");
-	    //defining a series
-	    XYChart.Series series1 = new XYChart.Series();
-        //populating the series with data
-        series1.getData().add(new XYChart.Data(1, 23));
-        series1.getData().add(new XYChart.Data(2, 14));
-        series1.getData().add(new XYChart.Data(3, 15));
-        series1.getData().add(new XYChart.Data(4, 24));
-        series1.getData().add(new XYChart.Data(5, 34));
-        series1.getData().add(new XYChart.Data(6, 36));
-        series1.getData().add(new XYChart.Data(7, 22));
-        series1.getData().add(new XYChart.Data(8, 45));
-        series1.getData().add(new XYChart.Data(9, 43));
-        series1.getData().add(new XYChart.Data(10, 17));
-        series1.getData().add(new XYChart.Data(11, 29));
-        series1.getData().add(new XYChart.Data(12, 25));
-	        
-        lineChart1.getData().add(series1);
-        
-        /****SAMPLE PLOT*********************************/
-		//defining the axes
-	    xAxis2 = new NumberAxis();
-	    yAxis2 = new NumberAxis();
-	    yAxis2.setLabel("Velocity");
-	    xAxis2.setLabel("Time");
-	    //creating the chart
-	    lineChart2 = new LineChart<Number,Number>(xAxis2,yAxis2);
-	    lineChart2.setTitle("Velocity vs Time");
-	    //defining a series
-	    XYChart.Series series2 = new XYChart.Series();
-        //populating the series with data
-        series2.getData().add(new XYChart.Data(1, 23));
-        series2.getData().add(new XYChart.Data(2, 14));
-        series2.getData().add(new XYChart.Data(3, 15));
-        series2.getData().add(new XYChart.Data(4, 24));
-        series2.getData().add(new XYChart.Data(5, 34));
-        series2.getData().add(new XYChart.Data(6, 36));
-        series2.getData().add(new XYChart.Data(7, 22));
-        series2.getData().add(new XYChart.Data(8, 45));
-        series2.getData().add(new XYChart.Data(9, 43));
-        series2.getData().add(new XYChart.Data(10, 17));
-        series2.getData().add(new XYChart.Data(11, 29));
-        series2.getData().add(new XYChart.Data(12, 25));
-	        
-        lineChart2.getData().add(series2);
-        
-        /****SAMPLE PLOT*********************************/
-		//defining the axes
-	    xAxis3 = new NumberAxis();
-	    yAxis3 = new NumberAxis();
-	    yAxis3.setLabel("Velocity");
-	    xAxis3.setLabel("Time");
-	    //creating the chart
-	    lineChart3 = new LineChart<Number,Number>(xAxis3,yAxis3);
-	    lineChart3.setTitle("Velocity vs Time");
-	    //defining a series
-	    XYChart.Series series3 = new XYChart.Series();
-        //populating the series with data
-        series3.getData().add(new XYChart.Data(1, 23));
-        series3.getData().add(new XYChart.Data(2, 14));
-        series3.getData().add(new XYChart.Data(3, 15));
-        series3.getData().add(new XYChart.Data(4, 24));
-        series3.getData().add(new XYChart.Data(5, 34));
-        series3.getData().add(new XYChart.Data(6, 36));
-        series3.getData().add(new XYChart.Data(7, 22));
-        series3.getData().add(new XYChart.Data(8, 45));
-        series3.getData().add(new XYChart.Data(9, 43));
-        series3.getData().add(new XYChart.Data(10, 17));
-        series3.getData().add(new XYChart.Data(11, 29));
-        series3.getData().add(new XYChart.Data(12, 25));
-	        
-        lineChart3.getData().add(series3);
-        
-        /****SAMPLE PLOT*********************************/
-		//defining the axes
-	    xAxis4 = new NumberAxis();
-	    yAxis4 = new NumberAxis();
-	    yAxis4.setLabel("Velocity");
-	    xAxis4.setLabel("Time");
-	    //creating the chart
-	    lineChart4 = new LineChart<Number,Number>(xAxis4,yAxis4);
-	    lineChart4.setTitle("Velocity vs Time");
-	    //defining a series
-	    XYChart.Series series4 = new XYChart.Series();
-        //populating the series with data
-        series4.getData().add(new XYChart.Data(1, 23));
-        series4.getData().add(new XYChart.Data(2, 14));
-        series4.getData().add(new XYChart.Data(3, 15));
-        series4.getData().add(new XYChart.Data(4, 24));
-        series4.getData().add(new XYChart.Data(5, 34));
-        series4.getData().add(new XYChart.Data(6, 36));
-        series4.getData().add(new XYChart.Data(7, 22));
-        series4.getData().add(new XYChart.Data(8, 45));
-        series4.getData().add(new XYChart.Data(9, 43));
-        series4.getData().add(new XYChart.Data(10, 17));
-        series4.getData().add(new XYChart.Data(11, 29));
-        series4.getData().add(new XYChart.Data(12, 25));
-	        
-        lineChart4.getData().add(series4);
+//		/****SAMPLE PLOT*********************************/
+//		//defining the axes
+//	    xAxis1 = new NumberAxis();
+//	    yAxis1 = new NumberAxis();
+//	    yAxis1.setLabel("Velocity");
+//	    xAxis1.setLabel("Time");
+//	    //creating the chart
+//	    lineChart1 = new LineChart<Number,Number>(xAxis1,yAxis1);
+//	    lineChart1.setTitle("Velocity vs Time");
+//	    //defining a series
+//	    XYChart.Series series1 = new XYChart.Series();
+//        //populating the series with data
+//        series1.getData().add(new XYChart.Data(1, 23));
+//        series1.getData().add(new XYChart.Data(2, 14));
+//        series1.getData().add(new XYChart.Data(3, 15));
+//        series1.getData().add(new XYChart.Data(4, 24));
+//        series1.getData().add(new XYChart.Data(5, 34));
+//        series1.getData().add(new XYChart.Data(6, 36));
+//        series1.getData().add(new XYChart.Data(7, 22));
+//        series1.getData().add(new XYChart.Data(8, 45));
+//        series1.getData().add(new XYChart.Data(9, 43));
+//        series1.getData().add(new XYChart.Data(10, 17));
+//        series1.getData().add(new XYChart.Data(11, 29));
+//        series1.getData().add(new XYChart.Data(12, 25));
+//	        
+//        lineChart1.getData().add(series1);
      
 	}
 	
@@ -327,22 +248,22 @@ public class MasterGUI extends Application {
 		
 		//check if text typed in textbox txProtNum is a 4-digit integer number
 		if(MS_Manager.isInteger(txPortNum.getText(),10)){
-			stationDetailsVBox = new VBox();
+			VBox localStationDetailsVBox = new VBox();
 			HBox stationHBox = new HBox();
 			HBox stationDetailsHBox = new HBox();
 			stationHBox.setSpacing(10);
-			stationDetailsVBox.setSpacing(10);
-			stationDetailsVBox.setPadding(new Insets (5, 2, 5, 16));
+			localStationDetailsVBox.setSpacing(10);
+			localStationDetailsVBox.setPadding(new Insets (5, 2, 5, 16));
 			stationDetailsHBox.setSpacing(5);;
 			Label lbStationDetails = new Label();
 			btStation = new Button();
 			btStation.setOnAction(arg0 -> btStationActions());
 			Label lbPortNum = new Label("Port number:");
-			cbSelectStation = new CheckBox();
+			CheckBox cbSelectStation = new CheckBox();
 			
-			if (cbSelectStation.isSelected()){
-				miRemoveStation.setOnAction(arg0 -> removeSelectedStation());
-			}
+//			if (cbSelectStation.isSelected()){
+//				miRemoveStation.setOnAction(arg0 -> removeSelectedStation()); /////////////////////////////////////////////////////////////
+//			}
 			
 			Button btConnect = new Button("Connect");
 			btConnect.setStyle("-fx-background-color: mediumseagreen ");
@@ -355,16 +276,19 @@ public class MasterGUI extends Application {
 				}
 			});
 			
-			stationHBox.getChildren().addAll(cbSelectStation, btConnect, btStation);
+			stationHBox.getChildren().add(0, cbSelectStation);
+			stationHBox.getChildren().add(1, btConnect);
+			stationHBox.getChildren().add(2, btStation);
 			stationDetailsHBox.getChildren().addAll(lbPortNum, lbStationDetails);
-			stationDetailsVBox.getChildren().addAll(stationHBox, stationDetailsHBox);
+			localStationDetailsVBox.getChildren().add(0, stationHBox);
+			localStationDetailsVBox.getChildren().add(1, stationDetailsHBox);
 			btStation.setText(txNameOfStation.getText());
 			lbStationDetails.setText(txPortNum.getText());
-			stationVBox.getChildren().addAll(stationDetailsVBox);
+			stationVBox.getChildren().add(localStationDetailsVBox);
 			
 
 			//testing remove function
-			miRemoveStation.setOnAction(arg0 -> removeSelectedStation());
+			miRemoveStation.setOnAction(arg0 -> removeSelectedStation()); ///////////////////////////////////////PLACE SOMEWHERE ELSE/////////////////////////
 			
 			
 			//assign port number to the station
@@ -374,13 +298,29 @@ public class MasterGUI extends Application {
 	
 	public void removeSelectedStation(){
 			
-		if(cbSelectStation.isSelected()){
-		
-		stationDetailsVBox.getChildren().clear();
+		VBox station = new VBox();
+		Object[] stationArray = stationVBox.getChildren().toArray();
+
+		int i;
+		int arrayLength = stationArray.length;
+		for(i=0; i < arrayLength; i++){
+			System.out.println(i);
+			try{
+				station = (VBox) stationArray[i];
+				System.out.println(1);
+				VBox vbox = (VBox) station.getChildren().get(0);
+				System.out.println(2);
+				CheckBox checkBox = (CheckBox) vbox.getChildren().get(0);
+				System.out.println(3);
+				if (checkBox.isSelected()){
+					System.out.println("sdfasdrgdsf");
+					stationVBox.getChildren().remove(i);
+				}
+				
+			}catch (Exception e){
+				System.out.println("failed");
+			}
 		}
-	//	VBox.clearConstraints(stationDetailsVBox);
-
-
 	}
 	
 	public void btStationActions(){
