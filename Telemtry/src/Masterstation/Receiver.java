@@ -74,54 +74,16 @@ public class Receiver extends Thread {
     
         while (moreData) {
             try {
-            	
-            	int bytesRead = 0;
-            	int currentTot = 0;
-            	
+            	            	
             	//allow to accept incoming connections
             	socket = serverSocket.accept();
                   
         		System.out.println("Accepted connection : " + socket);
-                byte [] bytearray = new byte [fileSize];
+
     			
                 //get input stream from a socket
     			InputStream inputStream = socket.getInputStream();
     			dataHandler.addNewData(inputStream);
-    			
-    			//create new zip file
-    			FileOutputStream fos = new FileOutputStream("test_" + counter + ".zip");
-    			//create buffered output stream for writing data into a file
-    			BufferedOutputStream bos = new BufferedOutputStream(fos);
-    			
-    			System.out.println("4");
-    			//bytesRead = inputStream.read(bytearray,0,bytearray.length);
-//    			
-//    			System.out.println("5");
-//    			currentTot = bytesRead; 
-//    			
-//    			System.out.println("Writing to a file");
-//    			do{    				
-//    				System.out.println("6");
-//    				//bytesRead = inputStream.read(bytearray, currentTot, (bytearray.length-currentTot)); 
-//    				
-//    				System.out.println("7");
-//    				if(bytesRead >= 0) currentTot += bytesRead; 
-//    				
-//    				System.out.println("8");
-//    			} while(bytesRead != -1);
-
-    			//bos.write(bytearray, 0 , currentTot);
-    			
-    			//cleanup buffered output stream
-    			bos.flush();
-    			bos.close();
-    			
-    			//close the socket
-    			
-
-    			System.out.println("--------------------------------------Done");
-    			counter++;
-    			System.out.println("Counter is: " + counter);
     			
             } catch (IOException e) {
                 //e.printStackTrace();
