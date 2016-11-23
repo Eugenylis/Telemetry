@@ -204,7 +204,7 @@ public class MasterGUI extends Application {
 	public void start(Stage stage) throws Exception {
 	
 		// Set the scene and the stage
-		Scene scene = new Scene(borderPane, 1000, 600);
+		Scene scene = new Scene(borderPane, 1200, 675);
 		stage.setScene(scene);
 		stage.setTitle("Telemetry Master Interface");
 		stage.setResizable(false);
@@ -400,6 +400,9 @@ public class MasterGUI extends Application {
         FlowPane  plotter = new FlowPane();
         plotter.getChildren().add(swingNode);
         plotGridPane.add(plotter,1,1);  
+        plotGridPane.add(plotter,1,2);  
+        plotGridPane.add(plotter,2,1);  
+        plotGridPane.add(plotter,2,2);  
 			
 //		plotGridPane.add(lineChart1, 1, 1);
 //		plotGridPane.add(lineChart2, 1, 2);
