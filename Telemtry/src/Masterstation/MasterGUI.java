@@ -20,6 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
@@ -44,6 +45,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -276,11 +278,11 @@ public class MasterGUI extends Application {
 				}
 			});
 			
-			stationHBox.getChildren().add(0, cbSelectStation);
+			stationHBox.getChildren().add(0, cbSelectStation); //Forcing cbSelectStation to be in index 0 allows easy reading later.
 			stationHBox.getChildren().add(1, btConnect);
 			stationHBox.getChildren().add(2, btStation);
 			stationDetailsHBox.getChildren().addAll(lbPortNum, lbStationDetails);
-			localStationDetailsVBox.getChildren().add(0, stationHBox);
+			localStationDetailsVBox.getChildren().add(0, stationHBox); //Forcing stationHBox  to be in index 0 allows easy reading later.
 			localStationDetailsVBox.getChildren().add(1, stationDetailsHBox);
 			btStation.setText(txNameOfStation.getText());
 			lbStationDetails.setText(txPortNum.getText());
@@ -290,7 +292,6 @@ public class MasterGUI extends Application {
 			//testing remove function
 			miRemoveStation.setOnAction(arg0 -> removeSelectedStation()); ///////////////////////////////////////PLACE SOMEWHERE ELSE/////////////////////////
 			
-			
 			//assign port number to the station
 			portNumber = Integer.parseInt(txPortNum.getText());
 		}
@@ -299,26 +300,25 @@ public class MasterGUI extends Application {
 	public void removeSelectedStation(){
 			
 		VBox station = new VBox();
-		Object[] stationArray = stationVBox.getChildren().toArray();
+		Iterator<Node> stationIterator = stationVBox.getChildren().iterator(); // Creates list like thing that allows it to me incremented 
+		//through. Changes to it also changes the elements of stationVBox.
 
-		int i;
-		int arrayLength = stationArray.length;
-		for(i=0; i < arrayLength; i++){
-			System.out.println(i);
+		while(stationIterator.hasNext()){
+			// In the current setup, this while loop will loop through all elements of stationVBox. 
+			// The first line in the try statement casts the element into a VBox, if the element is not a VBox then it will through an error
+			// and be caught in the catch statement then continues through the loop. If the element is a VBox then it will continues to the next
+			// line and assuming the above layout does not change (stationVBox(VBox) -> localStationDetailsVBox(VBox) -> stationHBox(HBox) -> cbSelectStation(CheckBox))
 			try{
-				station = (VBox) stationArray[i];
-				System.out.println(1);
-				VBox vbox = (VBox) station.getChildren().get(0);
-				System.out.println(2);
+				station = (VBox) stationIterator.next();
+				HBox vbox = (HBox) station.getChildren().get(0);
 				CheckBox checkBox = (CheckBox) vbox.getChildren().get(0);
-				System.out.println(3);
 				if (checkBox.isSelected()){
-					System.out.println("sdfasdrgdsf");
-					stationVBox.getChildren().remove(i);
+					stationIterator.remove(); //If checkBox is selected (as in it was checked), it is removed from the iterator (which is connected to the stationVBox) 
+					//which removes it from stationVBox.
 				}
 				
 			}catch (Exception e){
-				System.out.println("failed");
+
 			}
 		}
 	}
