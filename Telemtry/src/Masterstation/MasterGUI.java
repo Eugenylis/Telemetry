@@ -47,6 +47,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -392,15 +393,29 @@ public class MasterGUI extends Application {
 		//Add a swing node
         final SwingNode swingNode = new SwingNode();        
         createSwingContent(swingNode);
+        final SwingNode swingNode1 = new SwingNode();        
+        createSwingContent1(swingNode1);
+        final SwingNode swingNode2 = new SwingNode();        
+        createSwingContent2(swingNode2);
+        final SwingNode swingNode3 = new SwingNode();        
+        createSwingContent3(swingNode3);
+        
 		 //Plots in tabPane Plot1
         plotGridPane = new GridPane();        		
 		plotGridPane.setHgap(10);
         plotGridPane.setVgap(10);
         Plot.setContent(plotGridPane);
-        FlowPane  plotter = new FlowPane();
+      //Plots in tabPane Plot1 (change the TilePane to some blank pane for the swing)
+        TilePane  plotter = new TilePane();
         plotter.getChildren().add(swingNode);
+        TilePane  plotter1 = new TilePane();
+        plotter1.getChildren().add(swingNode1);     
+        TilePane  plotter2 = new TilePane();
+        plotter2.getChildren().add(swingNode2); 
+        TilePane  plotter3 = new TilePane();
+        plotter3.getChildren().add(swingNode3); 
         plotGridPane.add(plotter,1,1);  
-        plotGridPane.add(plotter,1,2);  
+        plotGridPane.add(plotter1,1,2);  
         plotGridPane.add(plotter,2,1);  
         plotGridPane.add(plotter,2,2);  
 			
@@ -452,6 +467,198 @@ public class MasterGUI extends Application {
 							            System.out.println(number2);	
 										series.add(number, number2);
 										plot.repaint();
+										Ycount++;
+										Xcount++;
+										counter++;
+    					            }
+        			            }    
+        			        }
+        					}catch(IOException e){
+        						e.printStackTrace();
+        					}
+        							}catch(IOException e){
+        								e.printStackTrace();
+        							}					
+        			            }
+        			        }					
+
+        			
+        		
+        			//end while
+        		};
+        		thread.start();
+            }
+        });
+		
+	}
+	private void createSwingContent1(SwingNode swingNode1) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+            	XYSeries series1 = new XYSeries("Light Sensor Readings");
+            	XYSeriesCollection dataset1 = new XYSeriesCollection(series1);
+        		JFreeChart chart1 = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading",dataset1 );
+        		ChartPanel plot1= new ChartPanel(chart1);        		
+        		swingNode1.setContent(plot1);
+        		// create a new thread that listens for incoming text and populates the graph
+        		Thread thread = new Thread(){     			
+        			
+        			@Override public void run() {
+        				while(Ycount<counter){//loop
+        				
+        		
+        				File temp = new File(file1);
+        				File temp2= new File(file2);
+
+        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
+        				     
+        					try(BufferedReader br2 = new BufferedReader(new FileReader(temp2))){
+        					    String line ;
+        					    String line2;
+        					    int count=0;
+        					 while ((line = br.readLine()) != null && (line2 = br2.readLine()) != null) {		
+        			        	count++;//count number of line 
+        			        	System.out.printf("Fist count: %d \n",count);
+        			        	System.out.printf("Secount Xcount: %d \n",Xcount);
+        			        	System.out.printf("Secount Ycount: %d \n",Ycount);
+        			        	// if the number of new line is added then do it 
+        			            if( Xcount == count ) {	     			    
+        							        
+						            if( Ycount == count ) {
+							            double number = Double.parseDouble(line);
+										System.out.println(number);				
+										double number2 = Double.parseDouble(line2);
+							            System.out.println(number2);	
+										series1.add(number, number2);
+										plot1.repaint();
+										Ycount++;
+										Xcount++;
+										counter++;
+    					            }
+        			            }    
+        			        }
+        					}catch(IOException e){
+        						e.printStackTrace();
+        					}
+        							}catch(IOException e){
+        								e.printStackTrace();
+        							}					
+        			            }
+        			        }					
+
+        			
+        		
+        			//end while
+        		};
+        		thread.start();
+            }
+        });
+		
+	}
+	private void createSwingContent2(SwingNode swingNode2) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+            	XYSeries series2 = new XYSeries("Light Sensor Readings");
+            	XYSeriesCollection dataset2 = new XYSeriesCollection(series2);
+        		JFreeChart chart2 = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading",dataset2 );
+        		ChartPanel plot2= new ChartPanel(chart2);        		
+        		swingNode2.setContent(plot2);
+        		// create a new thread that listens for incoming text and populates the graph
+        		Thread thread = new Thread(){     			
+        			
+        			@Override public void run() {
+        				while(Ycount<counter){//loop
+        				
+        		
+        				File temp = new File(file1);
+        				File temp2= new File(file2);
+
+        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
+        				     
+        					try(BufferedReader br2 = new BufferedReader(new FileReader(temp2))){
+        					    String line ;
+        					    String line2;
+        					    int count=0;
+        					 while ((line = br.readLine()) != null && (line2 = br2.readLine()) != null) {		
+        			        	count++;//count number of line 
+        			        	System.out.printf("Fist count: %d \n",count);
+        			        	System.out.printf("Secount Xcount: %d \n",Xcount);
+        			        	System.out.printf("Secount Ycount: %d \n",Ycount);
+        			        	// if the number of new line is added then do it 
+        			            if( Xcount == count ) {	     			    
+        							        
+						            if( Ycount == count ) {
+							            double number = Double.parseDouble(line);
+										System.out.println(number);				
+										double number2 = Double.parseDouble(line2);
+							            System.out.println(number2);	
+										series2.add(number, number2);
+										plot2.repaint();
+										Ycount++;
+										Xcount++;
+										counter++;
+    					            }
+        			            }    
+        			        }
+        					}catch(IOException e){
+        						e.printStackTrace();
+        					}
+        							}catch(IOException e){
+        								e.printStackTrace();
+        							}					
+        			            }
+        			        }					
+
+        			
+        		
+        			//end while
+        		};
+        		thread.start();
+            }
+        });
+		
+	}
+	private void createSwingContent3(SwingNode swingNode3) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+            	XYSeries series3 = new XYSeries("Light Sensor Readings");
+            	XYSeriesCollection dataset3 = new XYSeriesCollection(series3);
+        		JFreeChart chart3 = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading",dataset3 );
+        		ChartPanel plot3= new ChartPanel(chart3);        		
+        		swingNode3.setContent(plot3);
+        		// create a new thread that listens for incoming text and populates the graph
+        		Thread thread = new Thread(){     			
+        			
+        			@Override public void run() {
+        				while(Ycount<counter){//loop
+        				
+        		
+        				File temp = new File(file1);
+        				File temp2= new File(file2);
+
+        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
+        				     
+        					try(BufferedReader br2 = new BufferedReader(new FileReader(temp2))){
+        					    String line ;
+        					    String line2;
+        					    int count=0;
+        					 while ((line = br.readLine()) != null && (line2 = br2.readLine()) != null) {		
+        			        	count++;//count number of line 
+        			        	System.out.printf("Fist count: %d \n",count);
+        			        	System.out.printf("Secount Xcount: %d \n",Xcount);
+        			        	System.out.printf("Secount Ycount: %d \n",Ycount);
+        			        	// if the number of new line is added then do it 
+        			            if( Xcount == count ) {	     			    
+        							        
+						            if( Ycount == count ) {
+							            double number = Double.parseDouble(line);
+										System.out.println(number);				
+										double number2 = Double.parseDouble(line2);
+							            System.out.println(number2);	
+										series3.add(number, number2);
+										plot3.repaint();
 										Ycount++;
 										Xcount++;
 										counter++;
