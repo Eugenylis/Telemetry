@@ -58,7 +58,7 @@ import javafx.stage.Stage;
 
 public class MasterGUI extends Application {
 	
-
+	/* CREATE GUI ITEMS */
 	// Pane
 	private BorderPane borderPane;
 	private Button btStation;
@@ -78,6 +78,7 @@ public class MasterGUI extends Application {
 	//plotGridPane
 	private GridPane plotGridPane;
 	
+	/* PLOT ITEMS */
 	//for plot
 	static int Xcount=1;
 	static int Ycount=1; // counting number of line print
@@ -89,8 +90,10 @@ public class MasterGUI extends Application {
 	private Axis<Number> yAxis1, yAxis2, yAxis3, yAxis4;
 	private LineChart<Number,Number> lineChart1, lineChart2, lineChart3, lineChart4;
 	
-	//for Communications
+	/* COMMUNICATION ITEMS */
+	//specified port number
 	private int portNumber;
+	//counter for array of receiver objects
 	private static int count = 0;
 	
 	

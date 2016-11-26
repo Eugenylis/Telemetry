@@ -35,7 +35,7 @@ public class Receiver extends Thread {
     //port number
     private int portNum;
     
-    public String stationName;
+    public String stationName = " ";
 
     //no-argument constructor for the thread with specified object name
     public Receiver() throws IOException {
@@ -117,7 +117,7 @@ public class Receiver extends Thread {
      * @param name of the station
      */
     public void setStationName(String newName){
-    	this.stationName.replace(stationName, newName);
+    	stationName = stationName.replace(stationName, newName);
     }
     
 
