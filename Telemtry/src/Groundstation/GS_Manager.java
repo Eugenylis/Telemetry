@@ -11,7 +11,7 @@ import java.io.*;
  * @version 1.0
  *
  */
-public class GS_Manager{
+public abstract class GS_Manager{
     static public Sender zipSender;
     static public GS_GUI GUIwindow;
     static public ZipFileTimer Timer;
