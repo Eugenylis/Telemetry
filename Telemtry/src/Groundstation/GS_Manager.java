@@ -15,9 +15,6 @@ public abstract class GS_Manager{
     static public Sender zipSender;
     static public GS_GUI GUIwindow;
     static public ZipFileTimer Timer;
-    //static public String listenerDir;
-    //static public String IPaddress;
-    //static public int socketNum;
 	
 	/**
 	 * @param args Standard variable
@@ -44,8 +41,7 @@ public abstract class GS_Manager{
 	public static void setSettings(String listenerDir, String IPaddress, int socketNum) throws IOException{
 		Path dir = Paths.get(listenerDir);
 		zipSender = new Sender(IPaddress, socketNum);
-		Timer = new ZipFileTimer();
-		new WatchDir(dir, false).processEvents();
-				
+		Timer = new ZipFileTimer(2000);
+		new WatchDir(dir, false).processEvents();	
 	}
 }

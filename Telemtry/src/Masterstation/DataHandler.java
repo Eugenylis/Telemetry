@@ -24,6 +24,12 @@ public class DataHandler {
 		this.plotDataLocation = stationDataLocation + "\\plotData";
 		
 		//Creates folder to store plot data if folder does not already exist
+		File dataFolder = new File(stationDataLocation);
+		if(!dataFolder.exists()){
+			dataFolder.mkdir();
+		}
+		
+		//Creates folder to store plot data if folder does not already exist
 		File plotFolder = new File(plotDataLocation);
 		if(!plotFolder.exists()){
 			plotFolder.mkdir();

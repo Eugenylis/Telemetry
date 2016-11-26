@@ -11,12 +11,12 @@ x=0;
 y=0;
 tic;
 
-while x~=1000
-   Velocity=Velocity+1;
+while x~=10000
+   Velocity=Velocity+0.1;
    Altitude=Altitude+10;
-   Temperature=Temperature-0.1;
-   Humidity=Humidity-0.05;
-   Pressure=(100000)*exp(-Altitude/1000);
+   Temperature=Temperature-0.01;
+   Humidity=Humidity-0.005;
+   Pressure=(100000)*exp(-Altitude/10000);
    Time_int=clock;
    fix(Time_int);
    Time1=Time_int(4);
@@ -60,6 +60,6 @@ while x~=1000
    fclose(humidityFile);
    fclose(pressureFile);
    
-   pause(1);  
+   pause(0.1);  
    
 end

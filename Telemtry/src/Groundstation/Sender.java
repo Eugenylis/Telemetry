@@ -52,22 +52,22 @@ public class Sender {
             OutputStream os = socket.getOutputStream();
             ZipOutputStream zipOutputStream = new ZipOutputStream(os);
             
+            System.out.println("Zipping files...");
             for (File f : files){
             	if (f.isFile())
             		zipFile(f,zipOutputStream);
             }
 
-            zipOutputStream.close();
             System.out.println("Sending Files...");
-
+            zipOutputStream.close();
+            
             os.flush();
             os.close();
             System.out.println("File transfer complete");
-
-            //socket.close();
             
         } catch (IOException ex) {
-            // Do exception handling
+        	System.out.println("Sending failed!!!");
+        	System.out.println(ex);
         }
 	}
 	
@@ -87,7 +87,7 @@ public class Sender {
             bytesRead = fileInputStream.read(bytearray);
             zipOutputStream.write(bytearray, 0, bytesRead);
             
-            System.out.println("Zipping " + inputFile.getName());
+            //System.out.println("Zipping " + inputFile.getName());
 
             // close ZipEntry to store the stream to the file
             zipOutputStream.closeEntry();
