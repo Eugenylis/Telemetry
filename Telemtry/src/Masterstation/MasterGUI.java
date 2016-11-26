@@ -329,14 +329,14 @@ public class MasterGUI extends Application {
 		Label lbPlot2 = new Label("Plot 2:");
 		Label lbPlot3 = new Label("Plot 3:");
 		Label lbPlot4 = new Label("Plot 4:");
-		ChoiceBox cbPlot1XAxis = new ChoiceBox();		
-		ChoiceBox cbPlot2XAxis = new ChoiceBox();
-		ChoiceBox cbPlot3XAxis = new ChoiceBox();
-		ChoiceBox cbPlot4XAxis = new ChoiceBox();
-		ChoiceBox cbPlot1YAxis = new ChoiceBox();
-		ChoiceBox cbPlot2YAxis = new ChoiceBox();
-		ChoiceBox cbPlot3YAxis = new ChoiceBox();
-		ChoiceBox cbPlot4YAxis = new ChoiceBox();
+		ChoiceBox<String> cbPlot1XAxis = new ChoiceBox<String>();		
+		ChoiceBox<String> cbPlot2XAxis = new ChoiceBox<String>();
+		ChoiceBox<String> cbPlot3XAxis = new ChoiceBox<String>();
+		ChoiceBox<String> cbPlot4XAxis = new ChoiceBox<String>();
+		ChoiceBox<String> cbPlot1YAxis = new ChoiceBox<String>();
+		ChoiceBox<String> cbPlot2YAxis = new ChoiceBox<String>();
+		ChoiceBox<String> cbPlot3YAxis = new ChoiceBox<String>();
+		ChoiceBox<String> cbPlot4YAxis = new ChoiceBox<String>();
 		
 //		cbPlot1XAxis.setItems(FXCollections.observableArrayList("Velocity", "Pressure"));
 //		cbPlot2XAxis.setItems(FXCollections.observableArrayList("Velocity", "Pressure"));
@@ -414,7 +414,7 @@ public class MasterGUI extends Application {
 		borderPane.setCenter(tabPanePlots);
 		//Add a swing node
         final SwingNode swingNode = new SwingNode();        
-        createSwingContent(swingNode);
+        createSwingContent(swingNode, null, null);
         final SwingNode swingNode1 = new SwingNode();        
         createSwingContent1(swingNode1);
         final SwingNode swingNode2 = new SwingNode();        
@@ -443,22 +443,37 @@ public class MasterGUI extends Application {
 
 	}
 	// Creating Swing node for plot
-	private void createSwingContent(SwingNode swingNode) {
+	private void createSwingContent(SwingNode swingNode, ChoiceBox<String> cbPlot1XAxis, ChoiceBox<String> cbPlot1YAxis) {
         SwingUtilities.invokeLater(new Runnable() {
+        	String cbPlot1XAxis1=cbPlot1XAxis.getValue();
+        	String cbPlot1YAxis1=cbPlot1YAxis.getValue();
+        	String GPS = "GPS"; 
+//        	if ( userXchoice.equals(GPS)) {
+////  		  System.out.println("User choose Gps");
+////  		}
+////  		else {
+////  			System.out.println(userXchoice);    
+////  		} 
+////  	    if ( userYchoice.equals(GPS)) {
+//// 		  System.out.println("User choose Gps");
+//// 		}
+//// 		else {
+//// 			System.out.println(userYchoice);    
+//// 		} 
+        	
             @Override
             public void run() {
             	XYSeries series = new XYSeries("Temperature");
             	XYSeriesCollection dataset = new XYSeriesCollection(series);
         		JFreeChart chart = ChartFactory.createScatterPlot("Temperature plot", "Altitude (m)", "Temperature (C)", dataset);
-        		ChartPanel plot= new ChartPanel(chart);        		
+        		ChartPanel plot= new ChartPanel(chart);         		
         		swingNode.setContent(plot);
         		// create a new thread that listens for incoming text and populates the graph
         		Thread thread = new Thread(){     			
-        			
+     			
         			@Override public void run() {
         				int totalCount = 0;
-        				while(true){//loop//////////////////////////////////////////////////////////////////////
-        				
+        				while(true){//loop//////////////////////////////////////////////////////////////////////        				
         		
 	        				File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\temperature.txt");
         					double number[] = new double[2];
@@ -502,9 +517,6 @@ public class MasterGUI extends Application {
 	        				
         				}/////////////////////////////////////////////////////////////////////////////////////////////
         			}					
-
-        			
-        		
         			//end while
         		};
         		thread.start();
