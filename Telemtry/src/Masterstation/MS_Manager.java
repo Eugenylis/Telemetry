@@ -1,6 +1,7 @@
 package Masterstation;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.application.Application;
 
@@ -20,6 +21,9 @@ public abstract class MS_Manager{
 	//class for receiving incoming data
 	public static Receiver fileReceiverThread;
 	
+	public static ArrayList<Receiver> receiverThreadArray = new ArrayList<Receiver>();
+	
+	
 	
 	/**
 	 * Main method to launch Master Station GUI
@@ -38,8 +42,7 @@ public abstract class MS_Manager{
 	 */
 	public static void setSettings(int portNum) throws IOException{
 		
-		fileReceiverThread = new Receiver(portNum);
-		//fileReceiverThread.setPortNum(portNum);
+		receiverThreadArray.add(new Receiver(portNum));
 				
 	}
 	

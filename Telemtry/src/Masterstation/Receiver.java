@@ -44,11 +44,12 @@ public class Receiver extends Thread {
     /*
      * Constructor which creates socket with specified port number and specified name
      */
-    public Receiver(int portNum) throws IOException {
+    public Receiver(int portNumber) throws IOException {
     
         //specify directory to save files
         dataHandler = new DataHandler("E:\\SE 300\\Telemetry\\data");
  
+        setPortNum(portNumber);
         //set port number to server socket
         serverSocket = new ServerSocket(portNum); 
         //create socket for communication
@@ -69,7 +70,8 @@ public class Receiver extends Thread {
     
         while (moreData) {
             try {
-            	            	
+            	           
+            	System.out.println("Port Number " + portNum);
             	//allow to accept incoming connections
             	socket = serverSocket.accept();
                   

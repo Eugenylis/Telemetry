@@ -90,8 +90,8 @@ public class MasterGUI extends Application {
 	private LineChart<Number,Number> lineChart1, lineChart2, lineChart3, lineChart4;
 	
 	//for Communications
-	int portNumber;
-	
+	private int portNumber;
+	private static int count = 0;
 	
 	
 	/**
@@ -281,6 +281,13 @@ public class MasterGUI extends Application {
 			
 			//assign port number to the station
 			portNumber = Integer.parseInt(txPortNum.getText());
+			
+			//create a receiver object with specified port number
+			try {
+				MS_Manager.setSettings(portNumber);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -778,12 +785,15 @@ public class MasterGUI extends Application {
 	 * 
 	 */
 	public void Connect() throws IOException{
-		MS_Manager.setSettings(portNumber);
+		
 		//Start receiving files
 		System.out.println("Starting Server");
 		//execute run() method in Receiver thread
-		MS_Manager.fileReceiverThread.start();
+		MS_Manager.receiverThreadArray.get(count).start();
 		
+		//increment index counter of the array list receiverThreadArray
+		count++;
+		System.out.print("count " + count);
 	}
 	
 	
