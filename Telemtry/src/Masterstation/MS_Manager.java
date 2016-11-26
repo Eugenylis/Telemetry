@@ -38,8 +38,8 @@ public abstract class MS_Manager{
 	 */
 	public static void setSettings(int portNum) throws IOException{
 		
-		fileReceiverThread = new Receiver();
-		fileReceiverThread.setPortNum(portNum);
+		fileReceiverThread = new Receiver(portNum);
+		//fileReceiverThread.setPortNum(portNum);
 				
 	}
 	

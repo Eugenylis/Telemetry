@@ -1,7 +1,5 @@
 package Masterstation;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
@@ -35,24 +33,21 @@ public class Receiver extends Thread {
     protected static int counter = 0;
     
     //port number
-    private int portNum = 9010; //TODO ---------------------------------------delete and put into GUI
-    //maximum file size to be received in bytes
-    private int fileSize = 1022386;
-    
+    private int portNum;
+
     
     //no-argument constructor for the thread with specified object name
     public Receiver() throws IOException {
-	this("Receiver");
     }
 
     
     /*
      * Constructor which creates socket with specified port number and specified name
      */
-    public Receiver(String name) throws IOException {
-        super(name);
-        
-        dataHandler = new DataHandler("C:\\Users\\parkere2\\Pictures\\data");
+    public Receiver(int portNum) throws IOException {
+    
+        //specify directory to save files
+        dataHandler = new DataHandler("E:\\SE 300\\Telemetry\\data");
  
         //set port number to server socket
         serverSocket = new ServerSocket(portNum); 
