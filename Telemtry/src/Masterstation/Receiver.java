@@ -34,8 +34,9 @@ public class Receiver extends Thread {
     
     //port number
     private int portNum;
-
     
+    public String stationName;
+
     //no-argument constructor for the thread with specified object name
     public Receiver() throws IOException {
     }
@@ -44,12 +45,17 @@ public class Receiver extends Thread {
     /*
      * Constructor which creates socket with specified port number and specified name
      */
-    public Receiver(int portNumber) throws IOException {
+    public Receiver(int portNumber, String name) throws IOException {
     
-        //specify directory to save files
-        dataHandler = new DataHandler("E:\\SE 300\\Telemetry\\data");
+        MS_Manager.dataLocation = "E:\\SE 300\\Telemetry\\data"; ////////////////////////////////////////////////////ELIZA WILL HAVE THE USER GIVE THIS.
+    	
+    	//specify directory to save files
+        dataHandler = new DataHandler(MS_Manager.dataLocation);
  
         setPortNum(portNumber);
+        
+        setStationName(name);
+        
         //set port number to server socket
         serverSocket = new ServerSocket(portNum); 
         //create socket for communication
@@ -103,6 +109,15 @@ public class Receiver extends Thread {
      */
     public void setPortNum(int portNum){
     	this.portNum = portNum;
+    }
+    
+    
+    /**
+     * Method to set the station name
+     * @param name of the station
+     */
+    public void setStationName(String newName){
+    	this.stationName.replace(stationName, newName);
     }
     
 

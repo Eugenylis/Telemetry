@@ -19,8 +19,7 @@ import javafx.application.Application;
 public abstract class MS_Manager{
    
 	//class for receiving incoming data
-	public static Receiver fileReceiverThread;
-	
+	public static String dataLocation;
 	public static ArrayList<Receiver> receiverThreadArray = new ArrayList<Receiver>();
 	
 	
@@ -40,9 +39,9 @@ public abstract class MS_Manager{
 	 * Method to create a file receiver with specified port number
 	 * @throws IOException
 	 */
-	public static void setSettings(int portNum) throws IOException{
+	public static void createReceiver(int portNum, String name) throws IOException{
 		
-		receiverThreadArray.add(new Receiver(portNum));
+		receiverThreadArray.add(new Receiver(portNum, name));
 				
 	}
 	

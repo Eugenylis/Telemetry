@@ -281,10 +281,11 @@ public class MasterGUI extends Application {
 			
 			//assign port number to the station
 			portNumber = Integer.parseInt(txPortNum.getText());
+			String stationName = txNameOfStation.getText();
 			
 			//create a receiver object with specified port number
 			try {
-				MS_Manager.setSettings(portNumber);
+				MS_Manager.createReceiver(portNumber, stationName);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
