@@ -15,13 +15,13 @@ import java.util.zip.ZipInputStream;
 
 public class DataHandler {
 	
-	String dataLocation;
+	String stationDataLocation;
 	String plotDataLocation;
 	String savedDataExt = ".txt";
 	
-	public DataHandler(String dataSaveLocation) {
-		this.dataLocation = dataSaveLocation; //assumed to not have an ending \\
-		this.plotDataLocation = dataLocation + "\\plotData";
+	public DataHandler(String dataSaveLocation, String name) {
+		this.stationDataLocation = dataSaveLocation + "\\" + name; //assumed to not have an ending \\
+		this.plotDataLocation = stationDataLocation + "\\plotData";
 		
 		//Creates folder to store plot data if folder does not already exist
 		File plotFolder = new File(plotDataLocation);
@@ -56,7 +56,7 @@ public class DataHandler {
 	                // Once we get the entry from the stream, the stream is
 	                // positioned to read the raw data, and we keep
 	                // reading until read returns 0 or less.
-	                String outpath = dataLocation + "/" + entry.getName();
+	                String outpath = stationDataLocation + "/" + entry.getName();
 	                FileOutputStream output = null;
 	                try
 	                {

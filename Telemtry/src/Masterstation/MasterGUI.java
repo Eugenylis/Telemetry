@@ -452,52 +452,50 @@ public class MasterGUI extends Application {
         		// create a new thread that listens for incoming text and populates the graph
         		Thread thread = new Thread(){     			
         			
-        			@Override public void run() {
-        				while(Ycount<counter){//loop
-        				
-        		
-        				File temp = new File(file1);
-        				File temp2= new File(file2);
-
-        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
-        				     
-        					try(BufferedReader br2 = new BufferedReader(new FileReader(temp2))){
-        					    String line ;
-        					    String line2;
-        					    int count=0;
-        					 while ((line = br.readLine()) != null && (line2 = br2.readLine()) != null) {		
-        			        	count++;//count number of line 
-        			        	System.out.printf("Fist count: %d \n",count);
-        			        	System.out.printf("Secount Xcount: %d \n",Xcount);
-        			        	System.out.printf("Secount Ycount: %d \n",Ycount);
-        			        	// if the number of new line is added then do it 
-        			            if( Xcount == count ) {	     			    
-        							        
-						            if( Ycount == count ) {
-							            double number = Double.parseDouble(line);
-										System.out.println(number);				
-										double number2 = Double.parseDouble(line2);
-							            System.out.println(number2);	
-										series.add(number, number2);
-										plot.repaint();
-										Ycount++;
-										Xcount++;
-										counter++;
-    					            }
-        			            }    
-        			        }
-        					}catch(IOException e){
-        						e.printStackTrace();
-        					}
-        							}catch(IOException e){
-        								e.printStackTrace();
-        							}					
-        			            }
-        			        }					
-
-        			
-        		
-        			//end while
+//        			@Override public void run() {
+//        				while(Ycount<counter){//loop
+//        				
+//        		
+//	        				//File temp = new File(file1);
+//	        				//File temp2= new File(file2);
+//        					temp
+//	
+//	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
+//	        				     
+//	        					    String line ;
+//	        					    String line2;
+//	        					    int count=0;
+//	        					 while ((line = br.readLine()) != null && (line2 = br2.readLine()) != null) {		
+//	        			        	count++;//count number of line 
+//	        			        	System.out.printf("Fist count: %d \n",count);
+//	        			        	System.out.printf("Secount Xcount: %d \n",Xcount);
+//	        			        	System.out.printf("Secount Ycount: %d \n",Ycount);
+//	        			        	// if the number of new line is added then do it 
+//	        			            if( Xcount == count ) {	     			    
+//	        							        
+//							            if( Ycount == count ) {
+//								            double number = Double.parseDouble(line);
+//											System.out.println(number);				
+//											double number2 = Double.parseDouble(line2);
+//								            System.out.println(number2);	
+//											series.add(number, number2);
+//											plot.repaint();
+//											Ycount++;
+//											Xcount++;
+//											counter++;
+//	    					            }
+//	        			            }    
+//	        			        }
+//	
+//	        				}catch(IOException e){
+//	        					e.printStackTrace();
+//	        				}					
+//        				}
+//        			}					
+//
+//        			
+//        		
+//        			//end while
         		};
         		thread.start();
             }

@@ -50,7 +50,7 @@ public class Receiver extends Thread {
         MS_Manager.dataLocation = "E:\\SE 300\\Telemetry\\data"; ////////////////////////////////////////////////////ELIZA WILL HAVE THE USER GIVE THIS.
     	
     	//specify directory to save files
-        dataHandler = new DataHandler(MS_Manager.dataLocation);
+        dataHandler = new DataHandler(MS_Manager.dataLocation, name);
  
         setPortNum(portNumber);
         
