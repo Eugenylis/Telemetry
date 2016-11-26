@@ -356,24 +356,24 @@ public class MasterGUI extends Application {
 		cbPlot2YAxis.getItems().add("GPS"); 
 		cbPlot3YAxis.getItems().add("GPS"); 
 		cbPlot4YAxis.getItems().add("GPS"); 
-		//continue with datahandler the file that have all the name got to the line below
-        File temp = new File("E:\\java\\matlab test\\Name.txt");
-		try (BufferedReader br = new BufferedReader(new FileReader(temp))) {
-		    String text;
-	        while((text= br.readLine()) != null) {	
-	    		cbPlot1XAxis.getItems().add(text); 	
-	    		cbPlot2XAxis.getItems().add(text); 
-	    		cbPlot3XAxis.getItems().add(text); 
-	    		cbPlot4XAxis.getItems().add(text); 
-	    		cbPlot1YAxis.getItems().add(text); 
-	    		cbPlot2YAxis.getItems().add(text); 
-	    		cbPlot3YAxis.getItems().add(text); 
-	    		cbPlot4YAxis.getItems().add(text); 
-	        }
-
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+//		//continue with datahandler the file that have all the name got to the line below
+//        File temp = new File("E:\\java\\matlab test\\Name.txt");
+//		try (BufferedReader br = new BufferedReader(new FileReader(temp))) {
+//		    String text;
+//	        while((text= br.readLine()) != null) {	
+//	    		cbPlot1XAxis.getItems().add(text); 	
+//	    		cbPlot2XAxis.getItems().add(text); 
+//	    		cbPlot3XAxis.getItems().add(text); 
+//	    		cbPlot4XAxis.getItems().add(text); 
+//	    		cbPlot1YAxis.getItems().add(text); 
+//	    		cbPlot2YAxis.getItems().add(text); 
+//	    		cbPlot3YAxis.getItems().add(text); 
+//	    		cbPlot4YAxis.getItems().add(text); 
+//	        }
+//
+//		}catch(IOException e){
+//			e.printStackTrace();
+//		}
 		Button btAddPlots = new Button("Add Plots");
 		btAddPlots.setOnAction(arg0 -> addPlotsToGUI());		
 		
@@ -447,58 +447,65 @@ public class MasterGUI extends Application {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-            	XYSeries series = new XYSeries("Light Sensor Readings");
+            	XYSeries series = new XYSeries("Temperature");
             	XYSeriesCollection dataset = new XYSeriesCollection(series);
-        		JFreeChart chart = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading", dataset);
+        		JFreeChart chart = ChartFactory.createScatterPlot("Temperature plot", "Altitude (m)", "Temperature (C)", dataset);
         		ChartPanel plot= new ChartPanel(chart);        		
         		swingNode.setContent(plot);
         		// create a new thread that listens for incoming text and populates the graph
         		Thread thread = new Thread(){     			
         			
-//        			@Override public void run() {
-//        				while(Ycount<counter){//loop
-//        				
-//        		
-//	        				//File temp = new File(file1);
-//	        				//File temp2= new File(file2);
-//        					temp
-//	
-//	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
-//	        				     
-//	        					    String line ;
-//	        					    String line2;
-//	        					    int count=0;
-//	        					 while ((line = br.readLine()) != null && (line2 = br2.readLine()) != null) {		
-//	        			        	count++;//count number of line 
-//	        			        	System.out.printf("Fist count: %d \n",count);
-//	        			        	System.out.printf("Secount Xcount: %d \n",Xcount);
-//	        			        	System.out.printf("Secount Ycount: %d \n",Ycount);
-//	        			        	// if the number of new line is added then do it 
-//	        			            if( Xcount == count ) {	     			    
-//	        							        
-//							            if( Ycount == count ) {
-//								            double number = Double.parseDouble(line);
-//											System.out.println(number);				
-//											double number2 = Double.parseDouble(line2);
-//								            System.out.println(number2);	
-//											series.add(number, number2);
-//											plot.repaint();
-//											Ycount++;
-//											Xcount++;
-//											counter++;
-//	    					            }
-//	        			            }    
-//	        			        }
-//	
-//	        				}catch(IOException e){
-//	        					e.printStackTrace();
-//	        				}					
-//        				}
-//        			}					
-//
-//        			
-//        		
-//        			//end while
+        			@Override public void run() {
+        				int totalCount = 0;
+        				while(true){//loop//////////////////////////////////////////////////////////////////////
+        				
+        		
+	        				File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\temperature.txt");
+        					double number[] = new double[2];
+        					String[] data;// = new String[2];
+	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
+	        				     
+	        					String line;
+	        					
+	        					int tempCount = 0;
+	        					while ((line = br.readLine()) != null) {		
+	        						
+	        						tempCount++;
+	        						if (totalCount < tempCount){
+		        						totalCount++;//count number of line 
+		        			        	
+		        			        	data = line.split(",");
+		        			        	
+		        			        	number[0] = Double.parseDouble(data[0]);
+										System.out.println(number[0]);				
+										number[1] = Double.parseDouble(data[1]);
+									    System.out.println(number[1]);	
+										series.add(number[0], number[1]);
+										plot.repaint();
+										//Ycount++;
+										//Xcount++;
+										//counter++;
+										
+		        			            //System.out.printf("Fist count: %d \n",count);
+		        			        	//System.out.printf("Second Xcount: %d \n",Xcount);
+		        			        	//System.out.printf("Second Ycount: %d \n",Ycount);
+	        						}
+									   
+	        			        }
+	        					Thread.sleep(1000); 
+	
+	        				}catch(Exception e){
+	        					e.printStackTrace();
+	        				}					
+	        				
+	        				
+	        				
+        				}/////////////////////////////////////////////////////////////////////////////////////////////
+        			}					
+
+        			
+        		
+        			//end while
         		};
         		thread.start();
             }
@@ -509,56 +516,61 @@ public class MasterGUI extends Application {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-            	XYSeries series1 = new XYSeries("Light Sensor Readings");
-            	XYSeriesCollection dataset1 = new XYSeriesCollection(series1);
-        		JFreeChart chart1 = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading",dataset1 );
-        		ChartPanel plot1= new ChartPanel(chart1);        		
-        		swingNode1.setContent(plot1);
+            	XYSeries series = new XYSeries("Pressure");
+            	XYSeriesCollection dataset = new XYSeriesCollection(series);
+        		JFreeChart chart = ChartFactory.createScatterPlot("Pressure plot", "Time (seconds)", "ADC Reading", dataset);
+        		ChartPanel plot= new ChartPanel(chart);        		
+        		swingNode1.setContent(plot);
         		// create a new thread that listens for incoming text and populates the graph
         		Thread thread = new Thread(){     			
         			
         			@Override public void run() {
-        				while(Ycount<counter){//loop
+        				int totalCount = 0;
+        				while(true){//loop//////////////////////////////////////////////////////////////////////
         				
         		
-        				File temp = new File(file1);
-        				File temp2= new File(file2);
-
-        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
-        				     
-        					try(BufferedReader br2 = new BufferedReader(new FileReader(temp2))){
-        					    String line ;
-        					    String line2;
-        					    int count=0;
-        					 while ((line = br.readLine()) != null && (line2 = br2.readLine()) != null) {		
-        			        	count++;//count number of line 
-        			        	System.out.printf("Fist count: %d \n",count);
-        			        	System.out.printf("Secount Xcount: %d \n",Xcount);
-        			        	System.out.printf("Secount Ycount: %d \n",Ycount);
-        			        	// if the number of new line is added then do it 
-        			            if( Xcount == count ) {	     			    
-        							        
-						            if( Ycount == count ) {
-							            double number = Double.parseDouble(line);
-										System.out.println(number);				
-										double number2 = Double.parseDouble(line2);
-							            System.out.println(number2);	
-										series1.add(number, number2);
-										plot1.repaint();
-										Ycount++;
-										Xcount++;
-										counter++;
-    					            }
-        			            }    
-        			        }
-        					}catch(IOException e){
-        						e.printStackTrace();
-        					}
-        							}catch(IOException e){
-        								e.printStackTrace();
-        							}					
-        			            }
-        			        }					
+	        				File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\pressure.txt");
+        					double number[] = new double[2];
+        					String[] data;// = new String[2];
+	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
+	        				     
+	        					String line;
+	        					
+	        					int tempCount = 0;
+	        					while ((line = br.readLine()) != null) {		
+	        						
+	        						tempCount++;
+	        						if (totalCount < tempCount){
+		        						totalCount++;//count number of line 
+		        			        	
+		        			        	data = line.split(",");
+		        			        	
+		        			        	number[0] = Double.parseDouble(data[0]);
+										System.out.println(number[0]);				
+										number[1] = Double.parseDouble(data[1]);
+									    System.out.println(number[1]);	
+										series.add(number[0], number[1]);
+										plot.repaint();
+										//Ycount++;
+										//Xcount++;
+										//counter++;
+										
+		        			            //System.out.printf("Fist count: %d \n",count);
+		        			        	//System.out.printf("Second Xcount: %d \n",Xcount);
+		        			        	//System.out.printf("Second Ycount: %d \n",Ycount);
+	        						}
+									   
+	        			        }
+	        					Thread.sleep(1000);
+	
+	        				}catch(Exception e){
+	        					e.printStackTrace();
+	        				}					
+	        				
+	        				
+	        				
+        				}/////////////////////////////////////////////////////////////////////////////////////////////
+        			}					
 
         			
         		
@@ -569,60 +581,66 @@ public class MasterGUI extends Application {
         });
 		
 	}
+	
 	private void createSwingContent2(SwingNode swingNode2) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-            	XYSeries series2 = new XYSeries("Light Sensor Readings");
-            	XYSeriesCollection dataset2 = new XYSeriesCollection(series2);
-        		JFreeChart chart2 = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading",dataset2 );
-        		ChartPanel plot2= new ChartPanel(chart2);        		
-        		swingNode2.setContent(plot2);
+            	XYSeries series = new XYSeries("First Plot");
+            	XYSeriesCollection dataset = new XYSeriesCollection(series);
+        		JFreeChart chart = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading", dataset);
+        		ChartPanel plot= new ChartPanel(chart);        		
+        		swingNode2.setContent(plot);
         		// create a new thread that listens for incoming text and populates the graph
         		Thread thread = new Thread(){     			
         			
         			@Override public void run() {
-        				while(Ycount<counter){//loop
+        				int totalCount = 0;
+        				while(true){//loop//////////////////////////////////////////////////////////////////////
         				
         		
-        				File temp = new File(file1);
-        				File temp2= new File(file2);
-
-        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
-        				     
-        					try(BufferedReader br2 = new BufferedReader(new FileReader(temp2))){
-        					    String line ;
-        					    String line2;
-        					    int count=0;
-        					 while ((line = br.readLine()) != null && (line2 = br2.readLine()) != null) {		
-        			        	count++;//count number of line 
-        			        	System.out.printf("Fist count: %d \n",count);
-        			        	System.out.printf("Secount Xcount: %d \n",Xcount);
-        			        	System.out.printf("Secount Ycount: %d \n",Ycount);
-        			        	// if the number of new line is added then do it 
-        			            if( Xcount == count ) {	     			    
-        							        
-						            if( Ycount == count ) {
-							            double number = Double.parseDouble(line);
-										System.out.println(number);				
-										double number2 = Double.parseDouble(line2);
-							            System.out.println(number2);	
-										series2.add(number, number2);
-										plot2.repaint();
-										Ycount++;
-										Xcount++;
-										counter++;
-    					            }
-        			            }    
-        			        }
-        					}catch(IOException e){
-        						e.printStackTrace();
-        					}
-        							}catch(IOException e){
-        								e.printStackTrace();
-        							}					
-        			            }
-        			        }					
+	        				File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\humidity.txt");
+        					double number[] = new double[2];
+        					String[] data;// = new String[2];
+	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
+	        				     
+	        					String line;
+	        					
+	        					int tempCount = 0;
+	        					while ((line = br.readLine()) != null) {		
+	        						
+	        						tempCount++;
+	        						if (totalCount < tempCount){
+		        						totalCount++;//count number of line 
+		        			        	
+		        			        	data = line.split(",");
+		        			        	
+		        			        	number[0] = Double.parseDouble(data[0]);
+										System.out.println(number[0]);				
+										number[1] = Double.parseDouble(data[1]);
+									    System.out.println(number[1]);	
+										series.add(number[0], number[1]);
+										plot.repaint();
+										//Ycount++;
+										//Xcount++;
+										//counter++;
+										
+		        			            //System.out.printf("Fist count: %d \n",count);
+		        			        	//System.out.printf("Second Xcount: %d \n",Xcount);
+		        			        	//System.out.printf("Second Ycount: %d \n",Ycount);
+	        						}
+									   
+	        			        }
+	        					Thread.sleep(1000);
+	
+	        				}catch(Exception e){
+	        					e.printStackTrace();
+	        				}					
+	        				
+	        				
+	        				
+        				}/////////////////////////////////////////////////////////////////////////////////////////////
+        			}					
 
         			
         		
@@ -633,60 +651,66 @@ public class MasterGUI extends Application {
         });
 		
 	}
+	
 	private void createSwingContent3(SwingNode swingNode3) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-            	XYSeries series3 = new XYSeries("Light Sensor Readings");
-            	XYSeriesCollection dataset3 = new XYSeriesCollection(series3);
-        		JFreeChart chart3 = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading",dataset3 );
-        		ChartPanel plot3= new ChartPanel(chart3);        		
-        		swingNode3.setContent(plot3);
+            	XYSeries series = new XYSeries("First Plot");
+            	XYSeriesCollection dataset = new XYSeriesCollection(series);
+        		JFreeChart chart = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading", dataset);
+        		ChartPanel plot= new ChartPanel(chart);        		
+        		swingNode3.setContent(plot);
         		// create a new thread that listens for incoming text and populates the graph
         		Thread thread = new Thread(){     			
         			
         			@Override public void run() {
-        				while(Ycount<counter){//loop
+        				int totalCount = 0;
+        				while(true){//loop//////////////////////////////////////////////////////////////////////
         				
         		
-        				File temp = new File(file1);
-        				File temp2= new File(file2);
-
-        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
-        				     
-        					try(BufferedReader br2 = new BufferedReader(new FileReader(temp2))){
-        					    String line ;
-        					    String line2;
-        					    int count=0;
-        					 while ((line = br.readLine()) != null && (line2 = br2.readLine()) != null) {		
-        			        	count++;//count number of line 
-        			        	System.out.printf("Fist count: %d \n",count);
-        			        	System.out.printf("Secount Xcount: %d \n",Xcount);
-        			        	System.out.printf("Secount Ycount: %d \n",Ycount);
-        			        	// if the number of new line is added then do it 
-        			            if( Xcount == count ) {	     			    
-        							        
-						            if( Ycount == count ) {
-							            double number = Double.parseDouble(line);
-										System.out.println(number);				
-										double number2 = Double.parseDouble(line2);
-							            System.out.println(number2);	
-										series3.add(number, number2);
-										plot3.repaint();
-										Ycount++;
-										Xcount++;
-										counter++;
-    					            }
-        			            }    
-        			        }
-        					}catch(IOException e){
-        						e.printStackTrace();
-        					}
-        							}catch(IOException e){
-        								e.printStackTrace();
-        							}					
-        			            }
-        			        }					
+	        				File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\velocity.txt");
+        					double number[] = new double[2];
+        					String[] data;// = new String[2];
+	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
+	        				     
+	        					String line;
+	        					
+	        					int tempCount = 0;
+	        					while ((line = br.readLine()) != null) {		
+	        						
+	        						tempCount++;
+	        						if (totalCount < tempCount){
+		        						totalCount++;//count number of line 
+		        			        	
+		        			        	data = line.split(",");
+		        			        	
+		        			        	number[0] = Double.parseDouble(data[0]);
+										System.out.println(number[0]);				
+										number[1] = Double.parseDouble(data[1]);
+									    System.out.println(number[1]);	
+										series.add(number[0], number[1]);
+										plot.repaint();
+										//Ycount++;
+										//Xcount++;
+										//counter++;
+										
+		        			            //System.out.printf("Fist count: %d \n",count);
+		        			        	//System.out.printf("Second Xcount: %d \n",Xcount);
+		        			        	//System.out.printf("Second Ycount: %d \n",Ycount);
+	        						}
+									   
+	        			        }
+	        					Thread.sleep(1000);
+	
+	        				}catch(Exception e){
+	        					e.printStackTrace();
+	        				}					
+	        				
+	        				
+	        				
+        				}/////////////////////////////////////////////////////////////////////////////////////////////
+        			}					
 
         			
         		

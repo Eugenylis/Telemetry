@@ -1,5 +1,6 @@
 package Masterstation;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
@@ -17,7 +18,6 @@ import java.net.Socket;
 
 
 public class Receiver extends Thread {
-
 
 	public DataHandler dataHandler;
 	
@@ -47,7 +47,8 @@ public class Receiver extends Thread {
      */
     public Receiver(int portNumber, String name) throws IOException {
     
-        MS_Manager.dataLocation = "E:\\SE 300\\Telemetry\\data"; ////////////////////////////////////////////////////ELIZA WILL HAVE THE USER GIVE THIS.
+        //MS_Manager.dataLocation = "C:\\Users\\parkere2\\Music\\data"; ////////////////////////////////////////////////////ELIZA WILL HAVE THE USER GIVE THIS.
+    	MS_Manager.dataLocation = (new File(".")).getAbsoluteFile().getParentFile().getPath() + "\\Extras\\data"; ////////////////////This sets the data save location to be the project directory under lib/data/////////////////ELIZA WILL HAVE THE USER GIVE THIS.
     	
     	//specify directory to save files
         dataHandler = new DataHandler(MS_Manager.dataLocation, name);
@@ -60,7 +61,6 @@ public class Receiver extends Thread {
         serverSocket = new ServerSocket(portNum); 
         //create socket for communication
         socket = new Socket();
-        
     }
 
     
