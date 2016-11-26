@@ -101,12 +101,6 @@ public class MasterGUI extends Application {
 	int portNumber;
 	
 	
-	/**
-	 * @param args
-	 * 
-	 * Launches the GUI
-	 */
-	//public static void main(String[] args) { launch(args);}
 	
 	/**
 	 *  The method that contains all GUI details
