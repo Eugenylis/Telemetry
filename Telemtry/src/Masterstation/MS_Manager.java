@@ -1,5 +1,6 @@
 package Masterstation;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -20,8 +21,7 @@ public abstract class MS_Manager{
    
 	//class for receiving incoming data
 	public static String dataLocation;
-	public static ArrayList<Receiver> receiverThreadArray = new ArrayList<Receiver>();
-	
+	public static ArrayList<Station> stationArrayList = new ArrayList<Station>();
 	
 	
 	/**
@@ -39,9 +39,11 @@ public abstract class MS_Manager{
 	 * Method to create a file receiver with specified port number
 	 * @throws IOException
 	 */
-	public static void createReceiver(int portNum, String name) throws IOException{
+	public static void createStation(int portNum, String name) throws IOException{
 		
-		receiverThreadArray.add(new Receiver(portNum, name));
+		dataLocation = (new File(".")).getAbsoluteFile().getParentFile().getPath() + "\\Extras\\data"; ////////////////////This sets the data save location to be the project directory under lib/data/////////////////ELIZA WILL HAVE THE USER GIVE THIS.
+		
+		stationArrayList.add(new Station(portNum, name, dataLocation));
 				
 	}
 	

@@ -45,20 +45,20 @@ public class Receiver extends Thread {
     /*
      * Constructor which creates socket with specified port number and specified name
      */
-    public Receiver(int portNumber, String name) throws IOException {
+    public Receiver(int portNumber, String name, String saveLocation) {
     
-        //MS_Manager.dataLocation = "C:\\Users\\parkere2\\Music\\data"; ////////////////////////////////////////////////////ELIZA WILL HAVE THE USER GIVE THIS.
-    	MS_Manager.dataLocation = (new File(".")).getAbsoluteFile().getParentFile().getPath() + "\\Extras\\data"; ////////////////////This sets the data save location to be the project directory under lib/data/////////////////ELIZA WILL HAVE THE USER GIVE THIS.
-    	
-    	//specify directory to save files
-        dataHandler = new DataHandler(MS_Manager.dataLocation, name);
+        //specify directory to save files
+        dataHandler = new DataHandler(saveLocation, name);
  
         setPortNum(portNumber);
         
-        setStationName(name);
-        
         //set port number to server socket
-        serverSocket = new ServerSocket(portNum); 
+        try {
+			serverSocket = new ServerSocket(portNum);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+        
         //create socket for communication
         socket = new Socket();
     }
@@ -110,16 +110,7 @@ public class Receiver extends Thread {
     public void setPortNum(int portNum){
     	this.portNum = portNum;
     }
-    
-    
-    /**
-     * Method to set the station name
-     * @param name of the station
-     */
-    public void setStationName(String newName){
-    	stationName = stationName.replace(stationName, newName);
-    }
-    
+     
 
     /**
      * Method to get the port number

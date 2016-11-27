@@ -54,12 +54,7 @@ public class DataHandler {
 	            ZipEntry entry;
 	            while((entry = stream.getNextEntry())!=null)
 	            {
-//	            	String s = String.format("Entry: %s len %d added %TD",
-//	                                entry.getName(), entry.getSize(),
-//	                                new Date(entry.getTime()));
-//	                System.out.println(s);
-
-	                // Once we get the entry from the stream, the stream is
+	            	// Once we get the entry from the stream, the stream is
 	                // positioned to read the raw data, and we keep
 	                // reading until read returns 0 or less.
 	                String outpath = stationDataLocation + "/" + entry.getName();
@@ -71,8 +66,6 @@ public class DataHandler {
 	                    while ((len = stream.read(buffer)) > 0)
 	                    {
 	                        output.write(buffer, 0, len);
-	                        //testPut.write(buffer, 0, len);
-	                        //len = stream.read(buffer);
 	                    }
 	                    
 	                }

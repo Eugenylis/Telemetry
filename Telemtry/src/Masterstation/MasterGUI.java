@@ -83,8 +83,6 @@ public class MasterGUI extends Application {
 	static int Xcount=1;
 	static int Ycount=1; // counting number of line print
 	static int counter=100;
-	static String file1="E:\\java\\matlab test\\test1.txt";
-	static String file2="E:\\java\\matlab test\\test2.txt";
 	
 	private Axis<Number> xAxis1, xAxis2, xAxis3, xAxis4;
 	private Axis<Number> yAxis1, yAxis2, yAxis3, yAxis4;
@@ -199,7 +197,7 @@ public class MasterGUI extends Application {
 		Scene scene = new Scene(borderPane, 1200, 675);
 		stage.setScene(scene);
 		stage.setTitle("Telemetry Master Interface");
-		stage.setResizable(false);
+		stage.setResizable(true);
 		
 		
 				
@@ -253,10 +251,6 @@ public class MasterGUI extends Application {
 			Label lbPortNum = new Label("Port number:");
 			CheckBox cbSelectStation = new CheckBox();
 			
-//			if (cbSelectStation.isSelected()){
-//				miRemoveStation.setOnAction(arg0 -> removeSelectedStation()); /////////////////////////////////////////////////////////////
-//			}
-			
 			Button btConnect = new Button("Connect");
 			btConnect.setStyle("-fx-background-color: mediumseagreen ");
 			btConnect.setOnAction(arg0 -> {
@@ -288,7 +282,8 @@ public class MasterGUI extends Application {
 			
 			//create a receiver object with specified port number
 			try {
-				MS_Manager.createReceiver(portNumber, stationName);
+				//MS_Manager.createReceiver(portNumber, stationName);
+				MS_Manager.createStation(portNumber, stationName);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -355,25 +350,7 @@ public class MasterGUI extends Application {
 		cbPlot1YAxis.getItems().add("GPS"); 
 		cbPlot2YAxis.getItems().add("GPS"); 
 		cbPlot3YAxis.getItems().add("GPS"); 
-		cbPlot4YAxis.getItems().add("GPS"); 
-//		//continue with datahandler the file that have all the name got to the line below
-//        File temp = new File("E:\\java\\matlab test\\Name.txt");
-//		try (BufferedReader br = new BufferedReader(new FileReader(temp))) {
-//		    String text;
-//	        while((text= br.readLine()) != null) {	
-//	    		cbPlot1XAxis.getItems().add(text); 	
-//	    		cbPlot2XAxis.getItems().add(text); 
-//	    		cbPlot3XAxis.getItems().add(text); 
-//	    		cbPlot4XAxis.getItems().add(text); 
-//	    		cbPlot1YAxis.getItems().add(text); 
-//	    		cbPlot2YAxis.getItems().add(text); 
-//	    		cbPlot3YAxis.getItems().add(text); 
-//	    		cbPlot4YAxis.getItems().add(text); 
-//	        }
-//
-//		}catch(IOException e){
-//			e.printStackTrace();
-//		}
+		cbPlot4YAxis.getItems().add("GPS");
 		Button btAddPlots = new Button("Add Plots");
 		btAddPlots.setOnAction(arg0 -> addPlotsToGUI());		
 		
@@ -414,7 +391,7 @@ public class MasterGUI extends Application {
 		borderPane.setCenter(tabPanePlots);
 		//Add a swing node
         final SwingNode swingNode = new SwingNode();        
-        createSwingContent(swingNode, null, null);
+        createSwingContent(swingNode);
         final SwingNode swingNode1 = new SwingNode();        
         createSwingContent1(swingNode1);
         final SwingNode swingNode2 = new SwingNode();        
@@ -438,16 +415,16 @@ public class MasterGUI extends Application {
         plotter3.getChildren().add(swingNode3); 
         plotGridPane.add(plotter,1,1);  
         plotGridPane.add(plotter1,1,2);  
-        plotGridPane.add(plotter,2,1);  
-        plotGridPane.add(plotter,2,2);  			
+        plotGridPane.add(plotter2,2,1);  
+        plotGridPane.add(plotter3,2,2);  			
 
 	}
 	// Creating Swing node for plot
-	private void createSwingContent(SwingNode swingNode, ChoiceBox<String> cbPlot1XAxis, ChoiceBox<String> cbPlot1YAxis) {
+	private void createSwingContent(SwingNode swingNode) {
         SwingUtilities.invokeLater(new Runnable() {
-        	String cbPlot1XAxis1=cbPlot1XAxis.getValue();
-        	String cbPlot1YAxis1=cbPlot1YAxis.getValue();
-        	String GPS = "GPS"; 
+        	//String cbPlot1XAxis1=cbPlot1XAxis.getValue();
+        	//String cbPlot1YAxis1=cbPlot1YAxis.getValue();
+        	//String GPS = "GPS"; 
 //        	if ( userXchoice.equals(GPS)) {
 ////  		  System.out.println("User choose Gps");
 ////  		}
@@ -475,7 +452,8 @@ public class MasterGUI extends Application {
         				int totalCount = 0;
         				while(true){//loop//////////////////////////////////////////////////////////////////////        				
         		
-	        				File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\temperature.txt");
+	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\temperature.txt");
+        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\temperature.txt");
         					double number[] = new double[2];
         					String[] data;// = new String[2];
 	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
@@ -541,7 +519,8 @@ public class MasterGUI extends Application {
         				while(true){//loop//////////////////////////////////////////////////////////////////////
         				
         		
-	        				File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\pressure.txt");
+	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\pressure.txt");
+        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\pressure.txt");
         					double number[] = new double[2];
         					String[] data;// = new String[2];
 	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
@@ -563,13 +542,6 @@ public class MasterGUI extends Application {
 									    System.out.println(number[1]);	
 										series.add(number[0], number[1]);
 										plot.repaint();
-										//Ycount++;
-										//Xcount++;
-										//counter++;
-										
-		        			            //System.out.printf("Fist count: %d \n",count);
-		        			        	//System.out.printf("Second Xcount: %d \n",Xcount);
-		        			        	//System.out.printf("Second Ycount: %d \n",Ycount);
 	        						}
 									   
 	        			        }
@@ -611,7 +583,8 @@ public class MasterGUI extends Application {
         				while(true){//loop//////////////////////////////////////////////////////////////////////
         				
         		
-	        				File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\humidity.txt");
+	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\humidity.txt");
+        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\humidity.txt");
         					double number[] = new double[2];
         					String[] data;// = new String[2];
 	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
@@ -679,9 +652,9 @@ public class MasterGUI extends Application {
         			@Override public void run() {
         				int totalCount = 0;
         				while(true){//loop//////////////////////////////////////////////////////////////////////
-        				
-        		
-	        				File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\velocity.txt");
+
+	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\velocity.txt");
+        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\velocity.txt");
         					double number[] = new double[2];
         					String[] data;// = new String[2];
 	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
@@ -703,13 +676,7 @@ public class MasterGUI extends Application {
 									    System.out.println(number[1]);	
 										series.add(number[0], number[1]);
 										plot.repaint();
-										//Ycount++;
-										//Xcount++;
-										//counter++;
-										
-		        			            //System.out.printf("Fist count: %d \n",count);
-		        			        	//System.out.printf("Second Xcount: %d \n",Xcount);
-		        			        	//System.out.printf("Second Ycount: %d \n",Ycount);
+
 	        						}
 									   
 	        			        }
@@ -717,15 +684,11 @@ public class MasterGUI extends Application {
 	
 	        				}catch(Exception e){
 	        					e.printStackTrace();
-	        				}					
-	        				
-	        				
-	        				
-        				}/////////////////////////////////////////////////////////////////////////////////////////////
+	        				}
+
+        				}
         			}					
 
-        			
-        		
         			//end while
         		};
         		thread.start();
@@ -827,7 +790,8 @@ public class MasterGUI extends Application {
 		//Start receiving files
 		System.out.println("Starting Server");
 		//execute run() method in Receiver thread
-		MS_Manager.receiverThreadArray.get(count).start();
+		//MS_Manager.receiverThreadArray.get(count).start();
+		MS_Manager.stationArrayList.get(count).receiver.start();
 		
 		//increment index counter of the array list receiverThreadArray
 		count++;
