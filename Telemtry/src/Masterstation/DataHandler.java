@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -18,6 +19,7 @@ public class DataHandler {
 	String stationDataLocation;
 	String plotDataLocation;
 	String savedDataExt = ".txt";
+	ArrayList<String> sensorDataTypes = new ArrayList<String>();
 	
 	public DataHandler(String dataSaveLocation, String name) {
 		this.stationDataLocation = dataSaveLocation + "\\" + name; //assumed to not have an ending \\
@@ -100,7 +102,12 @@ public class DataHandler {
 		filteredData[0] = linePart[0];
 		filteredData[1] = linePart[1];
 		filteredData[2] = linePart[2];
-	 
+		
+		if(!sensorDataTypes.contains(filteredData[0])){
+			sensorDataTypes.add(filteredData[0]);
+			System.out.println("Stopped it!!!!!");
+		}
+		
 		br.close();
 		return filteredData;
 	}

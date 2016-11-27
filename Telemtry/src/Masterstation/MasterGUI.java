@@ -238,6 +238,11 @@ public class MasterGUI extends Application {
 		
 		//check if text typed in textbox txProtNum is a 4-digit integer number
 		if(MS_Manager.isInteger(txPortNum.getText(),10)){
+			
+			//Get information given by the user
+			portNumber = Integer.parseInt(txPortNum.getText());
+			String stationName = txNameOfStation.getText();
+			
 			VBox localStationDetailsVBox = new VBox();
 			HBox stationHBox = new HBox();
 			HBox stationDetailsHBox = new HBox();
@@ -247,7 +252,7 @@ public class MasterGUI extends Application {
 			stationDetailsHBox.setSpacing(5);;
 			Label lbStationDetails = new Label();
 			btStation = new Button();
-			btStation.setOnAction(arg0 -> btStationActions());
+			btStation.setOnAction(arg0 -> btStationActions(stationName));
 			Label lbPortNum = new Label("Port number:");
 			CheckBox cbSelectStation = new CheckBox();
 			
@@ -275,10 +280,6 @@ public class MasterGUI extends Application {
 
 			//testing remove function
 			miRemoveStation.setOnAction(arg0 -> removeSelectedStation()); ///////////////////////////////////////PLACE SOMEWHERE ELSE/////////////////////////
-			
-			//assign port number to the station
-			portNumber = Integer.parseInt(txPortNum.getText());
-			String stationName = txNameOfStation.getText();
 			
 			//create a receiver object with specified port number
 			try {
@@ -316,7 +317,7 @@ public class MasterGUI extends Application {
 		}
 	}
 	
-	public void btStationActions(){
+	public void btStationActions(String stationName){
 		
 		Label lbXAxis = new Label("X Axis");
 		Label lbYAxis = new Label("Y Axis");
@@ -324,35 +325,40 @@ public class MasterGUI extends Application {
 		Label lbPlot2 = new Label("Plot 2:");
 		Label lbPlot3 = new Label("Plot 3:");
 		Label lbPlot4 = new Label("Plot 4:");
-		ChoiceBox<String> cbPlot1XAxis = new ChoiceBox<String>();		
-		ChoiceBox<String> cbPlot2XAxis = new ChoiceBox<String>();
-		ChoiceBox<String> cbPlot3XAxis = new ChoiceBox<String>();
-		ChoiceBox<String> cbPlot4XAxis = new ChoiceBox<String>();
-		ChoiceBox<String> cbPlot1YAxis = new ChoiceBox<String>();
-		ChoiceBox<String> cbPlot2YAxis = new ChoiceBox<String>();
-		ChoiceBox<String> cbPlot3YAxis = new ChoiceBox<String>();
-		ChoiceBox<String> cbPlot4YAxis = new ChoiceBox<String>();
 		
-//		cbPlot1XAxis.setItems(FXCollections.observableArrayList("Velocity", "Pressure"));
-//		cbPlot2XAxis.setItems(FXCollections.observableArrayList("Velocity", "Pressure"));
-//		cbPlot3XAxis.setItems(FXCollections.observableArrayList("Velocity", "Pressure"));
-//		cbPlot4XAxis.setItems(FXCollections.observableArrayList("Velocity", "Pressure"));
-//		cbPlot1YAxis.setItems(FXCollections.observableArrayList("Altitude"));
-//		cbPlot2YAxis.setItems(FXCollections.observableArrayList("Altitude"));
-//		cbPlot3YAxis.setItems(FXCollections.observableArrayList("Altitude"));
-//		cbPlot4YAxis.setItems(FXCollections.observableArrayList("Altitude"));
+		ChoiceBox<String>[] cbPlotXAxis = new ChoiceBox[4];
+		cbPlotXAxis[0] = new ChoiceBox<String>();	
+		cbPlotXAxis[1] = new ChoiceBox<String>();
+		cbPlotXAxis[2] = new ChoiceBox<String>();
+		cbPlotXAxis[3] = new ChoiceBox<String>();
+		
+		ChoiceBox<String>[] cbPlotYAxis = new ChoiceBox[4];
+		cbPlotYAxis[0] = new ChoiceBox<String>();		
+		cbPlotYAxis[1] = new ChoiceBox<String>();
+		cbPlotYAxis[2] = new ChoiceBox<String>();
+		cbPlotYAxis[3] = new ChoiceBox<String>();
 
+		Station station;
+        Iterator<Station> stationList = MS_Manager.stationArrayList.iterator();
+        while(stationList.hasNext()){
+        	if((station = stationList.next()).stationName == stationName){
+        		cbPlotXAxis[0].getItems().addAll(station.receiver.dataHandler.sensorDataTypes);	
+        		cbPlotXAxis[1].getItems().addAll(station.receiver.dataHandler.sensorDataTypes); 
+        		cbPlotXAxis[2].getItems().addAll(station.receiver.dataHandler.sensorDataTypes); 
+        		cbPlotXAxis[3].getItems().addAll(station.receiver.dataHandler.sensorDataTypes);
+			break;
+        	}
+        }
         
-		cbPlot1XAxis.getItems().add("GPS");  	
-		cbPlot2XAxis.getItems().add("GPS"); 
-		cbPlot3XAxis.getItems().add("GPS"); 
-		cbPlot4XAxis.getItems().add("GPS");  
-		cbPlot1YAxis.getItems().add("GPS"); 
-		cbPlot2YAxis.getItems().add("GPS"); 
-		cbPlot3YAxis.getItems().add("GPS"); 
-		cbPlot4YAxis.getItems().add("GPS");
+        cbPlotYAxis[0].getItems().add("Altitude"); 
+		cbPlotYAxis[1].getItems().add("Altitude"); 
+		cbPlotYAxis[2].getItems().add("Altitude"); 
+		cbPlotYAxis[3].getItems().add("Altitude");
 		Button btAddPlots = new Button("Add Plots");
-		btAddPlots.setOnAction(arg0 -> addPlotsToGUI());		
+		
+		String[] testStringList = {"velocity", "temperature", "pressure", "humidity"};
+		
+		btAddPlots.setOnAction(arg0 -> addPlotsToGUI(stationName, cbPlotXAxis, cbPlotYAxis));		
 		
 		GridPane addPlotGridPane = new GridPane();
 		addPlotGridPane.setHgap(10);
@@ -363,17 +369,15 @@ public class MasterGUI extends Application {
 		addPlotGridPane.add(lbPlot2, 1, 3);
 		addPlotGridPane.add(lbPlot3, 1, 4);
 		addPlotGridPane.add(lbPlot4, 1, 5);
-		addPlotGridPane.add(cbPlot1XAxis, 2, 2);
-		addPlotGridPane.add(cbPlot2XAxis, 2, 3);
-		addPlotGridPane.add(cbPlot3XAxis, 2, 4);
-		addPlotGridPane.add(cbPlot4XAxis, 2, 5);
-		addPlotGridPane.add(cbPlot1YAxis, 3, 2);
-		addPlotGridPane.add(cbPlot2YAxis, 3, 3);
-		addPlotGridPane.add(cbPlot3YAxis, 3, 4);
-		addPlotGridPane.add(cbPlot4YAxis, 3, 5);
-		addPlotGridPane.add(btAddPlots, 1, 6);
-		
-
+		addPlotGridPane.add(cbPlotXAxis[0], 2, 2);
+		addPlotGridPane.add(cbPlotXAxis[1], 2, 3);
+		addPlotGridPane.add(cbPlotXAxis[2], 2, 4);
+		addPlotGridPane.add(cbPlotXAxis[3], 2, 5);
+		addPlotGridPane.add(cbPlotYAxis[0], 3, 2);
+		addPlotGridPane.add(cbPlotYAxis[1], 3, 3);
+		addPlotGridPane.add(cbPlotYAxis[2], 3, 4);
+		addPlotGridPane.add(cbPlotYAxis[3], 3, 5);
+		addPlotGridPane.add(btAddPlots, 1, 6);		
 		
 		// Create and display said the aforementioned pane in a new stage
 		Scene scene = new Scene(addPlotGridPane, 550, 300);
@@ -384,318 +388,311 @@ public class MasterGUI extends Application {
 		stage.show();
 	}
 	
-	public void addPlotsToGUI(){		
+	public void addPlotsToGUI(String stationName, ChoiceBox<String>[] cbPlotXAxis, ChoiceBox<String>[] cbPlotYAxis){		
+		
 		Plot = new Tab(btStation.getText());		
 		tabPanePlots.getTabs().addAll(Plot);
 		Plot.setClosable(true);
 		borderPane.setCenter(tabPanePlots);
-		//Add a swing node
-        final SwingNode swingNode = new SwingNode();        
-        createSwingContent(swingNode);
-        final SwingNode swingNode1 = new SwingNode();        
-        createSwingContent1(swingNode1);
-        final SwingNode swingNode2 = new SwingNode();        
-        createSwingContent2(swingNode2);
-        final SwingNode swingNode3 = new SwingNode();        
-        createSwingContent3(swingNode3);
         
-		 //Plots in tabPane Plot1
+		//Plots in tabPane Plot1
         plotGridPane = new GridPane();        		
 		plotGridPane.setHgap(10);
         plotGridPane.setVgap(10);
         Plot.setContent(plotGridPane);
-      //Plots in tabPane Plot1 (change the TilePane to some blank pane for the swing)
-        TilePane  plotter = new TilePane();
-        plotter.getChildren().add(swingNode);
-        TilePane  plotter1 = new TilePane();
-        plotter1.getChildren().add(swingNode1);     
-        TilePane  plotter2 = new TilePane();
-        plotter2.getChildren().add(swingNode2); 
-        TilePane  plotter3 = new TilePane();
-        plotter3.getChildren().add(swingNode3); 
-        plotGridPane.add(plotter,1,1);  
-        plotGridPane.add(plotter1,1,2);  
-        plotGridPane.add(plotter2,2,1);  
-        plotGridPane.add(plotter3,2,2);  			
+        
+        Station station;
+        Iterator<Station> stationList = MS_Manager.stationArrayList.iterator();
+        while(stationList.hasNext()){
+        	if((station = stationList.next()).stationName == stationName){
+        		//Plots in tabPane Plot1 (change the TilePane to some blank pane for the swing)
+		        plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[0].getValue(), 0),1,1);  
+		        plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[1].getValue(), 1),1,2);  
+		        plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[2].getValue(), 2),2,1);  
+		        plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[3].getValue(), 3),2,2);  
+        		break;
+        	}
+        }
+        			
 
 	}
-	// Creating Swing node for plot
-	private void createSwingContent(SwingNode swingNode) {
-        SwingUtilities.invokeLater(new Runnable() {
-        	//String cbPlot1XAxis1=cbPlot1XAxis.getValue();
-        	//String cbPlot1YAxis1=cbPlot1YAxis.getValue();
-        	//String GPS = "GPS"; 
-//        	if ( userXchoice.equals(GPS)) {
-////  		  System.out.println("User choose Gps");
-////  		}
-////  		else {
-////  			System.out.println(userXchoice);    
-////  		} 
-////  	    if ( userYchoice.equals(GPS)) {
-//// 		  System.out.println("User choose Gps");
-//// 		}
-//// 		else {
-//// 			System.out.println(userYchoice);    
-//// 		} 
-        	
-            @Override
-            public void run() {
-            	XYSeries series = new XYSeries("Temperature");
-            	XYSeriesCollection dataset = new XYSeriesCollection(series);
-        		JFreeChart chart = ChartFactory.createScatterPlot("Temperature plot", "Altitude (m)", "Temperature (C)", dataset);
-        		ChartPanel plot= new ChartPanel(chart);         		
-        		swingNode.setContent(plot);
-        		// create a new thread that listens for incoming text and populates the graph
-        		Thread thread = new Thread(){     			
-     			
-        			@Override public void run() {
-        				int totalCount = 0;
-        				while(true){//loop//////////////////////////////////////////////////////////////////////        				
-        		
-	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\temperature.txt");
-        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\temperature.txt");
-        					double number[] = new double[2];
-        					String[] data;// = new String[2];
-	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
-	        				     
-	        					String line;
-	        					
-	        					int tempCount = 0;
-	        					while ((line = br.readLine()) != null) {		
-	        						
-	        						tempCount++;
-	        						if (totalCount < tempCount){
-		        						totalCount++;//count number of line 
-		        			        	
-		        			        	data = line.split(",");
-		        			        	
-		        			        	number[0] = Double.parseDouble(data[0]);
-										System.out.println(number[0]);				
-										number[1] = Double.parseDouble(data[1]);
-									    System.out.println(number[1]);	
-										series.add(number[0], number[1]);
-										plot.repaint();
-										//Ycount++;
-										//Xcount++;
-										//counter++;
-										
-		        			            //System.out.printf("Fist count: %d \n",count);
-		        			        	//System.out.printf("Second Xcount: %d \n",Xcount);
-		        			        	//System.out.printf("Second Ycount: %d \n",Ycount);
-	        						}
-									   
-	        			        }
-	        					Thread.sleep(1000); 
-	
-	        				}catch(Exception e){
-	        					e.printStackTrace();
-	        				}					
-	        				
-	        				
-	        				
-        				}/////////////////////////////////////////////////////////////////////////////////////////////
-        			}					
-        			//end while
-        		};
-        		thread.start();
-            }
-        });
-		
-	}
-	private void createSwingContent1(SwingNode swingNode1) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-            	XYSeries series = new XYSeries("Pressure");
-            	XYSeriesCollection dataset = new XYSeriesCollection(series);
-        		JFreeChart chart = ChartFactory.createScatterPlot("Pressure plot", "Time (seconds)", "ADC Reading", dataset);
-        		ChartPanel plot= new ChartPanel(chart);        		
-        		swingNode1.setContent(plot);
-        		// create a new thread that listens for incoming text and populates the graph
-        		Thread thread = new Thread(){     			
-        			
-        			@Override public void run() {
-        				int totalCount = 0;
-        				while(true){//loop//////////////////////////////////////////////////////////////////////
-        				
-        		
-	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\pressure.txt");
-        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\pressure.txt");
-        					double number[] = new double[2];
-        					String[] data;// = new String[2];
-	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
-	        				     
-	        					String line;
-	        					
-	        					int tempCount = 0;
-	        					while ((line = br.readLine()) != null) {		
-	        						
-	        						tempCount++;
-	        						if (totalCount < tempCount){
-		        						totalCount++;//count number of line 
-		        			        	
-		        			        	data = line.split(",");
-		        			        	
-		        			        	number[0] = Double.parseDouble(data[0]);
-										System.out.println(number[0]);				
-										number[1] = Double.parseDouble(data[1]);
-									    System.out.println(number[1]);	
-										series.add(number[0], number[1]);
-										plot.repaint();
-	        						}
-									   
-	        			        }
-	        					Thread.sleep(1000);
-	
-	        				}catch(Exception e){
-	        					e.printStackTrace();
-	        				}					
-	        				
-	        				
-	        				
-        				}/////////////////////////////////////////////////////////////////////////////////////////////
-        			}					
-
-        			
-        		
-        			//end while
-        		};
-        		thread.start();
-            }
-        });
-		
-	}
-	
-	private void createSwingContent2(SwingNode swingNode2) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-            	XYSeries series = new XYSeries("First Plot");
-            	XYSeriesCollection dataset = new XYSeriesCollection(series);
-        		JFreeChart chart = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading", dataset);
-        		ChartPanel plot= new ChartPanel(chart);        		
-        		swingNode2.setContent(plot);
-        		// create a new thread that listens for incoming text and populates the graph
-        		Thread thread = new Thread(){     			
-        			
-        			@Override public void run() {
-        				int totalCount = 0;
-        				while(true){//loop//////////////////////////////////////////////////////////////////////
-        				
-        		
-	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\humidity.txt");
-        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\humidity.txt");
-        					double number[] = new double[2];
-        					String[] data;// = new String[2];
-	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
-	        				     
-	        					String line;
-	        					
-	        					int tempCount = 0;
-	        					while ((line = br.readLine()) != null) {		
-	        						
-	        						tempCount++;
-	        						if (totalCount < tempCount){
-		        						totalCount++;//count number of line 
-		        			        	
-		        			        	data = line.split(",");
-		        			        	
-		        			        	number[0] = Double.parseDouble(data[0]);
-										System.out.println(number[0]);				
-										number[1] = Double.parseDouble(data[1]);
-									    System.out.println(number[1]);	
-										series.add(number[0], number[1]);
-										plot.repaint();
-										//Ycount++;
-										//Xcount++;
-										//counter++;
-										
-		        			            //System.out.printf("Fist count: %d \n",count);
-		        			        	//System.out.printf("Second Xcount: %d \n",Xcount);
-		        			        	//System.out.printf("Second Ycount: %d \n",Ycount);
-	        						}
-									   
-	        			        }
-	        					Thread.sleep(1000);
-	
-	        				}catch(Exception e){
-	        					e.printStackTrace();
-	        				}					
-	        				
-	        				
-	        				
-        				}/////////////////////////////////////////////////////////////////////////////////////////////
-        			}					
-
-        			
-        		
-        			//end while
-        		};
-        		thread.start();
-            }
-        });
-		
-	}
-	
-	private void createSwingContent3(SwingNode swingNode3) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-            	XYSeries series = new XYSeries("First Plot");
-            	XYSeriesCollection dataset = new XYSeriesCollection(series);
-        		JFreeChart chart = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading", dataset);
-        		ChartPanel plot= new ChartPanel(chart);        		
-        		swingNode3.setContent(plot);
-        		// create a new thread that listens for incoming text and populates the graph
-        		Thread thread = new Thread(){     			
-        			
-        			@Override public void run() {
-        				int totalCount = 0;
-        				while(true){//loop//////////////////////////////////////////////////////////////////////
-
-	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\velocity.txt");
-        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\velocity.txt");
-        					double number[] = new double[2];
-        					String[] data;// = new String[2];
-	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
-	        				     
-	        					String line;
-	        					
-	        					int tempCount = 0;
-	        					while ((line = br.readLine()) != null) {		
-	        						
-	        						tempCount++;
-	        						if (totalCount < tempCount){
-		        						totalCount++;//count number of line 
-		        			        	
-		        			        	data = line.split(",");
-		        			        	
-		        			        	number[0] = Double.parseDouble(data[0]);
-										System.out.println(number[0]);				
-										number[1] = Double.parseDouble(data[1]);
-									    System.out.println(number[1]);	
-										series.add(number[0], number[1]);
-										plot.repaint();
-
-	        						}
-									   
-	        			        }
-	        					Thread.sleep(1000);
-	
-	        				}catch(Exception e){
-	        					e.printStackTrace();
-	        				}
-
-        				}
-        			}					
-
-        			//end while
-        		};
-        		thread.start();
-            }
-        });
-		
-	}
+//	// Creating Swing node for plot
+//	private void createSwingContent(SwingNode swingNode) {
+//        SwingUtilities.invokeLater(new Runnable() {
+//        	//String cbPlot1XAxis1=cbPlot1XAxis.getValue();
+//        	//String cbPlot1YAxis1=cbPlot1YAxis.getValue();
+//        	//String GPS = "GPS"; 
+////        	if ( userXchoice.equals(GPS)) {
+//////  		  System.out.println("User choose Gps");
+//////  		}
+//////  		else {
+//////  			System.out.println(userXchoice);    
+//////  		} 
+//////  	    if ( userYchoice.equals(GPS)) {
+////// 		  System.out.println("User choose Gps");
+////// 		}
+////// 		else {
+////// 			System.out.println(userYchoice);    
+////// 		} 
+//        	
+//            @Override
+//            public void run() {
+//            	XYSeries series = new XYSeries("Temperature");
+//            	XYSeriesCollection dataset = new XYSeriesCollection(series);
+//        		JFreeChart chart = ChartFactory.createScatterPlot("Temperature plot", "Altitude (m)", "Temperature (C)", dataset);
+//        		ChartPanel plot= new ChartPanel(chart);         		
+//        		swingNode.setContent(plot);
+//        		// create a new thread that listens for incoming text and populates the graph
+//        		Thread thread = new Thread(){     			
+//     			
+//        			@Override public void run() {
+//        				int totalCount = 0;
+//        				while(true){//loop//////////////////////////////////////////////////////////////////////        				
+//        		
+//	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\temperature.txt");
+//        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\temperature.txt");
+//        					double number[] = new double[2];
+//        					String[] data;// = new String[2];
+//	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
+//	        				     
+//	        					String line;
+//	        					
+//	        					int tempCount = 0;
+//	        					while ((line = br.readLine()) != null) {		
+//	        						
+//	        						tempCount++;
+//	        						if (totalCount < tempCount){
+//		        						totalCount++;//count number of line 
+//		        			        	
+//		        			        	data = line.split(",");
+//		        			        	
+//		        			        	number[0] = Double.parseDouble(data[0]);
+//										System.out.println(number[0]);				
+//										number[1] = Double.parseDouble(data[1]);
+//									    System.out.println(number[1]);	
+//										series.add(number[0], number[1]);
+//										plot.repaint();
+//										//Ycount++;
+//										//Xcount++;
+//										//counter++;
+//										
+//		        			            //System.out.printf("Fist count: %d \n",count);
+//		        			        	//System.out.printf("Second Xcount: %d \n",Xcount);
+//		        			        	//System.out.printf("Second Ycount: %d \n",Ycount);
+//	        						}
+//									   
+//	        			        }
+//	        					Thread.sleep(1000); 
+//	
+//	        				}catch(Exception e){
+//	        					e.printStackTrace();
+//	        				}					
+//	        				
+//	        				
+//	        				
+//        				}/////////////////////////////////////////////////////////////////////////////////////////////
+//        			}					
+//        			//end while
+//        		};
+//        		thread.start();
+//            }
+//        });
+//		
+//	}
+//	private void createSwingContent1(SwingNode swingNode1) {
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//            	XYSeries series = new XYSeries("Pressure");
+//            	XYSeriesCollection dataset = new XYSeriesCollection(series);
+//        		JFreeChart chart = ChartFactory.createScatterPlot("Pressure plot", "Time (seconds)", "ADC Reading", dataset);
+//        		ChartPanel plot= new ChartPanel(chart);        		
+//        		swingNode1.setContent(plot);
+//        		// create a new thread that listens for incoming text and populates the graph
+//        		Thread thread = new Thread(){     			
+//        			
+//        			@Override public void run() {
+//        				int totalCount = 0;
+//        				while(true){//loop//////////////////////////////////////////////////////////////////////
+//        				
+//        		
+//	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\pressure.txt");
+//        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\pressure.txt");
+//        					double number[] = new double[2];
+//        					String[] data;// = new String[2];
+//	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
+//	        				     
+//	        					String line;
+//	        					
+//	        					int tempCount = 0;
+//	        					while ((line = br.readLine()) != null) {		
+//	        						
+//	        						tempCount++;
+//	        						if (totalCount < tempCount){
+//		        						totalCount++;//count number of line 
+//		        			        	
+//		        			        	data = line.split(",");
+//		        			        	
+//		        			        	number[0] = Double.parseDouble(data[0]);
+//										System.out.println(number[0]);				
+//										number[1] = Double.parseDouble(data[1]);
+//									    System.out.println(number[1]);	
+//										series.add(number[0], number[1]);
+//										plot.repaint();
+//	        						}
+//									   
+//	        			        }
+//	        					Thread.sleep(1000);
+//	
+//	        				}catch(Exception e){
+//	        					e.printStackTrace();
+//	        				}					
+//	        				
+//	        				
+//	        				
+//        				}/////////////////////////////////////////////////////////////////////////////////////////////
+//        			}					
+//
+//        			
+//        		
+//        			//end while
+//        		};
+//        		thread.start();
+//            }
+//        });
+//		
+//	}
+//	
+//	private void createSwingContent2(SwingNode swingNode2) {
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//            	XYSeries series = new XYSeries("First Plot");
+//            	XYSeriesCollection dataset = new XYSeriesCollection(series);
+//        		JFreeChart chart = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading", dataset);
+//        		ChartPanel plot= new ChartPanel(chart);        		
+//        		swingNode2.setContent(plot);
+//        		// create a new thread that listens for incoming text and populates the graph
+//        		Thread thread = new Thread(){     			
+//        			
+//        			@Override public void run() {
+//        				int totalCount = 0;
+//        				while(true){//loop//////////////////////////////////////////////////////////////////////
+//        				
+//        		
+//	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\humidity.txt");
+//        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\humidity.txt");
+//        					double number[] = new double[2];
+//        					String[] data;// = new String[2];
+//	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
+//	        				     
+//	        					String line;
+//	        					
+//	        					int tempCount = 0;
+//	        					while ((line = br.readLine()) != null) {		
+//	        						
+//	        						tempCount++;
+//	        						if (totalCount < tempCount){
+//		        						totalCount++;//count number of line 
+//		        			        	
+//		        			        	data = line.split(",");
+//		        			        	
+//		        			        	number[0] = Double.parseDouble(data[0]);
+//										System.out.println(number[0]);				
+//										number[1] = Double.parseDouble(data[1]);
+//									    System.out.println(number[1]);	
+//										series.add(number[0], number[1]);
+//										plot.repaint();
+//										//Ycount++;
+//										//Xcount++;
+//										//counter++;
+//										
+//		        			            //System.out.printf("Fist count: %d \n",count);
+//		        			        	//System.out.printf("Second Xcount: %d \n",Xcount);
+//		        			        	//System.out.printf("Second Ycount: %d \n",Ycount);
+//	        						}
+//									   
+//	        			        }
+//	        					Thread.sleep(1000);
+//	
+//	        				}catch(Exception e){
+//	        					e.printStackTrace();
+//	        				}					
+//	        				
+//	        				
+//	        				
+//        				}/////////////////////////////////////////////////////////////////////////////////////////////
+//        			}					
+//
+//        			
+//        		
+//        			//end while
+//        		};
+//        		thread.start();
+//            }
+//        });
+//		
+//	}
+//	
+//	private void createSwingContent3(SwingNode swingNode3) {
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//            	XYSeries series = new XYSeries("First Plot");
+//            	XYSeriesCollection dataset = new XYSeriesCollection(series);
+//        		JFreeChart chart = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading", dataset);
+//        		ChartPanel plot= new ChartPanel(chart);        		
+//        		swingNode3.setContent(plot);
+//        		// create a new thread that listens for incoming text and populates the graph
+//        		Thread thread = new Thread(){     			
+//        			
+//        			@Override public void run() {
+//        				int totalCount = 0;
+//        				while(true){//loop//////////////////////////////////////////////////////////////////////
+//
+//	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\velocity.txt");
+//        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\velocity.txt");
+//        					double number[] = new double[2];
+//        					String[] data;// = new String[2];
+//	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
+//	        				     
+//	        					String line;
+//	        					
+//	        					int tempCount = 0;
+//	        					while ((line = br.readLine()) != null) {		
+//	        						
+//	        						tempCount++;
+//	        						if (totalCount < tempCount){
+//		        						totalCount++;//count number of line 
+//		        			        	
+//		        			        	data = line.split(",");
+//		        			        	
+//		        			        	number[0] = Double.parseDouble(data[0]);
+//										System.out.println(number[0]);				
+//										number[1] = Double.parseDouble(data[1]);
+//									    System.out.println(number[1]);	
+//										series.add(number[0], number[1]);
+//										plot.repaint();
+//
+//	        						}
+//									   
+//	        			        }
+//	        					Thread.sleep(1000);
+//	
+//	        				}catch(Exception e){
+//	        					e.printStackTrace();
+//	        				}
+//
+//        				}
+//        			}					
+//
+//        			//end while
+//        		};
+//        		thread.start();
+//            }
+//        });
+//		
+//	}
 
 	/**
 	}

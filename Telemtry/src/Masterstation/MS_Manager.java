@@ -42,7 +42,6 @@ public abstract class MS_Manager{
 	public static void createStation(int portNum, String name) throws IOException{
 		
 		dataLocation = (new File(".")).getAbsoluteFile().getParentFile().getPath() + "\\Extras\\data"; ////////////////////This sets the data save location to be the project directory under lib/data/////////////////ELIZA WILL HAVE THE USER GIVE THIS.
-		
 		stationArrayList.add(new Station(portNum, name, dataLocation));
 				
 	}
