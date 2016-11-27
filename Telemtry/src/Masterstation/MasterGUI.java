@@ -1,28 +1,21 @@
 package Masterstation;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
 
-import javax.swing.SwingUtilities;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
+//import org.jfree.chart.ChartFactory;
+//import org.jfree.chart.ChartPanel;
+//import org.jfree.chart.JFreeChart;
+//import org.jfree.data.xy.XYSeries;
+//import org.jfree.data.xy.XYSeriesCollection;
 
 import javafx.application.Application;
-import javafx.embed.swing.SwingNode;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.chart.Axis;
-import javafx.scene.chart.LineChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -67,8 +60,8 @@ public class MasterGUI extends Application {
 	
 	// Menu
 	private MenuBar menuBar; // MenuBar
-	private Menu menuHelp, menuFile, menuSettings, menuConnections, menuGroundStation; // Menus
-	private MenuItem miSave, miOpen, miHelp, miPlotData, miConnect, miAddStation, miRemoveStation, miStationSettings, miDataSincFreq;
+	private Menu menuHelp, menuSettings, menuConnections, menuGroundStation; // Menus
+	private MenuItem miHelp, miPlotData, miAddStation, miRemoveStation, miDataSincFreq, miChooseDirectory;
 	//VBox for Status Display
 	private VBox stationVBox;
 	private Label lbTitle;
@@ -84,10 +77,6 @@ public class MasterGUI extends Application {
 	static int Xcount=1;
 	static int Ycount=1; // counting number of line print
 	static int counter=100;
-	
-	private Axis<Number> xAxis1, xAxis2, xAxis3, xAxis4;
-	private Axis<Number> yAxis1, yAxis2, yAxis3, yAxis4;
-	private LineChart<Number,Number> lineChart1, lineChart2, lineChart3, lineChart4;
 	
 	/* COMMUNICATION ITEMS */
 	//specified port number
@@ -106,38 +95,26 @@ public class MasterGUI extends Application {
 		//menu
 		menuBar = new MenuBar();
 		menuHelp = new Menu("Help");
-		menuFile = new Menu("File");
 		menuSettings = new Menu("Settings");
 		menuConnections = new Menu("Connection");
 		menuGroundStation = new Menu("Setup Ground Stations");
 		miAddStation = new MenuItem("Add Station");
+		miChooseDirectory = new MenuItem("Choose Directory");
 		miRemoveStation = new MenuItem("Remove Station");
-		miSave = new MenuItem("Save");
-		miOpen = new MenuItem("Open");
 		miHelp = new MenuItem("Help");
-		miConnect = new MenuItem("Connect");
 		miDataSincFreq = new MenuItem("Data Sinc Freguency");
 		miPlotData = new MenuItem("Plot");
-		menuFile.getItems().addAll(miSave, miOpen);
 		menuHelp.getItems().addAll(miHelp);
-		menuConnections.getItems().addAll(miConnect, miDataSincFreq);
+		menuConnections.getItems().addAll(miChooseDirectory, miDataSincFreq);
 		menuSettings.getItems().addAll(miPlotData);
 		menuGroundStation.getItems().addAll(miAddStation, miRemoveStation);
-		menuBar.getMenus().addAll(menuFile, menuSettings, menuConnections, menuGroundStation, menuHelp);
+		menuBar.getMenus().addAll(menuSettings,menuConnections, menuGroundStation, menuHelp);
 		borderPane.setTop(menuBar);
 		
 				
 		miDataSincFreq.setOnAction(arg0 -> DataSincFerq());
 		miAddStation.setOnAction(arg0 -> showAddStation());
 		miHelp.setOnAction(arg0 -> showHelp());
-		miConnect.setOnAction(arg0 -> {
-			try {
-				Connect();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
 		
 		//Status Display
 		stationVBox = new VBox();
@@ -154,38 +131,8 @@ public class MasterGUI extends Application {
 		//tabs for plot display/ data/ 
 		tabPanePlots = new TabPane();
 		
+	}		
 		
-		
-		
-//		/****SAMPLE PLOT*********************************/
-//		//defining the axes
-//	    xAxis1 = new NumberAxis();
-//	    yAxis1 = new NumberAxis();
-//	    yAxis1.setLabel("Velocity");
-//	    xAxis1.setLabel("Time");
-//	    //creating the chart
-//	    lineChart1 = new LineChart<Number,Number>(xAxis1,yAxis1);
-//	    lineChart1.setTitle("Velocity vs Time");
-//	    //defining a series
-//	    XYChart.Series series1 = new XYChart.Series();
-//        //populating the series with data
-//        series1.getData().add(new XYChart.Data(1, 23));
-//        series1.getData().add(new XYChart.Data(2, 14));
-//        series1.getData().add(new XYChart.Data(3, 15));
-//        series1.getData().add(new XYChart.Data(4, 24));
-//        series1.getData().add(new XYChart.Data(5, 34));
-//        series1.getData().add(new XYChart.Data(6, 36));
-//        series1.getData().add(new XYChart.Data(7, 22));
-//        series1.getData().add(new XYChart.Data(8, 45));
-//        series1.getData().add(new XYChart.Data(9, 43));
-//        series1.getData().add(new XYChart.Data(10, 17));
-//        series1.getData().add(new XYChart.Data(11, 29));
-//        series1.getData().add(new XYChart.Data(12, 25));
-//	        
-//        lineChart1.getData().add(series1);
-     
-	}
-	
 	
 	/* 
 	 * @see javafx.application.Application#start(javafx.stage.Stage)
@@ -359,9 +306,7 @@ public class MasterGUI extends Application {
 		cbPlotYAxis[2].getItems().add("Altitude"); 
 		cbPlotYAxis[3].getItems().add("Altitude");
 		Button btAddPlots = new Button("Add Plots");
-		
-		btAddPlots.setOnAction(arg0 -> addPlotsToGUI(stationName, cbPlotXAxis, cbPlotYAxis));		
-		
+				
 		GridPane addPlotGridPane = new GridPane();
 		addPlotGridPane.setHgap(10);
 		addPlotGridPane.setVgap(10);
@@ -388,11 +333,19 @@ public class MasterGUI extends Application {
 		stage.setTitle("Choose Plot Settings");
 		stage.setResizable(false);
 		stage.show();
+		
+		btAddPlots.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+            	addPlotsToGUI(stationName, cbPlotXAxis, cbPlotYAxis);
+        		stage.close();
+
+            }
+        });
 	}
 	
 	public void addPlotsToGUI(String stationName, ChoiceBox<String>[] cbPlotXAxis, ChoiceBox<String>[] cbPlotYAxis){		
 		
-		Plot = new Tab(btStation.getText());		
+		Plot = new Tab(stationName);		
 		tabPanePlots.getTabs().addAll(Plot);
 		Plot.setClosable(true);
 		borderPane.setCenter(tabPanePlots);
@@ -408,10 +361,6 @@ public class MasterGUI extends Application {
         while(stationList.hasNext()){
         	if((station = stationList.next()).stationName.equals(stationName)){
         		//Plots in tabPane Plot1 (change the TilePane to some blank pane for the swing)
-		        System.out.println(cbPlotXAxis[0].getValue() + "---------");
-		        System.out.println(cbPlotXAxis[1].getValue() + "---------");
-		        System.out.println(cbPlotXAxis[2].getValue() + "---------");
-		        System.out.println(cbPlotXAxis[3].getValue() + "---------");
         		if(!(cbPlotXAxis[0].getValue()== null)){
 		        	plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[0].getValue(), 0),1,1);  
 		        }else{
@@ -500,29 +449,6 @@ public class MasterGUI extends Application {
 		stage.show();
 	}
 	
-	/**
-	 * Displays Connections window
-	 */
-	private void showConnections(){
-		
-		GridPane connectionGrid = new GridPane();
-		connectionGrid.setAlignment(Pos.CENTER);
-		
-		// Create the text label
-		Label connectionStat = new Label("Connection Status");
-		connectionStat.setTextAlignment(TextAlignment.LEFT);
-		connectionStat.setFont(Font.font("Times New Roman", 14));
-		connectionGrid.add(connectionStat, 1, 1);
-		
-	
-		// Create and display said the aforementioned pane in a new stage
-		Scene scene = new Scene(connectionGrid, 800, 500);
-		Stage stage = new Stage();
-		stage.setScene(scene);
-		stage.setTitle("Connections Settings");
-		stage.setResizable(false);
-		stage.show();
-	}
 	
 	/**
 	 * Method starts executing thread in receiver class to start communication

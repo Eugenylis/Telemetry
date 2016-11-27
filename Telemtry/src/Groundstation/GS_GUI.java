@@ -1,5 +1,4 @@
 package Groundstation;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -23,7 +22,6 @@ public class GS_GUI {
 	private JLabel lblStep;
 	private JLabel lblNewLabel_2;
 	private JTextField textFieldSocket;
-	private JButton btnNewButton_1;
 	private JLabel lblNewLabel_3;
 	private JButton btnNewButton_2;
 
