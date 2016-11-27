@@ -77,7 +77,6 @@ public class DataHandler {
 	                	if(output!=null) {
 							output.close();
 							addPlotdata(filterData(outpath));
-							
 	                    }
 	                }
 	            }
@@ -105,6 +104,24 @@ public class DataHandler {
 		
 		if(!sensorDataTypes.contains(filteredData[0])){
 			sensorDataTypes.add(filteredData[0]);
+			/////////////////////////////////////////////////////////
+			File file = new File(plotDataLocation + "\\name.txt");
+			try {
+				if(file.createNewFile()){
+					//File has been created
+				}else{
+					//File already exists
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			//Write Content
+			FileWriter writer = new FileWriter(file, true);
+			writer.write(filteredData[0] + ",");
+			writer.close();
+			/////////////////////////////////////////////////////////
 			System.out.println("Stopped it!!!!!");
 		}
 		

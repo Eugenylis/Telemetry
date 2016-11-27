@@ -2,6 +2,7 @@ package Masterstation;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
@@ -341,22 +342,23 @@ public class MasterGUI extends Application {
 		Station station;
         Iterator<Station> stationList = MS_Manager.stationArrayList.iterator();
         while(stationList.hasNext()){
-        	if((station = stationList.next()).stationName == stationName){
+        	station = stationList.next();
+        	if(station.stationName.equals(stationName)){
         		cbPlotXAxis[0].getItems().addAll(station.receiver.dataHandler.sensorDataTypes);	
         		cbPlotXAxis[1].getItems().addAll(station.receiver.dataHandler.sensorDataTypes); 
         		cbPlotXAxis[2].getItems().addAll(station.receiver.dataHandler.sensorDataTypes); 
         		cbPlotXAxis[3].getItems().addAll(station.receiver.dataHandler.sensorDataTypes);
-			break;
+        		
+        		break;
         	}
-        }
+        }        
+        
         
         cbPlotYAxis[0].getItems().add("Altitude"); 
 		cbPlotYAxis[1].getItems().add("Altitude"); 
 		cbPlotYAxis[2].getItems().add("Altitude"); 
 		cbPlotYAxis[3].getItems().add("Altitude");
 		Button btAddPlots = new Button("Add Plots");
-		
-		String[] testStringList = {"velocity", "temperature", "pressure", "humidity"};
 		
 		btAddPlots.setOnAction(arg0 -> addPlotsToGUI(stationName, cbPlotXAxis, cbPlotYAxis));		
 		
@@ -404,295 +406,38 @@ public class MasterGUI extends Application {
         Station station;
         Iterator<Station> stationList = MS_Manager.stationArrayList.iterator();
         while(stationList.hasNext()){
-        	if((station = stationList.next()).stationName == stationName){
+        	if((station = stationList.next()).stationName.equals(stationName)){
         		//Plots in tabPane Plot1 (change the TilePane to some blank pane for the swing)
-		        plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[0].getValue(), 0),1,1);  
-		        plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[1].getValue(), 1),1,2);  
-		        plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[2].getValue(), 2),2,1);  
-		        plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[3].getValue(), 3),2,2);  
+		        System.out.println(cbPlotXAxis[0].getValue() + "---------");
+        		if(!(cbPlotXAxis[0].getValue()== null)){
+		        	plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[0].getValue(), 0),1,1);  
+		        }else{
+		        	TilePane emptyplot= new TilePane();
+		        	plotGridPane.add(emptyplot,1,1);
+		        }
+		        if(!(cbPlotXAxis[1].getValue()== null)){
+		        	plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[1].getValue(), 1),1,2);  
+		        }else{
+		        	TilePane emptyplot= new TilePane();
+		        	plotGridPane.add(emptyplot,1,2);
+		        }
+		        if(!(cbPlotXAxis[2].getValue()== null)){
+		        	plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[2].getValue(), 2),2,1);  
+		        }else{
+		        	TilePane emptyplot= new TilePane();
+		        	plotGridPane.add(emptyplot,2,1);
+		        }
+		        if(!(cbPlotXAxis[3].getValue()== null)){
+		        	plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[3].getValue(), 3),2,2);  
+		        }else{
+		        	TilePane emptyplot= new TilePane();
+		        	plotGridPane.add(emptyplot,2,2);
+		        }
         		break;
         	}
         }
-        			
-
 	}
-//	// Creating Swing node for plot
-//	private void createSwingContent(SwingNode swingNode) {
-//        SwingUtilities.invokeLater(new Runnable() {
-//        	//String cbPlot1XAxis1=cbPlot1XAxis.getValue();
-//        	//String cbPlot1YAxis1=cbPlot1YAxis.getValue();
-//        	//String GPS = "GPS"; 
-////        	if ( userXchoice.equals(GPS)) {
-//////  		  System.out.println("User choose Gps");
-//////  		}
-//////  		else {
-//////  			System.out.println(userXchoice);    
-//////  		} 
-//////  	    if ( userYchoice.equals(GPS)) {
-////// 		  System.out.println("User choose Gps");
-////// 		}
-////// 		else {
-////// 			System.out.println(userYchoice);    
-////// 		} 
-//        	
-//            @Override
-//            public void run() {
-//            	XYSeries series = new XYSeries("Temperature");
-//            	XYSeriesCollection dataset = new XYSeriesCollection(series);
-//        		JFreeChart chart = ChartFactory.createScatterPlot("Temperature plot", "Altitude (m)", "Temperature (C)", dataset);
-//        		ChartPanel plot= new ChartPanel(chart);         		
-//        		swingNode.setContent(plot);
-//        		// create a new thread that listens for incoming text and populates the graph
-//        		Thread thread = new Thread(){     			
-//     			
-//        			@Override public void run() {
-//        				int totalCount = 0;
-//        				while(true){//loop//////////////////////////////////////////////////////////////////////        				
-//        		
-//	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\temperature.txt");
-//        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\temperature.txt");
-//        					double number[] = new double[2];
-//        					String[] data;// = new String[2];
-//	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
-//	        				     
-//	        					String line;
-//	        					
-//	        					int tempCount = 0;
-//	        					while ((line = br.readLine()) != null) {		
-//	        						
-//	        						tempCount++;
-//	        						if (totalCount < tempCount){
-//		        						totalCount++;//count number of line 
-//		        			        	
-//		        			        	data = line.split(",");
-//		        			        	
-//		        			        	number[0] = Double.parseDouble(data[0]);
-//										System.out.println(number[0]);				
-//										number[1] = Double.parseDouble(data[1]);
-//									    System.out.println(number[1]);	
-//										series.add(number[0], number[1]);
-//										plot.repaint();
-//										//Ycount++;
-//										//Xcount++;
-//										//counter++;
-//										
-//		        			            //System.out.printf("Fist count: %d \n",count);
-//		        			        	//System.out.printf("Second Xcount: %d \n",Xcount);
-//		        			        	//System.out.printf("Second Ycount: %d \n",Ycount);
-//	        						}
-//									   
-//	        			        }
-//	        					Thread.sleep(1000); 
-//	
-//	        				}catch(Exception e){
-//	        					e.printStackTrace();
-//	        				}					
-//	        				
-//	        				
-//	        				
-//        				}/////////////////////////////////////////////////////////////////////////////////////////////
-//        			}					
-//        			//end while
-//        		};
-//        		thread.start();
-//            }
-//        });
-//		
-//	}
-//	private void createSwingContent1(SwingNode swingNode1) {
-//        SwingUtilities.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//            	XYSeries series = new XYSeries("Pressure");
-//            	XYSeriesCollection dataset = new XYSeriesCollection(series);
-//        		JFreeChart chart = ChartFactory.createScatterPlot("Pressure plot", "Time (seconds)", "ADC Reading", dataset);
-//        		ChartPanel plot= new ChartPanel(chart);        		
-//        		swingNode1.setContent(plot);
-//        		// create a new thread that listens for incoming text and populates the graph
-//        		Thread thread = new Thread(){     			
-//        			
-//        			@Override public void run() {
-//        				int totalCount = 0;
-//        				while(true){//loop//////////////////////////////////////////////////////////////////////
-//        				
-//        		
-//	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\pressure.txt");
-//        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\pressure.txt");
-//        					double number[] = new double[2];
-//        					String[] data;// = new String[2];
-//	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
-//	        				     
-//	        					String line;
-//	        					
-//	        					int tempCount = 0;
-//	        					while ((line = br.readLine()) != null) {		
-//	        						
-//	        						tempCount++;
-//	        						if (totalCount < tempCount){
-//		        						totalCount++;//count number of line 
-//		        			        	
-//		        			        	data = line.split(",");
-//		        			        	
-//		        			        	number[0] = Double.parseDouble(data[0]);
-//										System.out.println(number[0]);				
-//										number[1] = Double.parseDouble(data[1]);
-//									    System.out.println(number[1]);	
-//										series.add(number[0], number[1]);
-//										plot.repaint();
-//	        						}
-//									   
-//	        			        }
-//	        					Thread.sleep(1000);
-//	
-//	        				}catch(Exception e){
-//	        					e.printStackTrace();
-//	        				}					
-//	        				
-//	        				
-//	        				
-//        				}/////////////////////////////////////////////////////////////////////////////////////////////
-//        			}					
-//
-//        			
-//        		
-//        			//end while
-//        		};
-//        		thread.start();
-//            }
-//        });
-//		
-//	}
-//	
-//	private void createSwingContent2(SwingNode swingNode2) {
-//        SwingUtilities.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//            	XYSeries series = new XYSeries("First Plot");
-//            	XYSeriesCollection dataset = new XYSeriesCollection(series);
-//        		JFreeChart chart = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading", dataset);
-//        		ChartPanel plot= new ChartPanel(chart);        		
-//        		swingNode2.setContent(plot);
-//        		// create a new thread that listens for incoming text and populates the graph
-//        		Thread thread = new Thread(){     			
-//        			
-//        			@Override public void run() {
-//        				int totalCount = 0;
-//        				while(true){//loop//////////////////////////////////////////////////////////////////////
-//        				
-//        		
-//	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\humidity.txt");
-//        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\humidity.txt");
-//        					double number[] = new double[2];
-//        					String[] data;// = new String[2];
-//	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
-//	        				     
-//	        					String line;
-//	        					
-//	        					int tempCount = 0;
-//	        					while ((line = br.readLine()) != null) {		
-//	        						
-//	        						tempCount++;
-//	        						if (totalCount < tempCount){
-//		        						totalCount++;//count number of line 
-//		        			        	
-//		        			        	data = line.split(",");
-//		        			        	
-//		        			        	number[0] = Double.parseDouble(data[0]);
-//										System.out.println(number[0]);				
-//										number[1] = Double.parseDouble(data[1]);
-//									    System.out.println(number[1]);	
-//										series.add(number[0], number[1]);
-//										plot.repaint();
-//										//Ycount++;
-//										//Xcount++;
-//										//counter++;
-//										
-//		        			            //System.out.printf("Fist count: %d \n",count);
-//		        			        	//System.out.printf("Second Xcount: %d \n",Xcount);
-//		        			        	//System.out.printf("Second Ycount: %d \n",Ycount);
-//	        						}
-//									   
-//	        			        }
-//	        					Thread.sleep(1000);
-//	
-//	        				}catch(Exception e){
-//	        					e.printStackTrace();
-//	        				}					
-//	        				
-//	        				
-//	        				
-//        				}/////////////////////////////////////////////////////////////////////////////////////////////
-//        			}					
-//
-//        			
-//        		
-//        			//end while
-//        		};
-//        		thread.start();
-//            }
-//        });
-//		
-//	}
-//	
-//	private void createSwingContent3(SwingNode swingNode3) {
-//        SwingUtilities.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//            	XYSeries series = new XYSeries("First Plot");
-//            	XYSeriesCollection dataset = new XYSeriesCollection(series);
-//        		JFreeChart chart = ChartFactory.createScatterPlot("Light Sensor Readings", "Time (seconds)", "ADC Reading", dataset);
-//        		ChartPanel plot= new ChartPanel(chart);        		
-//        		swingNode3.setContent(plot);
-//        		// create a new thread that listens for incoming text and populates the graph
-//        		Thread thread = new Thread(){     			
-//        			
-//        			@Override public void run() {
-//        				int totalCount = 0;
-//        				while(true){//loop//////////////////////////////////////////////////////////////////////
-//
-//	        				//File temp = new File(MS_Manager.receiverThreadArray.get(0).dataHandler.plotDataLocation + "\\velocity.txt");
-//        					File temp = new File(MS_Manager.stationArrayList.get(0).receiver.dataHandler.plotDataLocation + "\\velocity.txt");
-//        					double number[] = new double[2];
-//        					String[] data;// = new String[2];
-//	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {	
-//	        				     
-//	        					String line;
-//	        					
-//	        					int tempCount = 0;
-//	        					while ((line = br.readLine()) != null) {		
-//	        						
-//	        						tempCount++;
-//	        						if (totalCount < tempCount){
-//		        						totalCount++;//count number of line 
-//		        			        	
-//		        			        	data = line.split(",");
-//		        			        	
-//		        			        	number[0] = Double.parseDouble(data[0]);
-//										System.out.println(number[0]);				
-//										number[1] = Double.parseDouble(data[1]);
-//									    System.out.println(number[1]);	
-//										series.add(number[0], number[1]);
-//										plot.repaint();
-//
-//	        						}
-//									   
-//	        			        }
-//	        					Thread.sleep(1000);
-//	
-//	        				}catch(Exception e){
-//	        					e.printStackTrace();
-//	        				}
-//
-//        				}
-//        			}					
-//
-//        			//end while
-//        		};
-//        		thread.start();
-//            }
-//        });
-//		
-//	}
+	
 
 	/**
 	}

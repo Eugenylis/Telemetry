@@ -49,6 +49,7 @@ public class Station {
      */
     public SwingNode getNewSwingNodePlot(String sensorTypes, int listIndex) {
         
+    	System.out.println(sensorTypes + "__________________---------------------~~~~~~~~~~~~````````````````");
     	String properTitle = Character.toUpperCase(sensorTypes.charAt(0)) + sensorTypes.substring(1);
     	
     	SwingNode swingNode = new SwingNode();
@@ -107,6 +108,6 @@ public class Station {
         		
             }
         });
-		return swingNodeList.get(listIndex);
+		return swingNode;
 	}
 }
