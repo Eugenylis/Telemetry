@@ -63,7 +63,8 @@ public class Station {
         		swingNode.setContent(plot);
         		
         		//adds to list
-        		swingNodeList.add(listIndex, swingNode); ////////////LOOK AT MEEEEEEEEEEEEEE
+        		//swingNodeList.add(listIndex, swingNode); //Good for future when needing to know the location of the element in the list
+        		swingNodeList.add(swingNode); ////////////LOOK AT MEEEEEEEEEEEEEE
         		
         		// create a new thread that listens for incoming text and populates the graph
         		Thread thread = new Thread(){     			

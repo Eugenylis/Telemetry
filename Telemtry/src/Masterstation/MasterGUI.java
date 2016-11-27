@@ -409,6 +409,9 @@ public class MasterGUI extends Application {
         	if((station = stationList.next()).stationName.equals(stationName)){
         		//Plots in tabPane Plot1 (change the TilePane to some blank pane for the swing)
 		        System.out.println(cbPlotXAxis[0].getValue() + "---------");
+		        System.out.println(cbPlotXAxis[1].getValue() + "---------");
+		        System.out.println(cbPlotXAxis[2].getValue() + "---------");
+		        System.out.println(cbPlotXAxis[3].getValue() + "---------");
         		if(!(cbPlotXAxis[0].getValue()== null)){
 		        	plotGridPane.add(station.getNewSwingNodePlot(cbPlotXAxis[0].getValue(), 0),1,1);  
 		        }else{
