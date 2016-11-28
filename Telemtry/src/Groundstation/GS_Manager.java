@@ -15,12 +15,14 @@ public abstract class GS_Manager{
     static public Sender zipSender;
     static public GS_GUI GUIwindow;
     static public ZipFileTimer Timer;
+    static public int datSendFreqMiliseconds;
 	
 	/**
 	 * @param args Standard variable
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
+		datSendFreqMiliseconds = 2000;
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -41,7 +43,7 @@ public abstract class GS_Manager{
 	public static void setSettings(String listenerDir, String IPaddress, int socketNum) throws IOException{
 		Path dir = Paths.get(listenerDir);
 		zipSender = new Sender(IPaddress, socketNum);
-		Timer = new ZipFileTimer(2000);
+		Timer = new ZipFileTimer(datSendFreqMiliseconds);
 		new WatchDir(dir, false).processEvents();	
 	}
 }
