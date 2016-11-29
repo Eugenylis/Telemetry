@@ -1,8 +1,10 @@
 package Masterstation;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
+import javax.swing.JFileChooser;
 
 //import org.jfree.chart.ChartFactory;
 //import org.jfree.chart.ChartPanel;
@@ -41,6 +43,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -64,7 +68,7 @@ public class MasterGUI extends Application {
 	private MenuItem miHelp, miPlotData, miAddStation, miRemoveStation, miDataSincFreq, miChooseDirectory;
 	//VBox for Status Display
 	private VBox stationVBox;
-	private Label lbTitle;
+	private Label lbTitle, lbDirectory, lbSelectedDirectory;
 	
 	// TabPane
 	private TabPane tabPanePlots;
@@ -111,10 +115,14 @@ public class MasterGUI extends Application {
 		menuBar.getMenus().addAll(menuSettings,menuConnections, menuGroundStation, menuHelp);
 		borderPane.setTop(menuBar);
 		
-				
+		miChooseDirectory.setOnAction(arg0 -> showDirectoryChooser());		
 		miDataSincFreq.setOnAction(arg0 -> DataSincFerq());
 		miAddStation.setOnAction(arg0 -> showAddStation());
 		miHelp.setOnAction(arg0 -> showHelp());
+		
+		lbDirectory = new Label();
+		lbSelectedDirectory = new Label("File Directory:");
+		lbSelectedDirectory.setFont(Font.font("Ariel", FontWeight.BOLD, 15));
 		
 		//Status Display
 		stationVBox = new VBox();
@@ -122,7 +130,8 @@ public class MasterGUI extends Application {
 		lbTitle.setStyle("-fx-padding: 8 30 10 50; -fx-background-color: #f8ecc2; -fx-border-style: solid; -fx-border-width: 3");
 		lbTitle.setFont(Font.font("Ariel", FontWeight.BOLD, 25));
 		lbTitle.setMaxWidth(200);
-		stationVBox.getChildren().addAll(lbTitle);
+		stationVBox.getChildren().addAll(lbSelectedDirectory, lbDirectory, lbTitle);
+		stationVBox.setSpacing(10);
 		stationVBox.setBorder(new Border(new BorderStroke(Color.SKYBLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5) )));
 		stationVBox.setMinWidth(200);
 		borderPane.setLeft(stationVBox);
@@ -131,6 +140,7 @@ public class MasterGUI extends Application {
 		//tabs for plot display/ data/ 
 		tabPanePlots = new TabPane();
 		
+			
 	}		
 		
 	
@@ -151,6 +161,12 @@ public class MasterGUI extends Application {
 				
 		// Display the GUI
 		stage.show();
+	}
+	
+	public void showDirectoryChooser(){
+		DirectoryChooser openDirectoryChooser = new DirectoryChooser();
+		File selectedDirectory = openDirectoryChooser.showDialog(null);
+		lbDirectory.setText(selectedDirectory.getAbsolutePath());
 	}
 	
 	public void showAddStation(){
