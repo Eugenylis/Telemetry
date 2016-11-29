@@ -6,6 +6,8 @@ import java.util.Iterator;
 
 import javax.swing.JFileChooser;
 
+import Groundstation.GS_Manager;
+
 //import org.jfree.chart.ChartFactory;
 //import org.jfree.chart.ChartPanel;
 //import org.jfree.chart.JFreeChart;
@@ -167,6 +169,7 @@ public class MasterGUI extends Application {
 		DirectoryChooser openDirectoryChooser = new DirectoryChooser();
 		File selectedDirectory = openDirectoryChooser.showDialog(null);
 		lbDirectory.setText(selectedDirectory.getAbsolutePath());
+		MS_Manager.dataLocation = selectedDirectory.getAbsolutePath().toString();
 	}
 	
 	public void showAddStation(){
