@@ -12,7 +12,7 @@ import java.net.Socket;
  * All communication is done through the use of sockets like server socket with specified port number
  * 
  * @author Eugene Lischuk
- * @version 2.0
+ * @version 2.0 of the Receiver
  */
 
 

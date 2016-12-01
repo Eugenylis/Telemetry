@@ -3,17 +3,6 @@ package Masterstation;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
-
-import javax.swing.JFileChooser;
-
-import Groundstation.GS_Manager;
-
-//import org.jfree.chart.ChartFactory;
-//import org.jfree.chart.ChartPanel;
-//import org.jfree.chart.JFreeChart;
-//import org.jfree.data.xy.XYSeries;
-//import org.jfree.data.xy.XYSeriesCollection;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -46,7 +35,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
