@@ -201,33 +201,46 @@ public class MasterGUI extends Application {
 			VBox localStationDetailsVBox = new VBox();
 			HBox stationHBox = new HBox();
 			HBox stationDetailsHBox = new HBox();
+			HBox stationButtonsHBox = new HBox();
 			stationHBox.setSpacing(10);
 			localStationDetailsVBox.setSpacing(10);
 			localStationDetailsVBox.setPadding(new Insets (5, 2, 5, 16));
-			stationDetailsHBox.setSpacing(5);;
+			stationDetailsHBox.setSpacing(5);
+			stationButtonsHBox.setSpacing(5);
 			Label lbStationDetails = new Label();
 			btStation = new Button();
 			btStation.setOnAction(arg0 -> btStationActions(stationName));
 			Label lbPortNum = new Label("Port number:");
 			CheckBox cbSelectStation = new CheckBox();
+			Label lbStatus = new Label();
 			
 			Button btConnect = new Button("Connect");
 			btConnect.setStyle("-fx-background-color: mediumseagreen ");
-			btConnect.setOnAction(arg0 -> {
-				try {
-					Connect();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			});
+			btConnect.setFont(Font.font("Ariel", FontWeight.BOLD, 12));
+			btConnect.setOnAction(new EventHandler<ActionEvent>() {
+	            @Override public void handle(ActionEvent e) {
+	            	try {
+						Connect();
+					} catch (IOException i) {
+						// TODO Auto-generated catch block
+						i.printStackTrace();
+					}	
+	            	lbStatus.setText("Connected");
+			}});
+			
+			Button btDisconnect = new Button("Disconnect");			
+			btDisconnect.setStyle("-fx-background-color: crimson ");
+			btDisconnect.setFont(Font.font("Ariel", FontWeight.BOLD, 12));
+			//btDisconnect.setOnAction(arg0 ->
 			
 			stationHBox.getChildren().add(0, cbSelectStation); //Forcing cbSelectStation to be in index 0 allows easy reading later.
-			stationHBox.getChildren().add(1, btConnect);
-			stationHBox.getChildren().add(2, btStation);
-			stationDetailsHBox.getChildren().addAll(lbPortNum, lbStationDetails);
+			//stationHBox.getChildren().add(1, btConnect);
+			stationHBox.getChildren().add(1, btStation);
+			stationDetailsHBox.getChildren().addAll(lbPortNum, lbStationDetails, lbStatus);
+			stationButtonsHBox.getChildren().addAll(btConnect, btDisconnect);
 			localStationDetailsVBox.getChildren().add(0, stationHBox); //Forcing stationHBox  to be in index 0 allows easy reading later.
 			localStationDetailsVBox.getChildren().add(1, stationDetailsHBox);
+			localStationDetailsVBox.getChildren().add(2, stationButtonsHBox);
 			btStation.setText(txNameOfStation.getText());
 			lbStationDetails.setText(txPortNum.getText());
 			stationVBox.getChildren().add(localStationDetailsVBox);
