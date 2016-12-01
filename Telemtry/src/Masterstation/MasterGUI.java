@@ -204,7 +204,7 @@ public class MasterGUI extends Application {
 	public void addStations(){
 		
 		//check if text typed in textbox txProtNum is a 4-digit integer number
-		if(MS_Manager.isInteger(txPortNum.getText(),10)){
+		if(MS_Manager.isPortCorrect(txPortNum.getText(),10)){
 			
 			//Get information given by the user
 			portNumber = Integer.parseInt(txPortNum.getText());
