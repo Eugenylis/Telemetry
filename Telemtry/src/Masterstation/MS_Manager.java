@@ -28,6 +28,8 @@ public abstract class MS_Manager{
 	//array to store port number of stations
 	public static ArrayList<Integer> previousPortNum = new ArrayList<Integer>();
 	
+	public static boolean value = false;
+	
 	
 	/**
 	 * Main method to launch Master Station GUI
@@ -45,7 +47,6 @@ public abstract class MS_Manager{
 	 * @throws IOException
 	 */
 	public static void createStation(int portNum, String name) throws IOException{
-		
 		dataLocation = (new File(".")).getAbsoluteFile().getParentFile().getPath() + "\\Extras\\data"; ////////////////////This sets the data save location to be the project directory under lib/data/////////////////ELIZA WILL HAVE THE USER GIVE THIS.
 		stationArrayList.add(new Station(portNum, name, dataLocation));
 		//increment the counter
@@ -116,4 +117,6 @@ public abstract class MS_Manager{
 		}
 		return result;
 	}
+	
+	
 } //end of MS_Manager

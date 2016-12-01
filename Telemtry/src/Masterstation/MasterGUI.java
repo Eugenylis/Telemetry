@@ -2,6 +2,7 @@ package Masterstation;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -77,7 +78,6 @@ public class MasterGUI extends Application {
 	private int portNumber;
 	//counter for array of receiver objects
 	private static int count = 0;
-	
 	
 	/**
 	 *  The method that contains all GUI details
@@ -465,15 +465,14 @@ public class MasterGUI extends Application {
 	 */
 	public void Connect() throws IOException{
 		
-		//Start receiving files
-		System.out.println("Starting Server");
 		//execute run() method in Receiver thread
-		//MS_Manager.receiverThreadArray.get(count).start();
-		MS_Manager.stationArrayList.get(count).receiver.start();
-		
-		//increment index counter of the array list receiverThreadArray
-		count++;
-		System.out.print("count " + count);
+		if(MS_Manager.stationArrayList.get(count).receiver.isAlive() == false){
+			MS_Manager.stationArrayList.get(count).receiver.start();
+			//increment index counter of the array list stationArrayList
+			count++;
+		}
+
+		System.out.print(" count " + count);
 	}
 	
 	
