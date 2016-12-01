@@ -19,10 +19,15 @@ import javafx.application.Application;
  */
 public abstract class MS_Manager{
    
-	//class for receiving incoming data
+	//location or path to the data
 	public static String dataLocation;
+	//array list of created receiver stations
 	public static ArrayList<Station> stationArrayList = new ArrayList<Station>();
+	//station counter
 	public static int stationCount = 0;
+	//array to store port number of stations
+	public static ArrayList<Integer> previousPortNum = new ArrayList<Integer>();
+	
 	
 	/**
 	 * Main method to launch Master Station GUI
@@ -47,6 +52,7 @@ public abstract class MS_Manager{
 		stationCount++;
 	}
 	
+	
 	/**
 	 * Method to return current counter for the array of stations
 	 * @return current station count
@@ -61,7 +67,7 @@ public abstract class MS_Manager{
 	 * Checks if string is not equal to 4
 	 * Checks each character in a string for being an integer
 	 * Checks if the string is empty
-	 * Checks if port number is equal to the port of previous station
+	 * Checks if port number is equal to the port number of any previous stations
 	 * 
 	 * @param str - a string to check
 	 * @param radix - radix, range
@@ -73,8 +79,6 @@ public abstract class MS_Manager{
 		boolean result = true;
 		//integer value for the port to check for, initialized at some number (0 in this case, but any number would work)
 		int portToCheck = 0;
-		//previous port number, initialized at some number (0 in this case, but any number would work)
-		int previousPortNum = 0;
 		
 		//check is the string is less than 4 characters long
 	    if(portString.length() != 4) { result = false;	}
@@ -97,14 +101,19 @@ public abstract class MS_Manager{
 			portToCheck = Integer.parseInt(portString); 
 		}
 		
-		//if more than one stations exist, assign previous port number to a variable for checking
+		//if more than one stations exist check port number
 		if (stationCount>0){
-		previousPortNum = stationArrayList.get(stationArrayList.size()-1).receiver.getPortNum();
-		}
+			
+			//add port number of the previous station and add it to the array of port numbers
+			previousPortNum.add(  stationArrayList.get(stationArrayList.size()-1).receiver.getPortNum()  );
 		
-		//check if two stations have the same port number
-		if(portToCheck == previousPortNum){ result = false;	}
-	
+			//check if current port number is the same as port of any previous stations
+			for (int j=0; j<previousPortNum.size(); j++){
+				if(portToCheck == previousPortNum.get(j)){ 
+					result = false;	
+				}
+			}
+		}
 		return result;
 	}
-}
+} //end of MS_Manager

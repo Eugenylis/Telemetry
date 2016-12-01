@@ -12,6 +12,8 @@ import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 
+import Masterstation.MS_Manager;
+
 //test
 
 public class GS_GUI {
@@ -136,6 +138,7 @@ public class GS_GUI {
 		frame.getContentPane().add(lblNewLabel_5);
 
 		btnNewButton_2 = new JButton("Open");
+		
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser openFile = new JFileChooser();
@@ -145,30 +148,34 @@ public class GS_GUI {
 				filename=f.getAbsolutePath();
 				textPane.setText(filename);
 			}
+			
 		});
 		btnNewButton_2.setBounds(971, 178, 151, 41);
 		frame.getContentPane().add(btnNewButton_2);
 
 		JButton btnRun = new JButton("RUN");
 		btnRun.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
-				IPaddress = textFieldIP.getText();
-				try{
-					socketNum=Integer.parseInt(textFieldSocket.getText());
-
-				} catch(Exception e2){
-
-					JOptionPane.showMessageDialog(null, "Please Enter Valid Number");
-				}
-				try{
-					//System.out.println("Within GUI " + filename + " " + IPaddress + " " + socketNum);
-					GS_Manager.setSettings(filename, IPaddress, socketNum);
-
-				} catch(Exception e3){
-
-					System.out.print("Broke1");
-				}
-			}
+				if(GS_Manager.isPortCorrect(textFieldSocket.getText(),10)){
+					IPaddress = textFieldIP.getText();
+					try{
+						socketNum=Integer.parseInt(textFieldSocket.getText());
+	
+					} catch(Exception e2){
+	
+						JOptionPane.showMessageDialog(null, "Please Enter Valid Socket Number");
+					}
+					try{
+						//System.out.println("Within GUI " + filename + " " + IPaddress + " " + socketNum);
+						GS_Manager.setSettings(filename, IPaddress, socketNum);
+	
+					} catch(Exception e3){
+	
+						System.out.print("Broke1");
+					}
+				} // end of if
+			} // end of actionPerformed
 		});
 		btnRun.setBounds(149, 248, 171, 41);
 		frame.getContentPane().add(btnRun);
