@@ -46,6 +46,10 @@ import javafx.stage.Stage;
  * @version 1.0
  */
 
+/**
+ * @author GAZDAE
+ *
+ */
 public class MasterGUI extends Application {
 	
 	/*  GUI ITEMS */
@@ -151,23 +155,33 @@ public class MasterGUI extends Application {
 		stage.show();
 	}
 	
+	
+	/**
+	 * Method that opens a window allowing the user to choose a directory for all data files.
+	 */
 	public void showDirectoryChooser(){
+		//directory chooser created
 		DirectoryChooser openDirectoryChooser = new DirectoryChooser();
 		File selectedDirectory = openDirectoryChooser.showDialog(null);
+		//directory path name is added to the MS_Manager
 		lbDirectory.setText(selectedDirectory.getAbsolutePath());
 		MS_Manager.dataLocation = selectedDirectory.getAbsolutePath().toString();
 	}
 	
+	/**
+	 * Method opens a window to display the add stations window where the user must input station name and station port number.
+	 */
 	public void showAddStation(){
 		
+		//displayed features
 		Label lbNameOfStation = new Label("Name of Station:");
 		Label lbGPSNum = new Label("Port Number:");
 		txNameOfStation = new TextField();
 		txPortNum = new TextField();
 		Button btAddStation = new Button("Add");
 		btAddStation.setOnAction(arg0 -> addStations());
-		
-		
+				
+		//pane for the features
 		GridPane addStationPane = new GridPane();
 		addStationPane.setHgap(10);
 		addStationPane.setVgap(10);
@@ -176,9 +190,8 @@ public class MasterGUI extends Application {
 		addStationPane.add(lbGPSNum, 1, 2);
 		addStationPane.add(txPortNum, 2, 2);
 		addStationPane.add(btAddStation, 1, 3);
-
 		
-		// Create and display said the aforementioned pane in a new stage
+		// Create and display the pane in a new stage
 		Scene scene = new Scene(addStationPane, 550, 100);
 		Stage stage = new Stage();
 		stage.setScene(scene);
@@ -187,6 +200,9 @@ public class MasterGUI extends Application {
 		stage.show();
 	}
 	
+	/**
+	 * Method 
+	 */
 	public void addStations(){
 		
 		//check if text typed in textbox txProtNum is a 4-digit integer number
