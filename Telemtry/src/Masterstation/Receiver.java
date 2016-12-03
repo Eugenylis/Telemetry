@@ -18,23 +18,20 @@ import java.net.Socket;
 
 public class Receiver extends Thread {
 
+	//Data handler to process all received data
 	public DataHandler dataHandler;
-	
 	//Socket for communication
 	protected Socket socket;
 	//ServerSocket to accept incoming connections
     protected ServerSocket serverSocket;
     
-	//value for controlling while loop
+	//value for controlling while loop, if more data incoming = true
     protected boolean moreData = true;
-    
     //counter to count how many times file was received
     protected static int counter = 0;
-    
     //port number
     private int portNum;
-    
-    public String stationName = " ";
+
 
     //no-argument constructor for the thread with specified object name
     public Receiver() throws IOException {
@@ -48,10 +45,11 @@ public class Receiver extends Thread {
     
         //specify directory to save files
         dataHandler = new DataHandler(saveLocation, name);
- 
+        
+        //set the port number
         setPortNum(portNumber);
         
-        //set port number to server socket
+        //create server socket object with specified port number
         try {
 			serverSocket = new ServerSocket(portNum);
 		} catch (IOException e) {
@@ -74,34 +72,33 @@ public class Receiver extends Thread {
     public void run() {
     
         while (moreData) {
-            try {
-            	           
-            	System.out.println("Port Number " + portNum);
+            try {      
             	//allow to accept incoming connections
             	socket = serverSocket.accept();
-                  
+            	//print out number for accepted connection
         		System.out.println("Accepted connection : " + socket);
 
-    			
                 //get input stream from a socket
     			InputStream inputStream = socket.getInputStream();
+    			//get data from input stream and process it with data handler
     			dataHandler.addNewData(inputStream);
     			
             } catch (IOException e) {
-                //e.printStackTrace();
                 //stop the loop
                 moreData = false;
+                //close the socket
                 try {
 					socket.close();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-            }
+                
+            } 
             
         } // end of while(moreData)
     } // end of run()
 
+    
     /**
      * Method to set the port number to a new value
      * @param portNum number of the port
@@ -122,18 +119,14 @@ public class Receiver extends Thread {
     
     /**
      * Method to close the socket to stop communication
+     * Closes socket, so server socket port closes as well
      */
-    public void closeSocket(){
+    public void disconnect(){
     	try {
-			socket.close();
+			this.socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    }
-    
-    public void disconnect(){
-    	//
     }
     
    
