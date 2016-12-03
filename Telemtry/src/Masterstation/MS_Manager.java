@@ -1,8 +1,8 @@
 package Masterstation;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javafx.application.Application;
 
@@ -121,23 +121,21 @@ public abstract class MS_Manager{
 	public static void removeStation(String stationName){
 		Iterator<Station> stationIterator = stationArrayList.iterator(); // Creates list like thing that allows it to me incremented
 		while(stationIterator.hasNext()){
-			
-			station = stationIterator.hasNext();
-			
-			if(stationIterator.hasNext()){
-				
+			Station station = stationIterator.next(); //gets next station
+			if(station.stationName == stationName){ 
+				station.disconnect(); //disconnects station
+				stationIterator.remove(); //removes station from class list of stations
+				break;
 			}
-			stationIterator.next().disconnect();
-			stationIterator.remove();
+		}
 	}
 	
-	public static void diconnectAllStations(){
+	public static void disconnectAllStations(){
+		Station station;
 		Iterator<Station> stationIterator = stationArrayList.iterator(); // Creates list like thing that allows it to me incremented
 		while(stationIterator.hasNext()){
-			if(!stationIterator.hasNext()){
-				
-			}
-			stationIterator.next().disconnect();
+			station = stationIterator.next();
+			station.disconnect();
 			stationIterator.remove();
 		}
 	}

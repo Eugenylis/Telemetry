@@ -1,7 +1,6 @@
 package Groundstation;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.awt.EventQueue;
 import java.io.*;
 
