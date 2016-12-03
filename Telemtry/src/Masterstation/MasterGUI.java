@@ -56,7 +56,7 @@ public class MasterGUI extends Application {
 	// Menu
 	private MenuBar menuBar; // MenuBar
 	private Menu menuHelp, menuSettings, menuConnections, menuGroundStation; // Menus
-	private MenuItem miHelp, miPlotData, miAddStation, miRemoveStation, miDataSincFreq, miChooseDirectory;
+	private MenuItem miHelp, miPlotData, miAddStation, miRemoveStation, miDataSincFreq, miChooseDirectory, miDisconnectAllStations;
 	//VBox for Status Display
 	private VBox stationVBox;
 	private Label lbTitle, lbDirectory, lbSelectedDirectory;
@@ -98,13 +98,15 @@ public class MasterGUI extends Application {
 		miHelp = new MenuItem("Help");
 		miDataSincFreq = new MenuItem("Data Sinc Freguency");
 		miPlotData = new MenuItem("Plot");
+		miDisconnectAllStations = new MenuItem("Disconnect All Stations");
 		menuHelp.getItems().addAll(miHelp);
-		menuConnections.getItems().addAll(miChooseDirectory, miDataSincFreq);
+		menuConnections.getItems().addAll(miChooseDirectory, miDataSincFreq, miDisconnectAllStations);
 		menuSettings.getItems().addAll(miPlotData);
 		menuGroundStation.getItems().addAll(miAddStation, miRemoveStation);
 		menuBar.getMenus().addAll(menuSettings,menuConnections, menuGroundStation, menuHelp);
 		borderPane.setTop(menuBar);
 		
+	//	miDisconnectAllStations.setOnAction(arg0 -> );
 		miChooseDirectory.setOnAction(arg0 -> showDirectoryChooser());		
 		miDataSincFreq.setOnAction(arg0 -> DataSincFerq());
 		miAddStation.setOnAction(arg0 -> showAddStation());
