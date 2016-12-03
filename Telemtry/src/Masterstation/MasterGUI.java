@@ -40,14 +40,15 @@ import javafx.stage.Stage;
 
 /**
  * Master GUI class is a display of the main GUI seen by the user of the program. 
- * The user can view the connection with the station. Add files and view plots with live data.
+ * The user can view the connection status, add multiple stations, view plots with live data, save the data and plots.
+ * 
  * @author Eliza Gazda
  * @version 1.0
  */
 
 public class MasterGUI extends Application {
 	
-	/* CREATE GUI ITEMS */
+	/*  GUI ITEMS */
 	// Pane
 	private BorderPane borderPane;
 	private Button btStation;
@@ -56,7 +57,7 @@ public class MasterGUI extends Application {
 	// Menu
 	private MenuBar menuBar; // MenuBar
 	private Menu menuHelp, menuSettings, menuConnections, menuGroundStation; // Menus
-	private MenuItem miHelp, miPlotData, miAddStation, miRemoveStation, miDataSincFreq, miChooseDirectory, miDisconnectAllStations;
+	private MenuItem miHelp, miPlotData, miAddStation, miRemoveStation, miDataSincFreq, miChooseDirectory, miDisconnectAllStations; //MenuItems
 	//VBox for Status Display
 	private VBox stationVBox;
 	private Label lbTitle, lbDirectory, lbSelectedDirectory;
@@ -67,11 +68,6 @@ public class MasterGUI extends Application {
 	//plotGridPane
 	private GridPane plotGridPane;
 	
-	/* PLOT ITEMS */
-	//for plot
-	static int Xcount=1;
-	static int Ycount=1; // counting number of line print
-	static int counter=100;
 	
 	/* COMMUNICATION ITEMS */
 	//specified port number
@@ -80,7 +76,7 @@ public class MasterGUI extends Application {
 	private static int count = 0;
 	
 	/**
-	 *  The method that contains all GUI details
+	 *  This method contains GUI main GUI pane, menu bar items, and VBox for stations
 	 */
 	public MasterGUI(){
 		
@@ -106,17 +102,19 @@ public class MasterGUI extends Application {
 		menuBar.getMenus().addAll(menuSettings,menuConnections, menuGroundStation, menuHelp);
 		borderPane.setTop(menuBar);
 		
-	//	miDisconnectAllStations.setOnAction(arg0 -> );
+		//menu items actions
+		miDisconnectAllStations.setOnAction(arg0 -> MS_Manager.disconnectAllStations());
 		miChooseDirectory.setOnAction(arg0 -> showDirectoryChooser());		
 		miDataSincFreq.setOnAction(arg0 -> DataSincFerq());
 		miAddStation.setOnAction(arg0 -> showAddStation());
 		miHelp.setOnAction(arg0 -> showHelp());
 		
+		//show directory chosen
 		lbDirectory = new Label();
 		lbSelectedDirectory = new Label("File Directory:");
 		lbSelectedDirectory.setFont(Font.font("Ariel", FontWeight.BOLD, 15));
 		
-		//Status Display
+		//VBox for station and details
 		stationVBox = new VBox();
 		lbTitle = new Label("Stations"); 
 		lbTitle.setStyle("-fx-padding: 8 30 10 50; -fx-background-color: #f8ecc2; -fx-border-style: solid; -fx-border-width: 3");
@@ -148,9 +146,7 @@ public class MasterGUI extends Application {
 		stage.setScene(scene);
 		stage.setTitle("Telemetry Master Interface");
 		stage.setResizable(true);
-		
-		
-				
+						
 		// Display the GUI
 		stage.show();
 	}
@@ -274,9 +270,10 @@ public class MasterGUI extends Application {
 			// line and assuming the above layout does not change (stationVBox(VBox) -> localStationDetailsVBox(VBox) -> stationHBox(HBox) -> cbSelectStation(CheckBox))
 			try{
 				station = (VBox) stationIterator.next();
-				HBox vbox = (HBox) station.getChildren().get(0);
-				CheckBox checkBox = (CheckBox) vbox.getChildren().get(0);
+				HBox hbox = (HBox) station.getChildren().get(0);
+				CheckBox checkBox = (CheckBox) hbox.getChildren().get(0);
 				if (checkBox.isSelected()){
+					MS_Manager.removeStation(((Button)(hbox.getChildren().get(1))).getText()); //sends name of station which is on it's button
 					stationIterator.remove(); //If checkBox is selected (as in it was checked), it is removed from the iterator (which is connected to the stationVBox) 
 					//which removes it from stationVBox.
 				}
