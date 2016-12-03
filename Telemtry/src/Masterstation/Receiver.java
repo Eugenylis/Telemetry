@@ -24,7 +24,6 @@ public class Receiver extends Thread {
 	protected Socket socket;
 	//ServerSocket to accept incoming connections
     protected ServerSocket serverSocket;
-    
 	//value for controlling while loop, if more data incoming = true
     protected boolean moreData = true;
     //counter to count how many times file was received
@@ -33,13 +32,13 @@ public class Receiver extends Thread {
     private int portNum;
 
 
-    //no-argument constructor for the thread with specified object name
+    //no-argument constructor
     public Receiver() throws IOException {
     }
 
     
     /*
-     * Constructor which creates socket with specified port number and specified name
+     * Constructor which creates socket with specified port number, specified name and location to save the data
      */
     public Receiver(int portNumber, String name, String saveLocation) {
     
