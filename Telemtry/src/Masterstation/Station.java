@@ -111,4 +111,9 @@ public class Station {
         });
 		return swingNode;
 	}
+    
+    public void disconnect(){
+    	receiver.disconnect(); //closes port to station
+    	
+    }
 }

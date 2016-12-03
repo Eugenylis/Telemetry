@@ -118,5 +118,29 @@ public abstract class MS_Manager{
 		return result;
 	}
 	
+	public static void removeStation(String stationName){
+		Iterator<Station> stationIterator = stationArrayList.iterator(); // Creates list like thing that allows it to me incremented
+		while(stationIterator.hasNext()){
+			
+			station = stationIterator.hasNext();
+			
+			if(stationIterator.hasNext()){
+				
+			}
+			stationIterator.next().disconnect();
+			stationIterator.remove();
+	}
+	
+	public static void diconnectAllStations(){
+		Iterator<Station> stationIterator = stationArrayList.iterator(); // Creates list like thing that allows it to me incremented
+		while(stationIterator.hasNext()){
+			if(!stationIterator.hasNext()){
+				
+			}
+			stationIterator.next().disconnect();
+			stationIterator.remove();
+		}
+	}
+	
 	
 } //end of MS_Manager

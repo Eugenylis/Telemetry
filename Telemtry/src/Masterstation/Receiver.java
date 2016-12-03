@@ -132,5 +132,9 @@ public class Receiver extends Thread {
 		}
     }
     
+    public void disconnect(){
+    	//
+    }
+    
    
 } // end of class
