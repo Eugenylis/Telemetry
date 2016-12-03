@@ -11,7 +11,7 @@ import java.net.Socket;
  * It also allows to receive multiple files and store each at a different name
  * All communication is done through the use of sockets like server socket with specified port number
  * 
- * @author Eugene Lischuk
+ * @author Yevgeniy Lischuk
  * @version 2.0 of the Receiver
  */
 
@@ -64,7 +64,7 @@ public class Receiver extends Thread {
     /**
 	 * Method to implement the thread
 	 * Accepts incoming connections
-	 * Creates new InputStream, FileOutputStream, BufferedOutputStream each time a file is sent
+	 * Uses dataHandler to process the received data
 	 * Allows to continuously run and receive files
 	 * @override run method in Thread class
 	 * @throws IOException Something when wrong
