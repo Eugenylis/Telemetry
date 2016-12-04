@@ -58,7 +58,6 @@ public abstract class MS_Manager{
 	 * Checks each character in a string for being an integer
 	 * Checks if the string is empty
 	 * Checks if port number is equal to the port number of any previous stations
-	 * 
 	 * @param str - a string to check
 	 * @param radix - radix, range
 	 * @return verify that string is a 4-digit integer number
@@ -110,7 +109,6 @@ public abstract class MS_Manager{
 	 * Uses Iterator to find the station based on its name
 	 * Removes station from the list
 	 * Disconnects the station from communication (closes the socket)
-	 * 
 	 * @param stationName - name of the station to remove from the list
 	 */
 	public static void removeStation(String stationName){
