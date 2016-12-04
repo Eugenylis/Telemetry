@@ -69,7 +69,8 @@ public class Receiver extends Thread {
 	 * @throws IOException Something when wrong
 	 */
     public void run() {
-    	while (moreData) {
+    
+        while (moreData) {
             try {      
             	//allow to accept incoming connections
             	socket = serverSocket.accept();
@@ -82,9 +83,7 @@ public class Receiver extends Thread {
     			dataHandler.addNewData(inputStream);
     			
             } catch (IOException e) {
-                
-            	System.out.println("Failed??? I was right");
-            	//stop the loop
+                //stop the loop
                 moreData = false;
                 //close the socket
                 try {

@@ -126,15 +126,13 @@ public abstract class MS_Manager{
 		while(stationIterator.hasNext()){
 			station = stationIterator.next(); //gets next station
 			if(station.stationName == stationName){ 
-				//disconnect the station
-				station.disconnect(); 
-				//remove the station from class list of stations
-				stationIterator.remove(); 
 				break;
 			}
 		}
 		return station;
 	}
+	
+	
 	
 	public static void removeStation(String stationName){
 		Station station = getStation(stationName);
@@ -149,7 +147,6 @@ public abstract class MS_Manager{
 	 * Disconnects all stations from communication (closes the socket)
 	 */
 	public static void disconnectAllStations(){
-		System.out.println("erik sucks ass");
 		Station station;
 		Iterator<Station> stationIterator = stationArrayList.iterator(); // Creates list like thing that allows it to me incremented
 		while(stationIterator.hasNext()){

@@ -161,4 +161,13 @@ public class Station {
     	receiver.disconnect(); 
     	
     }
+    
+    /**
+     * Method to set the station name
+     * Replaces existing string name with a new one
+     * @param name of the station 
+     */
+    public boolean isConnected(){
+    	return receiver.isAlive();
+    }
 }

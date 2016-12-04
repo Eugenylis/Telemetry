@@ -36,6 +36,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Master GUI class is a display of the main GUI seen by the user of the program. 
@@ -152,6 +153,14 @@ public class MasterGUI extends Application {
 						
 		// Display the GUI
 		stage.show();
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+	          public void handle(WindowEvent we) {
+	              System.out.println("Stage is closing");
+	              MS_Manager.disconnectAllStations();
+	  	        stage.close();
+
+	          }
+	      });        
 	}
 	
 	
@@ -236,19 +245,29 @@ public class MasterGUI extends Application {
 			btConnect.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override public void handle(ActionEvent e) {
 	            	MS_Manager.getStation(stationName).connect();
-	            	lbStatus.setText("Connected");
+	            	if (MS_Manager.getStation(stationName).isConnected()){
+	            		lbStatus.setText("Connected");
+	            	}
 			}});
 			
 			//button to allow disconnecting from the station
 			Button btDisconnect = new Button("Disconnect");			
 			btDisconnect.setStyle("-fx-background-color: crimson ");
 			btDisconnect.setFont(Font.font("Ariel", FontWeight.BOLD, 12));
-			//btDisconnect.setOnAction(arg0 ->
+			btDisconnect.setOnAction(new EventHandler<ActionEvent>() {
+	            @Override public void handle(ActionEvent e) {
+	            	MS_Manager.getStation(stationName).disconnect();
+	            	if (MS_Manager.getStation(stationName).isConnected() == false){
+	            	lbStatus.setText("Disconnected");
+	            	}
+			}});
+			
 			
 			//setup of the station details and features
 			stationHBox.getChildren().add(0, cbSelectStation); //Forcing cbSelectStation to be in index 0 allows easy reading later.
 			stationHBox.getChildren().add(1, btStation);
-			stationDetailsHBox.getChildren().addAll(lbPortNum, lbStationDetails, lbStatus);
+			stationHBox.getChildren().add(2, lbStatus);
+			stationDetailsHBox.getChildren().addAll(lbPortNum, lbStationDetails);
 			stationButtonsHBox.getChildren().addAll(btConnect, btDisconnect);
 			localStationDetailsVBox.getChildren().add(0, stationHBox); //Forcing stationHBox  to be in index 0 allows easy reading later.
 			localStationDetailsVBox.getChildren().add(1, stationDetailsHBox);
