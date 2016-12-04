@@ -36,7 +36,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
  * Master GUI class is a display of the main GUI seen by the user of the program. 
@@ -153,14 +152,6 @@ public class MasterGUI extends Application {
 						
 		// Display the GUI
 		stage.show();
-		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-	          public void handle(WindowEvent we) {
-	              System.out.println("Stage is closing");
-	              MS_Manager.disconnectAllStations();
-	  	        stage.close();
-
-	          }
-	      });        
 	}
 	
 	
