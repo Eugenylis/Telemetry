@@ -156,7 +156,7 @@ public class MasterGUI extends Application {
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 	          public void handle(WindowEvent we) {
 	              System.out.println("Stage is closing");
-	              showDirectoryChooser();
+	              MS_Manager.disconnectAllStations();
 	  	        stage.close();
 
 	          }
