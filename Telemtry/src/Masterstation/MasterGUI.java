@@ -526,9 +526,10 @@ public class MasterGUI extends Application {
 		// Create the text label
 		Label aboutLabel = new Label();
 		aboutLabel.setWrapText(true);
-		aboutLabel.setTextAlignment(TextAlignment.CENTER);
+		aboutLabel.setTextAlignment(TextAlignment.LEFT);
 		aboutLabel.setFont(Font.font("Times New Roman", 14));
 		aboutLabel.setText(aboutText);
+		aboutLabel.setMaxWidth(500);
 	
 		// Add the label to a StackPane
 		StackPane pane = new StackPane();
@@ -536,7 +537,7 @@ public class MasterGUI extends Application {
 	
 	
 		// Create and display said the aforementioned pane in a new stage
-		Scene scene = new Scene(pane, 550, 100);
+		Scene scene = new Scene(pane, 600, 150);
 		Stage stage = new Stage();
 		stage.setScene(scene);
 		stage.setTitle("How to use this program");
