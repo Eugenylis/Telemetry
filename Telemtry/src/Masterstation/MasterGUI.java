@@ -9,9 +9,12 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -180,6 +183,16 @@ public class MasterGUI extends Application {
 	 * Method opens a window to display the add stations window where the user must input station name and station port number.
 	 */
 	public void showAddStation(){
+		
+		if (MS_Manager.dataLocation == null){
+			
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			String s ="Please select a directory. Then try again.";
+			alert.setContentText(s);
+			alert.show();
+			return;
+		}
 		
 		//displayed features
 		Label lbNameOfStation = new Label("Name of Station:");

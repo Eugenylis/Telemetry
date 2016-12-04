@@ -20,7 +20,7 @@ import javafx.application.Application;
 public abstract class MS_Manager{
    
 	//location or path to the data
-	public static String dataLocation;
+	public static String dataLocation = null;
 	//array list of created receiver stations
 	public static ArrayList<Station> stationArrayList = new ArrayList<Station>();
 	//station counter
