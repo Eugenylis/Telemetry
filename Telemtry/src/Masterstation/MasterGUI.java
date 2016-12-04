@@ -107,7 +107,7 @@ public class MasterGUI extends Application {
 		borderPane.setTop(menuBar);
 		
 		//menu items actions
-		miDisconnectAllStations.setOnAction(arg0 -> MS_Manager.disconnectAllStations());
+//		miDisconnectAllStations.setOnAction(arg0 -> MS_Manager.disconnectAllStations());
 		miChooseDirectory.setOnAction(arg0 -> showDirectoryChooser());		
 		miDataSincFreq.setOnAction(arg0 -> DataSincFerq());
 		miAddStation.setOnAction(arg0 -> showAddStation());
@@ -201,17 +201,18 @@ public class MasterGUI extends Application {
 	}
 	
 	/**
-	 * Method 
+	 * Method gives functionality to Add Station button, station is created on the main view in a column on left
 	 */
 	public void addStations(){
 		
-		//check if text typed in textbox txProtNum is a 4-digit integer number
+		//check if text typed in text box txProtNum is a 4-digit integer number
 		if(MS_Manager.isPortCorrect(txPortNum.getText(),10)){
 			
 			//Get information given by the user
 			portNumber = Integer.parseInt(txPortNum.getText());
 			String stationName = txNameOfStation.getText();
 			
+			//create the column with station details
 			VBox localStationDetailsVBox = new VBox();
 			HBox stationHBox = new HBox();
 			HBox stationDetailsHBox = new HBox();
@@ -228,9 +229,11 @@ public class MasterGUI extends Application {
 			CheckBox cbSelectStation = new CheckBox();
 			Label lbStatus = new Label();
 			
+			//add a connect button to allow receiving data
 			Button btConnect = new Button("Connect");
 			btConnect.setStyle("-fx-background-color: mediumseagreen ");
 			btConnect.setFont(Font.font("Ariel", FontWeight.BOLD, 12));
+			//connection is made and status is showed when connection is made
 			btConnect.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override public void handle(ActionEvent e) {
 	            	try {
@@ -242,13 +245,14 @@ public class MasterGUI extends Application {
 	            	lbStatus.setText("Connected");
 			}});
 			
+			//button to allow disconnecting from the station
 			Button btDisconnect = new Button("Disconnect");			
 			btDisconnect.setStyle("-fx-background-color: crimson ");
 			btDisconnect.setFont(Font.font("Ariel", FontWeight.BOLD, 12));
 			//btDisconnect.setOnAction(arg0 ->
 			
+			//setup of the station details and features
 			stationHBox.getChildren().add(0, cbSelectStation); //Forcing cbSelectStation to be in index 0 allows easy reading later.
-			//stationHBox.getChildren().add(1, btConnect);
 			stationHBox.getChildren().add(1, btStation);
 			stationDetailsHBox.getChildren().addAll(lbPortNum, lbStationDetails, lbStatus);
 			stationButtonsHBox.getChildren().addAll(btConnect, btDisconnect);
@@ -289,7 +293,7 @@ public class MasterGUI extends Application {
 				HBox hbox = (HBox) station.getChildren().get(0);
 				CheckBox checkBox = (CheckBox) hbox.getChildren().get(0);
 				if (checkBox.isSelected()){
-					MS_Manager.removeStation(((Button)(hbox.getChildren().get(1))).getText()); //sends name of station which is on it's button
+					//MS_Manager.removeStation(((Button)(hbox.getChildren().get(1))).getText()); //sends name of station which is on it's button
 					stationIterator.remove(); //If checkBox is selected (as in it was checked), it is removed from the iterator (which is connected to the stationVBox) 
 					//which removes it from stationVBox.
 				}
