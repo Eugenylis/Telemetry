@@ -11,47 +11,44 @@ import java.net.Socket;
  * It also allows to receive multiple files and store each at a different name
  * All communication is done through the use of sockets like server socket with specified port number
  * 
- * @author Eugene Lischuk
+ * @author Yevgeniy Lischuk
  * @version 2.0 of the Receiver
  */
 
 
 public class Receiver extends Thread {
 
+	//Data handler to process all received data
 	public DataHandler dataHandler;
-	
 	//Socket for communication
 	protected Socket socket;
 	//ServerSocket to accept incoming connections
     protected ServerSocket serverSocket;
-    
-	//value for controlling while loop
+	//value for controlling while loop, if more data incoming = true
     protected boolean moreData = true;
-    
     //counter to count how many times file was received
     protected static int counter = 0;
-    
     //port number
     private int portNum;
-    
-    public String stationName = " ";
 
-    //no-argument constructor for the thread with specified object name
+
+    //no-argument constructor
     public Receiver() throws IOException {
     }
 
     
     /*
-     * Constructor which creates socket with specified port number and specified name
+     * Constructor which creates socket with specified port number, specified name and location to save the data
      */
     public Receiver(int portNumber, String name, String saveLocation) {
     
         //specify directory to save files
         dataHandler = new DataHandler(saveLocation, name);
- 
+        
+        //set the port number
         setPortNum(portNumber);
         
-        //set port number to server socket
+        //create server socket object with specified port number
         try {
 			serverSocket = new ServerSocket(portNum);
 		} catch (IOException e) {
@@ -66,7 +63,7 @@ public class Receiver extends Thread {
     /**
 	 * Method to implement the thread
 	 * Accepts incoming connections
-	 * Creates new InputStream, FileOutputStream, BufferedOutputStream each time a file is sent
+	 * Uses dataHandler to process the received data
 	 * Allows to continuously run and receive files
 	 * @override run method in Thread class
 	 * @throws IOException Something when wrong
@@ -74,34 +71,33 @@ public class Receiver extends Thread {
     public void run() {
     
         while (moreData) {
-            try {
-            	           
-            	System.out.println("Port Number " + portNum);
+            try {      
             	//allow to accept incoming connections
             	socket = serverSocket.accept();
-                  
+            	//print out number for accepted connection
         		System.out.println("Accepted connection : " + socket);
 
-    			
                 //get input stream from a socket
     			InputStream inputStream = socket.getInputStream();
+    			//get data from input stream and process it with data handler
     			dataHandler.addNewData(inputStream);
     			
             } catch (IOException e) {
-                //e.printStackTrace();
                 //stop the loop
                 moreData = false;
+                //close the socket
                 try {
 					socket.close();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-            }
+                
+            } 
             
         } // end of while(moreData)
     } // end of run()
 
+    
     /**
      * Method to set the port number to a new value
      * @param portNum number of the port
@@ -122,12 +118,12 @@ public class Receiver extends Thread {
     
     /**
      * Method to close the socket to stop communication
+     * Closes socket, so server socket port closes as well
      */
-    public void closeSocket(){
+    public void disconnect(){
     	try {
-			socket.close();
+			this.socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }

@@ -13,10 +13,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import Groundstation.Sender;
-import Groundstation.WatchDir;
-import Groundstation.ZipFileTimer;
-
 public class WatchDir_Tester {
 	String fileParentPath = Paths.get("").toString();
 	Path dir = Paths.get(fileParentPath);

@@ -2,7 +2,6 @@ package Masterstation;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
