@@ -25,8 +25,6 @@ public abstract class MS_Manager{
 	public static ArrayList<Station> stationArrayList = new ArrayList<Station>();
 	//station counter
 	public static int stationCount = 0;
-	//array to store port number of stations
-	public static ArrayList<Integer> previousPortNum = new ArrayList<Integer>();
 	
 	
 	/**
@@ -57,7 +55,7 @@ public abstract class MS_Manager{
 	 * @return current station count
 	 */
 	public static int getStationCount(){
-		Fix
+		return stationArrayList.size();
 	}
 	
 	
