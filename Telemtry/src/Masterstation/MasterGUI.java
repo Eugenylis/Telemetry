@@ -491,7 +491,10 @@ public class MasterGUI extends Application {
 	 * Displays Help window
 	 */
 	public void showHelp(){
-		final String aboutText = "blah blah blah";
+		final String aboutText = "To use this program, follow these steps: click on 'Connection' -> 'Choose Directory' -> 'Select Directory', "
+				+ "then: 'Setup Ground Stations' -> 'Add station' -> write name of your station and port number, then click 'Add', "
+				+ "after that: click on 'Connect' to stat communication "
+				+ "If the communication is established, click on the button which contains station name to see the plots ";
 	
 		// Create the text label
 		Label aboutLabel = new Label();
