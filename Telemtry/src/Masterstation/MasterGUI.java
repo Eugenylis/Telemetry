@@ -63,8 +63,8 @@ public class MasterGUI extends Application {
 	
 	// Menu
 	private MenuBar menuBar; // MenuBar
-	private Menu menuHelp, menuSettings, menuConnections, menuGroundStation; // Menus
-	private MenuItem miHelp, miPlotData, miAddStation, miRemoveStation, miDataSincFreq, miChooseDirectory, miDisconnectAllStations; //MenuItems
+	private Menu menuHelp, menuConnections, menuGroundStation; // Menus
+	private MenuItem miHelp, miAddStation, miRemoveStation, miDataSincFreq, miChooseDirectory, miDisconnectAllStations; //MenuItems
 	//VBox for Status Display
 	private VBox stationVBox;
 	private Label lbTitle, lbDirectory, lbSelectedDirectory;
@@ -79,9 +79,6 @@ public class MasterGUI extends Application {
 	/* COMMUNICATION ITEMS */
 	//specified port number
 	private int portNumber;
-	//counter for array of receiver objects
-	private static int count = 0;
-	
 	/**
 	 *  This method contains GUI main GUI pane, menu bar items, and VBox for stations
 	 */
@@ -92,7 +89,6 @@ public class MasterGUI extends Application {
 		//menu
 		menuBar = new MenuBar();
 		menuHelp = new Menu("Help");
-		menuSettings = new Menu("Settings");
 		menuConnections = new Menu("Connection");
 		menuGroundStation = new Menu("Setup Ground Stations");
 		miAddStation = new MenuItem("Add Station");
@@ -100,13 +96,11 @@ public class MasterGUI extends Application {
 		miRemoveStation = new MenuItem("Remove Station");
 		miHelp = new MenuItem("Help");
 		miDataSincFreq = new MenuItem("Data Sinc Freguency");
-		miPlotData = new MenuItem("Plot");
 		miDisconnectAllStations = new MenuItem("Disconnect All Stations");
 		menuHelp.getItems().addAll(miHelp);
 		menuConnections.getItems().addAll(miChooseDirectory, miDataSincFreq, miDisconnectAllStations);
-		menuSettings.getItems().addAll(miPlotData);
 		menuGroundStation.getItems().addAll(miAddStation, miRemoveStation);
-		menuBar.getMenus().addAll(menuSettings,menuConnections, menuGroundStation, menuHelp);
+		menuBar.getMenus().addAll(menuConnections, menuGroundStation, menuHelp);
 		borderPane.setTop(menuBar);
 		
 		//menu items actions
@@ -135,9 +129,7 @@ public class MasterGUI extends Application {
 	
 		
 		//tabs for plot display/ data/ 
-		tabPanePlots = new TabPane();
-		
-			
+		tabPanePlots = new TabPane();			
 	}		
 		
 	
@@ -184,8 +176,9 @@ public class MasterGUI extends Application {
 	 */
 	public void showAddStation(){
 		
+		//if the user did not choose a directory this method will not open
 		if (MS_Manager.dataLocation == null){
-			
+			//alert message for the chooser to pick a directory first
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error");
 			String s ="Please select a directory. Then try again.";
@@ -194,14 +187,14 @@ public class MasterGUI extends Application {
 			return;
 		}
 		
-		//displayed features
+		//displayed features in the pop up window
 		Label lbNameOfStation = new Label("Name of Station:");
 		Label lbGPSNum = new Label("Port Number:");
 		txNameOfStation = new TextField();
 		txPortNum = new TextField();
 		Button btAddStation = new Button("Add");
-		btAddStation.setOnAction(arg0 -> addStations());
-				
+		btAddStation.setOnAction(arg0-> addStations()); 		//button adds stations to the main GUI view
+		
 		//pane for the features
 		GridPane addStationPane = new GridPane();
 		addStationPane.setHgap(10);
@@ -226,7 +219,17 @@ public class MasterGUI extends Application {
 	 */
 	public void addStations(){
 		
-		//check if text typed in textbox txProtNum is a 4-digit integer number
+		//if user did not put in station name or port number a warning message appears
+    	if (txNameOfStation.getText().isEmpty() || txPortNum.getText().isEmpty()){
+    		Alert alert = new Alert(AlertType.WARNING);
+    		alert.setTitle("WAIT");
+			String s ="Please enter a station name and port number!";
+			alert.setContentText(s);
+			alert.show();
+			return;
+    	}
+    	
+		//check if text typed in text box txProtNum is a 4-digit integer number
 		if(MS_Manager.isPortAvailable(txPortNum.getText(),10)){
 			
 			//Get information given by the user
@@ -275,7 +278,6 @@ public class MasterGUI extends Application {
 	            	}
 			}});
 			
-			
 			//setup of the station details and features
 			stationHBox.getChildren().add(0, cbSelectStation); //Forcing cbSelectStation to be in index 0 allows easy reading later.
 			stationHBox.getChildren().add(1, btStation);
@@ -290,12 +292,11 @@ public class MasterGUI extends Application {
 			stationVBox.getChildren().add(localStationDetailsVBox);
 			
 
-			//testing remove function
-			miRemoveStation.setOnAction(arg0 -> removeSelectedStation()); ///////////////////////////////////////PLACE SOMEWHERE ELSE/////////////////////////
+			//remove function
+			miRemoveStation.setOnAction(arg0 -> removeSelectedStation());
 			
 			//create a receiver object with specified port number
 			try {
-				//MS_Manager.createReceiver(portNumber, stationName);
 				MS_Manager.createStation(portNumber, stationName);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -303,6 +304,9 @@ public class MasterGUI extends Application {
 		}
 	}
 	
+	/**
+	 * Method allows the removal of a station when its corresponding check box is selected
+	 */
 	public void removeSelectedStation(){
 			
 		VBox station = new VBox();
@@ -330,8 +334,25 @@ public class MasterGUI extends Application {
 		}
 	}
 	
+	/**
+	 * @param stationName : the name of each station set up by the user
+	 * 
+	 * This method allows each station button to open graph settings and setup the station plots
+	 */
 	public void btStationActions(String stationName){
 		
+		//check if station is connected and  show a message when not connected
+		if (MS_Manager.getStation(stationName).isConnected() == false){
+			//error message
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error");
+			String s ="Connection not established. Please try to connect again.";
+			alert.setContentText(s);
+			alert.show();
+			return;
+		}
+		
+		//labels and features in the plot settings window
 		Label lbXAxis = new Label("X Axis");
 		Label lbYAxis = new Label("Y Axis");
 		Label lbPlot1 = new Label("Plot 1:");
@@ -351,6 +372,7 @@ public class MasterGUI extends Application {
 		cbPlotYAxis[2] = new ChoiceBox<String>();
 		cbPlotYAxis[3] = new ChoiceBox<String>();
 
+		// connect data and data type, to be viewed
 		Station station;
         Iterator<Station> stationList = MS_Manager.stationArrayList.iterator();
         while(stationList.hasNext()){
@@ -365,13 +387,12 @@ public class MasterGUI extends Application {
         	}
         }        
         
-        
         cbPlotYAxis[0].getItems().add("Altitude"); 
 		cbPlotYAxis[1].getItems().add("Altitude"); 
 		cbPlotYAxis[2].getItems().add("Altitude"); 
 		cbPlotYAxis[3].getItems().add("Altitude");
 		Button btAddPlots = new Button("Add Plots");
-				
+		//add features to pane		
 		GridPane addPlotGridPane = new GridPane();
 		addPlotGridPane.setHgap(10);
 		addPlotGridPane.setVgap(10);
@@ -398,7 +419,7 @@ public class MasterGUI extends Application {
 		stage.setTitle("Choose Plot Settings");
 		stage.setResizable(false);
 		stage.show();
-		
+		//plots are added to main GUI and stage is closed
 		btAddPlots.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
             	addPlotsToGUI(stationName, cbPlotXAxis, cbPlotYAxis);
@@ -408,8 +429,16 @@ public class MasterGUI extends Application {
         });
 	}
 	
+	/**
+	 * @param stationName : name of station chosen by the user
+	 * @param cbPlotXAxis : choice box option for x axis in plots
+	 * @param cbPlotYAxis : choice box option for x axis in plots
+	 * 
+	 * This method adds all plots for a specific station to the main GUI
+	 */
 	public void addPlotsToGUI(String stationName, ChoiceBox<String>[] cbPlotXAxis, ChoiceBox<String>[] cbPlotYAxis){		
 		
+		//plot tab with station name is created
 		Plot = new Tab(stationName);		
 		tabPanePlots.getTabs().addAll(Plot);
 		Plot.setClosable(true);
@@ -421,6 +450,7 @@ public class MasterGUI extends Application {
         plotGridPane.setVgap(10);
         Plot.setContent(plotGridPane);
         
+        //adding plots
         Station station;
         Iterator<Station> stationList = MS_Manager.stationArrayList.iterator();
         while(stationList.hasNext()){
@@ -454,15 +484,11 @@ public class MasterGUI extends Application {
         	}
         }
 	}
-	
-
 	/**
-	}
-	 * Displays DataSincFreq window
-	 * @return 
+	 * Data Frequency Window Displayed
 	 */
 	public void DataSincFerq(){
-		
+		//instructions
 		final String descriptionText = "Input the value for the time equal to the amount of data rcieved from ground station:";
 		// Create the text label
 				Label aboutLabel = new Label();
@@ -487,6 +513,7 @@ public class MasterGUI extends Application {
 		stage.setResizable(false);
 		stage.show();
 	}
+	
 	/**
 	 * Displays Help window
 	 */
