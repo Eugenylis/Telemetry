@@ -12,6 +12,10 @@ import javafx.application.Application;
  * Launches master station GUI
  * Creates file receiver
  * Allows to set port number for file receiver
+ * Sets each station into the array of stations
+ * Allows to check if specified port number for the station is a valid number
+ * Allows to remove specific ground station
+ * Allows to remove all stations from the array at once
  * 
  * @author Yevgeniy Lischuk
  * @version 1.0
@@ -68,33 +72,33 @@ public abstract class MS_Manager{
 	 * 
 	 * @param portString - a string to check
 	 * @param radix - radix, range
-	 * @return result - verify that string is a 4-digit integer number
+	 * @return correct - verify that string is a 4-digit integer number
 	 */
-	public static boolean PortIsAvailable(String portString, int radix) {
+	public static boolean portIsAvailable(String portString, int radix) {
 		
 		//variable to return
-		boolean result = true;
+		boolean correct = true;
 		//integer value for the port to check for, initialized at some number (0 in this case, but any number would work)
 		int portToCheck = 0;
 		
 		//check is the string is less than 4 characters long
-	    if(portString.length() != 4) { result = false;	}
+	    if(portString.length() != 4) { correct = false;	}
 	    
 	    //check each charter in a string for being a number
 	    for(int i = 0; i < portString.length(); i++) {
 	        if(i == 0 && portString.charAt(i) == '-') {
-	            if(portString.length() == 1 ) { result = false; }
+	            if(portString.length() == 1 ) { correct = false; }
 	        }
 	        if(Character.digit(portString.charAt(i),radix) < 0) {
-	        	result = false;
+	        	correct = false;
 	        }
 	    }
 		
 		//check is string is empty
-		if(portString.isEmpty()){ result = false; }
+		if(portString.isEmpty()){ correct = false; }
 		
 		//if no previous conditions were true, parse string to a integer
-		if (result == true){ 
+		if (correct == true){ 
 			portToCheck = Integer.parseInt(portString); 
 		}
 		
@@ -106,19 +110,19 @@ public abstract class MS_Manager{
 			while(stationIterator.hasNext()){
 				Station station = stationIterator.next(); //gets next station
 				if(station.receiver.getPortNum() == portToCheck){ 
-					result =  false; // returns 
+					correct =  false; // returns 
 					break;
 				}
 			}
 		}
-		return result;
+		return correct;
 	}
 	
 	
 	/**
-	 *  
-	 * @param stationName - a string to of the station name
-	 * @return station verify that string is a 4-digit integer number
+	 * Method to get the specific station based on its name
+	 * @param stationName - a string of the station name
+	 * @return station which has specific name
 	 */
 	public static Station getStation(String stationName){
 		Station station = null;
