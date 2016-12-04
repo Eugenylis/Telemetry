@@ -1,6 +1,11 @@
 package Groundstation;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+
+import Masterstation.MasterGUI;
+import javafx.application.Application;
+
 import java.awt.EventQueue;
 import java.io.*;
 
@@ -12,8 +17,7 @@ import java.io.*;
  *
  */
 public abstract class GS_Manager{
-    static public Sender zipSender;
-    static public GS_GUI GUIwindow;
+    static public Sender zipSender; 
     static public ZipFileTimer Timer;
     static public int datSendFreqMiliseconds;
     
@@ -22,29 +26,24 @@ public abstract class GS_Manager{
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
-		datSendFreqMiliseconds = 2000;
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GUIwindow = new GS_GUI();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		Application.launch(GS_GUI.class, args);
 	}
 	
 	/**
 	 * @param listenerDir The location of the directory being watched for changes.
 	 * @param IPaddress The IP address of the Master side.
 	 * @param socketNum The socket number of the Master station to transfer files to.
+	 * @param freq 
+	 * @param freq 
 	 * @throws IOException
 	 */
-	public static void setSettings(String listenerDir, String IPaddress, int socketNum) throws IOException{
+	public static void setSettings(String listenerDir, String IPaddress, int socketNum, int freq) throws IOException{
 		Path dir = Paths.get(listenerDir);
 		zipSender = new Sender(IPaddress, socketNum);
+		datSendFreqMiliseconds = freq*1000;
 		Timer = new ZipFileTimer(datSendFreqMiliseconds);
 		new WatchDir(dir, false).processEvents();	
+		
 	}
 	
 	
