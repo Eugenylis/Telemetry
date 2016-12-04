@@ -117,6 +117,17 @@ public class Receiver extends Thread {
     
     
     /**
+     * Method to open connection to start communication
+     */
+    public void connect(){
+    	//execute run() method in Receiver thread
+    	if(isAlive()){
+    		start();
+    	}
+    }
+    
+    
+    /**
      * Method to close the socket to stop communication
      * Closes socket, so server socket port closes as well
      */

@@ -106,7 +106,7 @@ public class MasterGUI extends Application {
 		borderPane.setTop(menuBar);
 		
 		//menu items actions
-//		miDisconnectAllStations.setOnAction(arg0 -> MS_Manager.disconnectAllStations());
+		miDisconnectAllStations.setOnAction(arg0 -> MS_Manager.disconnectAllStations());
 		miChooseDirectory.setOnAction(arg0 -> showDirectoryChooser());		
 		miDataSincFreq.setOnAction(arg0 -> DataSincFerq());
 		miAddStation.setOnAction(arg0 -> showAddStation());
@@ -204,8 +204,8 @@ public class MasterGUI extends Application {
 	 */
 	public void addStations(){
 		
-		//check if text typed in text box txProtNum is a 4-digit integer number
-		if(MS_Manager.isPortCorrect(txPortNum.getText(),10)){
+		//check if text typed in textbox txProtNum is a 4-digit integer number
+		if(MS_Manager.PortIsAvailable(txPortNum.getText(),10)){
 			
 			//Get information given by the user
 			portNumber = Integer.parseInt(txPortNum.getText());
@@ -235,12 +235,7 @@ public class MasterGUI extends Application {
 			//connection is made and status is showed when connection is made
 			btConnect.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override public void handle(ActionEvent e) {
-	            	try {
-						Connect();
-					} catch (IOException i) {
-						// TODO Auto-generated catch block
-						i.printStackTrace();
-					}	
+	            	MS_Manager.getStation(stationName).connect();
 	            	lbStatus.setText("Connected");
 			}});
 			
@@ -292,7 +287,7 @@ public class MasterGUI extends Application {
 				HBox hbox = (HBox) station.getChildren().get(0);
 				CheckBox checkBox = (CheckBox) hbox.getChildren().get(0);
 				if (checkBox.isSelected()){
-					//MS_Manager.removeStation(((Button)(hbox.getChildren().get(1))).getText()); //sends name of station which is on it's button
+					MS_Manager.removeStation(((Button)(hbox.getChildren().get(1))).getText()); //sends name of station which is on it's button
 					stationIterator.remove(); //If checkBox is selected (as in it was checked), it is removed from the iterator (which is connected to the stationVBox) 
 					//which removes it from stationVBox.
 				}
@@ -485,26 +480,5 @@ public class MasterGUI extends Application {
 		stage.setTitle("How to use this program");
 		stage.setResizable(false);
 		stage.show();
-	}
-	
-	
-	/**
-	 * Method starts executing thread in receiver class to start communication
-	 * Allows connection to the Ground Station
-	 * @throws IOException
-	 * 
-	 */
-	public void Connect() throws IOException{
-		
-		//execute run() method in Receiver thread
-		if(MS_Manager.stationArrayList.get(count).receiver.isAlive() == false){
-			MS_Manager.stationArrayList.get(count).receiver.start();
-			//increment index counter of the array list stationArrayList
-			count++;
-		}
-
-		System.out.print(" count " + count);
-	}
-	
-	
+	}	
 }

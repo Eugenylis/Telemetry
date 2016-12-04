@@ -34,7 +34,7 @@ public class Station {
 	//Array list of plots using SwingNode
 	final ArrayList<SwingNode> swingNodeList = new ArrayList<SwingNode>();
 	//name of the station
-	public String stationName = " ";
+	public String stationName = "";
 	//plot update frequency in milliseconds
 	public int plotUpdateFreqMS;
 	
@@ -148,6 +148,9 @@ public class Station {
 		return swingNode;
 	} // end of SwingNode
     
+    public void connect(){
+		receiver.connect();
+	}
     
     /**
      * Method to close the socket to stop communication

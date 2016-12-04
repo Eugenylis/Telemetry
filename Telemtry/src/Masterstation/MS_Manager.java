@@ -53,16 +53,27 @@ public abstract class MS_Manager{
 	
 	
 	/**
+	 * Method to return current counter for the array of stations
+	 * @return current station count
+	 */
+	public static int getStationCount(){
+		Fix
+	}
+	
+	
+	/**
 	 * Method to check if the text typed in a box is correct (4-integer number)
 	 * Checks if string is not equal to 4
 	 * Checks each character in a string for being an integer
 	 * Checks if the string is empty
 	 * Checks if port number is equal to the port number of any previous stations
-	 * @param str - a string to check
+	 * 
+	 * @param portString - a string to check
 	 * @param radix - radix, range
-	 * @return verify that string is a 4-digit integer number
+	 * @return result - verify that string is a 4-digit integer number
 	 */
-	public static boolean isPortCorrect(String portString, int radix) {
+	public static boolean PortIsAvailable(String portString, int radix) {
+		
 		//variable to return
 		boolean result = true;
 		//integer value for the port to check for, initialized at some number (0 in this case, but any number would work)
@@ -90,13 +101,15 @@ public abstract class MS_Manager{
 		}
 		
 		//if more than one stations exist check port number
-		if (stationCount>0){
-			//add port number of the previous station and add it to the array of port numbers
-			previousPortNum.add(  stationArrayList.get(stationArrayList.size()-1).receiver.getPortNum()  );
-			//check if current port number is the same as port of any previous stations
-			for (int j=0; j<previousPortNum.size(); j++){
-				if(portToCheck == previousPortNum.get(j)){ 
-					result = false;	
+		if (stationArrayList.size() > 0){
+			
+			//iterates through the station list looking are the porn numbers to find a duplicates
+			Iterator<Station> stationIterator = stationArrayList.iterator(); // Creates list like thing that allows it to me incremented
+			while(stationIterator.hasNext()){
+				Station station = stationIterator.next(); //gets next station
+				if(station.receiver.getPortNum() == portToCheck){ 
+					result =  false; // returns 
+					break;
 				}
 			}
 		}
@@ -105,19 +118,15 @@ public abstract class MS_Manager{
 	
 	
 	/**
-	 * Method to remove a selected station
-	 * Uses Iterator to find the station based on its name
-	 * Removes station from the list
-	 * Disconnects the station from communication (closes the socket)
-	 * @param stationName - name of the station to remove from the list
+	 *  
+	 * @param stationName - a string to of the station name
+	 * @return station verify that string is a 4-digit integer number
 	 */
-	public static void removeStation(String stationName){
-		//Creates list like the counter in MasterGUI to increment station array list
-		Iterator<Station> stationIterator = stationArrayList.iterator();
-		
+	public static Station getStation(String stationName){
+		Station station = null;
+		Iterator<Station> stationIterator = stationArrayList.iterator(); // Creates list like thing that allows it to me incremented
 		while(stationIterator.hasNext()){
-			//get the next station
-			Station station = stationIterator.next();
+			station = stationIterator.next(); //gets next station
 			if(station.stationName == stationName){ 
 				//disconnect the station
 				station.disconnect(); 
@@ -126,8 +135,14 @@ public abstract class MS_Manager{
 				break;
 			}
 		}
+		return station;
 	}
 	
+	public static void removeStation(String stationName){
+		Station station = getStation(stationName);
+		station.disconnect(); //disconnects station
+		stationArrayList.remove(station); //removes station from class list of stations
+	}
 	
 	/**
 	 * Method to remove all ground stations from the array list
@@ -137,23 +152,15 @@ public abstract class MS_Manager{
 	 */
 	public static void disconnectAllStations(){
 		Station station;
-		
-		//Creates list like the counter in MasterGUI to increment station array list
-		Iterator<Station> stationIterator = stationArrayList.iterator(); 
+		Iterator<Station> stationIterator = stationArrayList.iterator(); // Creates list like thing that allows it to me incremented
+		while(stationIterator.hasNext()){
 			station = stationIterator.next();
 			//disconnect the station
 			station.disconnect();
 			//remove the station from class list of stations
 			stationIterator.remove();
+		}
 	}
 	
-
-	/**
-	 * Method to return current counter for the array of stations
-	 * @return current station count
-	 */
-	public static int getStationCount(){
-		return stationCount;
-	}
 	
 } //end of MS_Manager
