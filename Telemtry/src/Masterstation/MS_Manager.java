@@ -74,7 +74,7 @@ public abstract class MS_Manager{
 	 * @param radix - radix, range
 	 * @return correct - verify that string is a 4-digit integer number
 	 */
-	public static boolean portIsAvailable(String portString, int radix) {
+	public static boolean isPortAvailable(String portString, int radix) {
 		
 		//variable to return
 		boolean correct = true;
