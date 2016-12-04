@@ -130,27 +130,29 @@ public class GS_GUI extends Application {
 			 * @return file location in string and IPaddress,socketNum,Freq in Int
 			 */
             @Override public void handle(ActionEvent e) {
-				if(GS_Manager.isPortCorrect(portInput.getText(),10)){
+            	
+				if(GS_Manager.isPortCorrect(portInput.getText(),10) && GS_Manager.ipValid(ipaddressInput.getText())){
 					IPaddress = ipaddressInput.getText();
 					Freq=Integer.parseInt(timeInput.getText());
-					try{
-						socketNum=Integer.parseInt(portInput.getText());
+					
+					socketNum=Integer.parseInt(portInput.getText());
 	
-					} catch(Exception e2){
-	
-						JOptionPane.showMessageDialog(null, "Please Enter Valid Socket Number");
-					}
 					try{
 						//System.out.println("Within GUI " + filename + " " + IPaddress + " " + socketNum);
 						GS_Manager.setSettings(filename, IPaddress, socketNum,Freq);
 	
 					} catch(Exception e3){
-	
 						System.out.print("Broke1");
 					}
-				} // end of if
-			
-
+					
+				} else if(GS_Manager.isPortCorrect(portInput.getText(),10)){
+					JOptionPane.showMessageDialog(null, "Your IP number format is incorrect, please enter valid IP number");
+				} else if(GS_Manager.ipValid(ipaddressInput.getText())){
+					JOptionPane.showMessageDialog(null, "Your Port number format is incorrect, please enter valid Port number");
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Your IP and Port number format is incorrect, please enter valid IP and Port number");
+				}
 		}});
         
         Scene scene = new Scene(grid, 600, 200);

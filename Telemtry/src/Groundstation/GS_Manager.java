@@ -1,13 +1,11 @@
 package Groundstation;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import Masterstation.MasterGUI;
 import javafx.application.Application;
-
-import java.awt.EventQueue;
-import java.io.*;
 
 /**
  * GS_Manager manages the file sender, GUI, and the directory watcher.
@@ -59,25 +57,39 @@ public abstract class GS_Manager{
 	 */
 	public static boolean isPortCorrect(String portString, int radix) {
 		
-		//variable to return
-		boolean result = true;
+		//variable to return if port is correct
+		boolean correct = true;
 		
 		//check is the string is less than 4 characters long
-	    if(portString.length() != 4) { result = false;	}
+	    if(portString.length() != 4) { correct = false;	}
 	    
 	    //check each charter in a string for being a number
 	    for(int i = 0; i < portString.length(); i++) {
 	        if(i == 0 && portString.charAt(i) == '-') {
-	            if(portString.length() == 1 ) { result = false; }
+	            if(portString.length() == 1 ) { correct = false; }
 	        }
 	        if(Character.digit(portString.charAt(i),radix) < 0) {
-	        	result = false;
+	        	correct = false;
 	        }
 	    }
 		
 		//check is string is empty
-		if(portString.isEmpty()){ result = false; }
+		if(portString.isEmpty()){ correct = false; }
 		
-		return result;
+		return correct;
 	}
+	
+	
+	/**
+	 * Method to check if the text typed in a box is correct IP address
+	 * Checks if IP address is in correct format, Example: 155.55.555.55
+	 * @param ip - a IP address string to check
+	 * @return false - if incorrect, true if correct
+	 */
+	public static boolean ipValid(String ip) {
+	    Pattern p = Pattern.compile("^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+	    Matcher m = p.matcher(ip);
+	    return m.find();
+	}
+	
 }
