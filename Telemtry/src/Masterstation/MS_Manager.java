@@ -151,6 +151,7 @@ public abstract class MS_Manager{
 	 * Disconnects all stations from communication (closes the socket)
 	 */
 	public static void disconnectAllStations(){
+		System.out.println("erik sucks ass");
 		Station station;
 		Iterator<Station> stationIterator = stationArrayList.iterator(); // Creates list like thing that allows it to me incremented
 		while(stationIterator.hasNext()){
