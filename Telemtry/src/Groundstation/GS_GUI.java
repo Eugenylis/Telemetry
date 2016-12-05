@@ -109,7 +109,7 @@ public class GS_GUI extends Application {
         
         //Add everything to grid
         grid.getChildren().addAll(Step1, IPaddresslabel, ipaddressInput, Step2, portnumberlabel, 
-        		portInput, Step3, timelabel, timeInput, Step4, filedirectorylabel, filedirectoryinput, OpenButton, SendButton);
+        		portInput, Step3, timelabel, timeInput, Step4, filedirectorylabel, filedirectoryinput, OpenButton, SendButton,DisconnectButton);
 
 		OpenButton.setOnAction(new EventHandler<ActionEvent>() {
 			/**
@@ -161,10 +161,8 @@ public class GS_GUI extends Application {
 		
 		DisconnectButton.setOnAction(new EventHandler<ActionEvent>() {
 
-            @Override public void handle(ActionEvent e) {        
-            	
-
-
+            @Override public void handle(ActionEvent e) { 
+            	System.exit(0);
 		}});
         
         Scene scene = new Scene(grid, 600, 200);
