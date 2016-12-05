@@ -94,7 +94,7 @@ public class GS_GUI extends Application {
         filedirectoryinput.setFont(Font.font("Ariel", FontWeight.BOLD, 15));             
         GridPane.setConstraints(filedirectoryinput, 2, 3);
         
-        //Send Button
+        //Open file directory Button
         Button OpenButton = new Button("Open");
         GridPane.setConstraints(OpenButton, 3, 3);  
         
@@ -102,7 +102,11 @@ public class GS_GUI extends Application {
         Button SendButton = new Button("Send");
         GridPane.setConstraints(SendButton, 1, 4);            
         
-
+        //Disconnect Button
+        
+        Button DisconnectButton = new Button("Disconnect");
+        GridPane.setConstraints(DisconnectButton, 2, 4); 
+        
         //Add everything to grid
         grid.getChildren().addAll(Step1, IPaddresslabel, ipaddressInput, Step2, portnumberlabel, 
         		portInput, Step3, timelabel, timeInput, Step4, filedirectorylabel, filedirectoryinput, OpenButton, SendButton);
@@ -153,6 +157,14 @@ public class GS_GUI extends Application {
 				else{
 					JOptionPane.showMessageDialog(null, "Your IP and Port number format is incorrect, please enter valid IP and Port number");
 				}
+		}});
+		
+		DisconnectButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override public void handle(ActionEvent e) {        
+            	
+
+
 		}});
         
         Scene scene = new Scene(grid, 600, 200);
