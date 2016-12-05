@@ -134,8 +134,14 @@ public class Receiver extends Thread {
     public void disconnect(){
     	try {
 			this.socket.close();
+			interrupt(); //stops thread
 		} catch (IOException e) {
 			e.printStackTrace();
+			try {
+				wait(0); //in case thread won't stop, this will pause it forever
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 		}
     }
     

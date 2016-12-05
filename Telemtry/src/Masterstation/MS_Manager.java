@@ -137,7 +137,6 @@ public abstract class MS_Manager{
 	}
 	
 	
-	
 	public static void removeStation(String stationName){
 		Station station = getStation(stationName);
 		station.disconnect(); //disconnects station

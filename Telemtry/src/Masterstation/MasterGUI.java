@@ -509,7 +509,7 @@ public class MasterGUI extends Application {
 		Scene scene = new Scene(pane, 550, 100);
 		Stage stage = new Stage();
 		stage.setScene(scene);
-		stage.setTitle("Data Sinc Frequency");
+		stage.setTitle("Data Sync Frequency");
 		stage.setResizable(false);
 		stage.show();
 	}
