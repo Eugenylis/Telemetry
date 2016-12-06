@@ -3,6 +3,7 @@ package Masterstation;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -14,7 +15,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -150,7 +150,6 @@ public class MasterGUI extends Application {
 		stage.show();
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 	          public void handle(WindowEvent we) {
-	              System.out.println("Stage is closing");
 	              MS_Manager.disconnectAllStations();
 	  	        stage.close();
 
@@ -273,7 +272,7 @@ public class MasterGUI extends Application {
 			btDisconnect.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override public void handle(ActionEvent e) {
 	            	MS_Manager.getStation(stationName).disconnect();
-	            	if (MS_Manager.getStation(stationName).isConnected() == false){
+	            	if (MS_Manager.getStation(stationName).isConnected()){
 	            	lbStatus.setText("Disconnected");
 	            	}
 			}});
