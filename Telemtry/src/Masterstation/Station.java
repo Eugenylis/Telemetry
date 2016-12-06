@@ -163,9 +163,7 @@ public class Station {
     }
     
     /**
-     * Method to set the station name
-     * Replaces existing string name with a new one
-     * @param name of the station 
+     * Method to check if receiver thread is alive
      */
     public boolean isConnected(){
     	return receiver.isAlive();
