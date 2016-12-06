@@ -98,6 +98,16 @@ public class Sender {
         }
 
     }
+	
+	
+	public void disconnect(){
+		try {
+			this.socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
 
 
