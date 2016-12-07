@@ -7,59 +7,71 @@ import java.util.zip.ZipOutputStream;
 import java.io.*;
 
 /**
- * This class enables sending files to the Master system using TCP/IP through sockets.
+ * This class enables sending files to the Master Station using TCP/IP data transfer through sockets
+ * Allows to zip multiple files into packet
+ * Sends packet to the Master station using bit output stream
  * 
+ * Based upon:
  * https://examples.javacodegeeks.com/core-java/util/zip/zipoutputstream/java-zip-file-example/
+ * 
  * @author Erik Parker
- * @version 1.0
+ * @version 2.0
  *
  */
 public class Sender {
 	
-	String IPaddress;
-	int portNum;
-	
+	//IP address
+	protected String IPaddress;
+	//port (socket) number
+	protected int portNum;
+	//socket object for TCP/IP communication
 	private Socket socket;
 	
 	
-	
-	
-	/**
-	 * @param IPaddress The IP of the Master side
-	 * @param portNum The socket number on the master side
-	 * @throws IOException Something when wrong
-	 */
-	public Sender(String IPaddress, int portNum) throws IOException {
-		
-		//System.out.println("With in sender " + IPaddress + " " + portNum);
-		//this.socket = new Socket(IPaddress, portNum);
-		this.IPaddress = IPaddress;
-		this.portNum = portNum;
-		//this.socket = new Socket("155.31.132.40", 8748);
-		//InputStream is = socket.getInputStream();
+	//no-argument constructor
+	public Sender(){
 	}
 	
-	//This method handles all things required to send a file is supplied the file location
+	
 	/**
+	 * Constructor that creases a sender object based upon provided IP address of the Master Station and port number
+	 * @param IPaddress The IP of the Master Station (server)
+	 * @param portNum The socket number on the master side
+	 * @throws IOException is something when wrong
+	 */
+	public Sender(String IPaddress, int portNum) throws IOException {
+		this.IPaddress = IPaddress;
+		this.portNum = portNum;
+	}
+	
+	
+	
+	/**
+	 * Method to handle all things required to send a file to the Master Station
+	 * Uses sockets to send streams of data
 	 * @param fileLocation The path of the file to be transfered
 	 * @throws IOException
 	 */
 	public void send(ArrayList<File> files) {
 		
         try {
+        	//initialize socket
             this.socket = new Socket(this.IPaddress, this.portNum);
+            
+            //create output streams for sending data
             OutputStream os = socket.getOutputStream();
             ZipOutputStream zipOutputStream = new ZipOutputStream(os);
             
+            //zip multiple files together
             System.out.println("Zipping files...");
             for (File f : files){
             	if (f.isFile())
             		zipFile(f,zipOutputStream);
             }
 
+           //clean up output streams
             System.out.println("Sending Files...");
             zipOutputStream.close();
-            
             os.flush();
             os.close();
             System.out.println("File transfer complete");
@@ -70,6 +82,13 @@ public class Sender {
         }
 	}
 	
+	
+	/**
+	 * Method to zip several files into archive file
+	 * @param inputFile file to be zipped
+	 * @param zipOutputStream object for zipping file streams
+	 * @throws IOException
+	 */
 	public static void zipFile(File inputFile, ZipOutputStream zipOutputStream) {
 
         try {
@@ -77,7 +96,7 @@ public class Sender {
             // We name the ZipEntry after the original file's name
             ZipEntry zipEntry = new ZipEntry(inputFile.getName());
             zipOutputStream.putNextEntry(zipEntry);
-
+            //create new file stream and separate it into bytes
             FileInputStream fileInputStream = new FileInputStream(inputFile);
             byte [] bytearray  = new byte [(int)inputFile.length()];
             int bytesRead;
@@ -86,8 +105,6 @@ public class Sender {
             bytesRead = fileInputStream.read(bytearray);
             zipOutputStream.write(bytearray, 0, bytesRead);
             
-            //System.out.println("Zipping " + inputFile.getName());
-
             // close ZipEntry to store the stream to the file
             zipOutputStream.closeEntry();
             fileInputStream.close();
@@ -99,17 +116,16 @@ public class Sender {
     }
 	
 	
+	/**
+	 * Method to disconnect Ground Station from communication
+	 * Closes socket used to send files
+	 */
 	public void disconnect(){
 		try {
 			this.socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-}
-
-
-
-
-				
+	
+} //end of class

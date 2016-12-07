@@ -106,4 +106,4 @@ public abstract class GS_Manager{
 	    return m.find();
 	}
 	
-}
+} //end of class

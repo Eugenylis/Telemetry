@@ -23,8 +23,10 @@ import javafx.stage.WindowEvent;
  * GS_GUI is the class used to create GUI for Ground Station
  * Creates GUI with text boxes for IP address, port number and data sync frequency
  * Contains buttons to send data and open file directory to listen for file additions
+ * 
  * @author Victor Wong
  * @version 2.0
+ * 
  */
 public class GS_GUI extends Application {
 
