@@ -77,7 +77,7 @@ public class Receiver extends Thread {
 	 */
     public void run() {
     
-        while (moreData) {
+        while (getMoreData()) {
             try {      
             	//allow to accept incoming connections
             	socket = serverSocket.accept();
@@ -113,13 +113,32 @@ public class Receiver extends Thread {
     	this.portNum = portNum;
     }
      
+    
+    /**
+     * Method to set value used to control the loop inside the thread
+     * moreData - boolean value to determine if any additional data is being received
+     * @param data - true is more data incoming, false otherwise
+     */
+    public void setMoreData(boolean data){
+    	this.moreData = data;
+    }
 
+    
     /**
      * Method to get the port number
      * @return port number for the specified object
      */
     public int getPortNum(){
     	return this.portNum;
+    }
+    
+    
+    /**
+     * Method to return value used to control the loop inside the thread
+     * @return moreData - boolean value to determine if any additional data is being received
+     */
+    public boolean getMoreData(){
+    	return this.moreData;
     }
     
     
@@ -140,6 +159,7 @@ public class Receiver extends Thread {
      */
     public void disconnect(){
     	try {
+    		setMoreData(false);
 			this.socket.close();
 			interrupt(); //stops thread
 		} catch (IOException e) {
