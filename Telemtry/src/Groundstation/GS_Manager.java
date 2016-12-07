@@ -40,7 +40,9 @@ public abstract class GS_Manager{
 		zipSender = new Sender(IPaddress, socketNum);
 		datSendFreqMiliseconds = freq*1000;
 		Timer = new ZipFileTimer(datSendFreqMiliseconds);
-		new WatchDir(dir, false).processEvents();	
+		WatchDir wt = new WatchDir(dir, false);
+		Thread thread = new Thread(wt);
+		thread.start();
 		
 	}
 	

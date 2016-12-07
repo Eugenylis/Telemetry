@@ -42,13 +42,14 @@ import java.util.*;
  * @author Erik Parker  
  */
 
-public class WatchDir {
+public class WatchDir implements Runnable{
 
     private final WatchService watcher;
     private final Map<WatchKey,Path> keys;
     private final boolean recursive;
     private boolean trace = false;
-
+    private boolean moreData = true;
+    
     @SuppressWarnings("unchecked")
     static <T> WatchEvent<T> cast(WatchEvent<?> event) {
         return (WatchEvent<T>)event;
@@ -117,82 +118,160 @@ public class WatchDir {
      * @throws IOException
      */
     void processEvents() throws IOException {
-        for (;;) {
-
-        	// wait for key to be signalled
-            WatchKey key;
-            
-            try {
-            	key = watcher.take();
-            } catch (InterruptedException x) {
-                return;
-            }
-
-            Path dir = keys.get(key);
-            if (dir == null) {
-                System.err.println("WatchKey not recognized!!");
-                continue;
-            }
-            
-            for (WatchEvent<?> event: key.pollEvents()) {
-                WatchEvent.Kind kind = event.kind();
-
-                // TBD - provide example of how OVERFLOW event is handled
-                if (kind == OVERFLOW) {
-                    continue;
-                }
-
-                // Context for directory entry event is the file name of entry
-                WatchEvent<Path> ev = cast(event);
-                Path name = ev.context();
-                Path child = dir.resolve(name);
-
-                // print out event
-                if (event.kind().name() == ENTRY_CREATE.toString()){ //Triggers when new file is created
-                	
-                	//System.out.format("%s: %s\n", event.kind().name(), child);
-                	GS_Manager.Timer.addFile(child.toString());//Adds file to list to be sent
-                
-                }else if (event.kind().name() == ENTRY_MODIFY.toString()){ //Triggers when new file is modified
-                
-                	//System.out.format("%s\n", event.kind().name());
-                	GS_Manager.Timer.addFile(child.toString());//Adds file to list to be sent
-                	
-                }else { //Probably ENTRY_DELETE
-                    
-                	System.out.format("%s\n", event.kind().name());
-                	
-                }
-                
-                	
-                // if directory is created, and watching recursively, then
-                // register it and its sub-directories
-                if (recursive && (kind == ENTRY_CREATE)) {
-                    try {
-                        if (Files.isDirectory(child, NOFOLLOW_LINKS)) {
-                            registerAll(child);
-                        }
-                    } catch (IOException x) {
-                        // ignore to keep sample readable
-                    }
-                }
-            }
-
-            // reset key and remove from set if directory no longer accessible
-            boolean valid = key.reset();
-            if (!valid) {
-                keys.remove(key);
-
-                // all directories are inaccessible
-                if (keys.isEmpty()) {
-                    break;
-                }
-            }
-        }
+    	
+//        while(moreData) {
+//
+//        	// wait for key to be signalled
+//            WatchKey key;
+//            
+//            try {
+//            	key = watcher.take();
+//            } catch (InterruptedException x) {
+//                return;
+//            }
+//
+//            Path dir = keys.get(key);
+//            if (dir == null) {
+//                System.err.println("WatchKey not recognized!!");
+//                continue;
+//            }
+//            
+//            for (WatchEvent<?> event: key.pollEvents()) {
+//                WatchEvent.Kind kind = event.kind();
+//
+//                // TBD - provide example of how OVERFLOW event is handled
+//                if (kind == OVERFLOW) {
+//                    continue;
+//                }
+//
+//                // Context for directory entry event is the file name of entry
+//                WatchEvent<Path> ev = cast(event);
+//                Path name = ev.context();
+//                Path child = dir.resolve(name);
+//
+//                // print out event
+//                if (event.kind().name() == ENTRY_CREATE.toString()){ //Triggers when new file is created
+//                	
+//                	//System.out.format("%s: %s\n", event.kind().name(), child);
+//                	GS_Manager.Timer.addFile(child.toString());//Adds file to list to be sent
+//                
+//                }else if (event.kind().name() == ENTRY_MODIFY.toString()){ //Triggers when new file is modified
+//                
+//                	//System.out.format("%s\n", event.kind().name());
+//                	GS_Manager.Timer.addFile(child.toString());//Adds file to list to be sent
+//                	
+//                }else { //Probably ENTRY_DELETE
+//                    
+//                	System.out.format("%s\n", event.kind().name());
+//                	
+//                }
+//                
+//                	
+//                // if directory is created, and watching recursively, then
+//                // register it and its sub-directories
+//                if (recursive && (kind == ENTRY_CREATE)) {
+//                    try {
+//                        if (Files.isDirectory(child, NOFOLLOW_LINKS)) {
+//                            registerAll(child);
+//                        }
+//                    } catch (IOException x) {
+//                        // ignore to keep sample readable
+//                    }
+//                }
+//            }
+//
+//            // reset key and remove from set if directory no longer accessible
+//            boolean valid = key.reset();
+//            if (!valid) {
+//                keys.remove(key);
+//
+//                // all directories are inaccessible
+//                if (keys.isEmpty()) {
+//                    break;
+//                }
+//            }
+//        }
     }
 
     static void usage() {
         System.err.println("usage: java WatchDir [-r] dir");
         System.exit(-1);
     }
+
+	@Override
+	public void run() {
+		
+		 while(moreData) {
+
+	        	// wait for key to be signalled
+	            WatchKey key;
+	            
+	            try {
+	            	key = watcher.take();
+	            } catch (InterruptedException x) {
+	                return;
+	            }
+
+	            Path dir = keys.get(key);
+	            if (dir == null) {
+	                System.err.println("WatchKey not recognized!!");
+	                continue;
+	            }
+	            
+	            for (WatchEvent<?> event: key.pollEvents()) {
+	                WatchEvent.Kind kind = event.kind();
+
+	                // TBD - provide example of how OVERFLOW event is handled
+	                if (kind == OVERFLOW) {
+	                    continue;
+	                }
+
+	                // Context for directory entry event is the file name of entry
+	                WatchEvent<Path> ev = cast(event);
+	                Path name = ev.context();
+	                Path child = dir.resolve(name);
+
+	                // print out event
+	                if (event.kind().name() == ENTRY_CREATE.toString()){ //Triggers when new file is created
+	                	
+	                	//System.out.format("%s: %s\n", event.kind().name(), child);
+	                	GS_Manager.Timer.addFile(child.toString());//Adds file to list to be sent
+	                
+	                }else if (event.kind().name() == ENTRY_MODIFY.toString()){ //Triggers when new file is modified
+	                
+	                	//System.out.format("%s\n", event.kind().name());
+	                	GS_Manager.Timer.addFile(child.toString());//Adds file to list to be sent
+	                	
+	                }else { //Probably ENTRY_DELETE
+	                    
+	                	System.out.format("%s\n", event.kind().name());
+	                	
+	                }
+	                
+	                	
+	                // if directory is created, and watching recursively, then
+	                // register it and its sub-directories
+	                if (recursive && (kind == ENTRY_CREATE)) {
+	                    try {
+	                        if (Files.isDirectory(child, NOFOLLOW_LINKS)) {
+	                            registerAll(child);
+	                        }
+	                    } catch (IOException x) {
+	                        // ignore to keep sample readable
+	                    }
+	                }
+	            }
+
+	            // reset key and remove from set if directory no longer accessible
+	            boolean valid = key.reset();
+	            if (!valid) {
+	                keys.remove(key);
+
+	                // all directories are inaccessible
+	                if (keys.isEmpty()) {
+	                    break;
+	                }
+	            }
+	        }
+	}
 }

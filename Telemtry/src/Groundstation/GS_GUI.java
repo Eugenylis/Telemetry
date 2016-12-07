@@ -4,6 +4,7 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
+import Masterstation.MS_Manager;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,19 +18,30 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
+ * GS_GUI is the class used to create GUI for Ground Station
+ * Creates GUI with text boxes for IP address, port number and data sync frequency
+ * Contains buttons to send data and disconnect station to stop communication
+ * 
+ * 
  * @author Victor Wong
  *
  */
 public class GS_GUI extends Application {
 
-    Stage window;
-    String filename;
-    Label filedirectoryinput = new Label();	
-	String IPaddress;
-	int socketNum;
-	int Freq;
+	//main window
+    private Stage window;
+    //path to file
+    private String pathName;
+    private Label filedirectoryinput = new Label();	
+    //IP address of the master station
+	private String IPaddress;
+	//port number
+	private int socketNum;
+	//data sync frequency
+	private int syncFreq;
 
   
 	/**
@@ -42,6 +54,14 @@ public class GS_GUI extends Application {
         window = primaryStage;
         window.setTitle("Ground station");
 
+        window.setOnCloseRequest(new EventHandler<WindowEvent>() {
+	          public void handle(WindowEvent we) {
+	            window.close();
+	  	        System.exit(0);
+
+	          }
+	      });  
+        
         //GridPane with 10px padding around edge
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
@@ -105,16 +125,12 @@ public class GS_GUI extends Application {
         
         //Send Button
         Button SendButton = new Button("Send");
-        GridPane.setConstraints(SendButton, 1, 4);            
+        GridPane.setConstraints(SendButton, 1, 4);         
         
-        //Disconnect Button
-        
-        Button DisconnectButton = new Button("Disconnect");
-        GridPane.setConstraints(DisconnectButton, 2, 4); 
-        
+
         //Add everything to grid
         grid.getChildren().addAll(Step1, IPaddresslabel, ipaddressInput, Step2, portnumberlabel, 
-        		portInput, Step3, timelabel, timeInput, Step4, filedirectorylabel, filedirectoryinput, OpenButton, SendButton,DisconnectButton);
+        		portInput, Step3, timelabel, timeInput, Step4, filedirectorylabel, filedirectoryinput, OpenButton, SendButton);
         
         // button will open up file directory 
 		OpenButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -122,9 +138,10 @@ public class GS_GUI extends Application {
         		DirectoryChooser openDirectoryChooser = new DirectoryChooser();        		
         		File selectedDirectory = openDirectoryChooser.showDialog(null);   
         		filedirectoryinput.setText(selectedDirectory.getAbsolutePath());   	    
-        		filename = selectedDirectory.getAbsolutePath().toString();
+        		pathName = selectedDirectory.getAbsolutePath().toString();
 
 		}});
+		
 		// button will run the whole ground station gui 
 		SendButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -132,13 +149,13 @@ public class GS_GUI extends Application {
             	
 				if(GS_Manager.isPortCorrect(portInput.getText(),10) && GS_Manager.ipValid(ipaddressInput.getText())){
 					IPaddress = ipaddressInput.getText();
-					Freq=Integer.parseInt(timeInput.getText());
+					syncFreq=Integer.parseInt(timeInput.getText());
 					
 					socketNum=Integer.parseInt(portInput.getText());
 	
 					try{
 						//System.out.println("Within GUI " + filename + " " + IPaddress + " " + socketNum);
-						GS_Manager.setSettings(filename, IPaddress, socketNum,Freq);
+						GS_Manager.setSettings(pathName, IPaddress, socketNum,syncFreq);
 	
 					} catch(Exception e3){
 						System.out.print("Broke1");
@@ -154,13 +171,7 @@ public class GS_GUI extends Application {
 				}
 		}});
 		
-		// button will disconnect the ground station 
-		DisconnectButton.setOnAction(new EventHandler<ActionEvent>() {
 
-            @Override public void handle(ActionEvent e) { 
-            	System.exit(0);
-		}});
-        
         Scene scene = new Scene(grid, 600, 200);
         window.setScene(scene);
         window.show();
