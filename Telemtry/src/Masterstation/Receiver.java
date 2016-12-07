@@ -165,8 +165,7 @@ public class Receiver extends Thread {
     		//close the socket
 			this.socket.close();
 			//stops thread
-			interrupt()
-			; 
+			interrupt(); 
 		} catch (IOException e) {
 			e.printStackTrace();
 			
