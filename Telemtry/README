@@ -1,2 +1,8 @@
-Test/Ideas to work on
+The 3 folders in this project directory are broken up in the following way:
+Extras:
+	Contains a MATLAB code to generate fake data for testing.
+lib:
+	Contains the jfreechart library file required for Masterstation.
+src:
+	This contains Junit tests for as few classes.
 

@@ -1,0 +1,14 @@
+The 3 folders in this src directory are broken up in the following way:
+Groundstation:
+	The code required for the ground station side of the application. 
+	It can be compiled using just it's contents and the main method 
+	class is GS_Manager.
+Masterstation:
+	The code required for the master station side of the application. 
+	It must be compiled using the jfreechart library file in the lib 
+	folder one level up. The main method class is MS_Manager. The 
+	Graph class is fully commented out and contains helpful code for 
+	a future coder.
+tests:
+	This contains Junit tests for as few classes.
+

@@ -91,7 +91,7 @@ public class MasterGUI extends Application {
 		miChooseDirectory = new MenuItem("Choose Directory");
 		miRemoveStation = new MenuItem("Remove Station");
 		miHelp = new MenuItem("Help");
-		miDataSyncFreq = new MenuItem("Data Sync Freguency");
+		miDataSyncFreq = new MenuItem("Data Sync Frequency");
 		miDisconnectAllStations = new MenuItem("Disconnect All Stations");
 		menuHelp.getItems().addAll(miHelp);
 		menuConnections.getItems().addAll(miChooseDirectory, miDataSyncFreq, miDisconnectAllStations);
