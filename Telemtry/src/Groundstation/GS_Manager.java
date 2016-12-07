@@ -12,6 +12,8 @@ import javafx.application.Application;
  * Starts GS_GUI
  * Manages file sender, file zipper and zip file timer
  * Starts and manager directory watcher thread
+ * Checks if port number was given correctly
+ * Checks if IP number was given correctly
  * 
  * @author Erik Parker, Victor Wong, Yevgeniy Lischuk
  * @version 2.0

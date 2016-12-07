@@ -6,7 +6,6 @@ import java.util.Iterator;
 
 import javafx.application.Application;
 
-
 /**
  * MS_Manager manages the file receiver and master station GUI
  * Launches master station GUI
@@ -126,9 +125,12 @@ public abstract class MS_Manager{
 	 */
 	public static Station getStation(String stationName){
 		Station station = null;
-		Iterator<Station> stationIterator = stationArrayList.iterator(); // Creates list like thing that allows it to me incremented
+		//creates a list of stations using iterator
+		Iterator<Station> stationIterator = stationArrayList.iterator();
+		
 		while(stationIterator.hasNext()){
-			station = stationIterator.next(); //gets next station
+			//gets next station
+			station = stationIterator.next(); 
 			if(station.stationName == stationName){ 
 				break;
 			}
@@ -137,11 +139,18 @@ public abstract class MS_Manager{
 	}
 	
 	
+	/**
+	 * Method to remove specific station
+	 * Disconnects the station
+	 * Removes the station from the station array list
+	 * @param stationName name of the station
+	 */
 	public static void removeStation(String stationName){
 		Station station = getStation(stationName);
 		station.disconnect(); //disconnects station
 		stationArrayList.remove(station); //removes station from class list of stations
 	}
+	
 	
 	/**
 	 * Method to remove all ground stations from the array list
@@ -151,7 +160,9 @@ public abstract class MS_Manager{
 	 */
 	public static void disconnectAllStations(){
 		Station station;
-		Iterator<Station> stationIterator = stationArrayList.iterator(); // Creates list like thing that allows it to me incremented
+		//creates a list of stations using iterator
+		Iterator<Station> stationIterator = stationArrayList.iterator();
+		
 		while(stationIterator.hasNext()){
 			station = stationIterator.next();
 			//disconnect the station
@@ -160,6 +171,5 @@ public abstract class MS_Manager{
 			stationIterator.remove();
 		}
 	}
-	
 	
 } //end of MS_Manager

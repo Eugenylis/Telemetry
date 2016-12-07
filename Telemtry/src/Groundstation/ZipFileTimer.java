@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Zips files based on given frequency, given in milliseconds
  * Zips multiple files in one packet
  * Executes a thread for zipping files
+ * 
  * @author Erik Parker
  *
  */

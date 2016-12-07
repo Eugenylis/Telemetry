@@ -46,12 +46,8 @@ import javafx.stage.WindowEvent;
  * The user can view the connection status, add multiple stations, view plots with live data, save the data and plots.
  * 
  * @author Eliza Gazda
- * @version 1.0
- */
-
-/**
- * @author GAZDAE
- *
+ * @version 2.0
+ * 
  */
 public class MasterGUI extends Application {
 	
@@ -64,7 +60,7 @@ public class MasterGUI extends Application {
 	// Menu
 	private MenuBar menuBar; // MenuBar
 	private Menu menuHelp, menuConnections, menuGroundStation; // Menus
-	private MenuItem miHelp, miAddStation, miRemoveStation, miDataSincFreq, miChooseDirectory, miDisconnectAllStations; //MenuItems
+	private MenuItem miHelp, miAddStation, miRemoveStation, miDataSyncFreq, miChooseDirectory, miDisconnectAllStations; //MenuItems
 	//VBox for Status Display
 	private VBox stationVBox;
 	private Label lbTitle, lbDirectory, lbSelectedDirectory;
@@ -95,10 +91,10 @@ public class MasterGUI extends Application {
 		miChooseDirectory = new MenuItem("Choose Directory");
 		miRemoveStation = new MenuItem("Remove Station");
 		miHelp = new MenuItem("Help");
-		miDataSincFreq = new MenuItem("Data Sync Freguency");
+		miDataSyncFreq = new MenuItem("Data Sync Freguency");
 		miDisconnectAllStations = new MenuItem("Disconnect All Stations");
 		menuHelp.getItems().addAll(miHelp);
-		menuConnections.getItems().addAll(miChooseDirectory, miDataSincFreq, miDisconnectAllStations);
+		menuConnections.getItems().addAll(miChooseDirectory, miDataSyncFreq, miDisconnectAllStations);
 		menuGroundStation.getItems().addAll(miAddStation, miRemoveStation);
 		menuBar.getMenus().addAll(menuConnections, menuGroundStation, menuHelp);
 		borderPane.setTop(menuBar);
@@ -106,7 +102,7 @@ public class MasterGUI extends Application {
 		//menu items actions
 		miDisconnectAllStations.setOnAction(arg0 -> MS_Manager.disconnectAllStations());
 		miChooseDirectory.setOnAction(arg0 -> showDirectoryChooser());		
-		miDataSincFreq.setOnAction(arg0 -> DataSincFerq());
+		miDataSyncFreq.setOnAction(arg0 -> DataSyncFerq());
 		miAddStation.setOnAction(arg0 -> showAddStation());
 		miHelp.setOnAction(arg0 -> showHelp());
 		
@@ -127,7 +123,6 @@ public class MasterGUI extends Application {
 		stationVBox.setMinWidth(200);
 		borderPane.setLeft(stationVBox);
 	
-		
 		//tabs for plot display/ data/ 
 		tabPanePlots = new TabPane();			
 	}		
@@ -171,6 +166,7 @@ public class MasterGUI extends Application {
 		MS_Manager.dataLocation = selectedDirectory.getAbsolutePath().toString();
 	}
 	
+	
 	/**
 	 * Method opens a window to display the add stations window where the user must input station name and station port number.
 	 */
@@ -193,7 +189,9 @@ public class MasterGUI extends Application {
 		txNameOfStation = new TextField();
 		txPortNum = new TextField();
 		Button btAddStation = new Button("Add");
-		btAddStation.setOnAction(arg0-> addStations()); 		//button adds stations to the main GUI view
+		
+		//button adds stations to the main GUI view
+		btAddStation.setOnAction(arg0-> addStations());
 		
 		//pane for the features
 		GridPane addStationPane = new GridPane();
@@ -213,6 +211,7 @@ public class MasterGUI extends Application {
 		stage.setResizable(false);
 		stage.show();
 	}
+	
 	
 	/**
 	 * Method gives functionality to Add Station button, station is created on the main view in a column on left
@@ -279,12 +278,14 @@ public class MasterGUI extends Application {
 			}});
 			
 			//setup of the station details and features
-			stationHBox.getChildren().add(0, cbSelectStation); //Forcing cbSelectStation to be in index 0 allows easy reading later.
+			//Forcing cbSelectStation to be in index 0 allows easy reading later.
+			stationHBox.getChildren().add(0, cbSelectStation);
 			stationHBox.getChildren().add(1, btStation);
 			stationHBox.getChildren().add(2, lbStatus);
 			stationDetailsHBox.getChildren().addAll(lbPortNum, lbStationDetails);
 			stationButtonsHBox.getChildren().addAll(btConnect, btDisconnect);
-			localStationDetailsVBox.getChildren().add(0, stationHBox); //Forcing stationHBox  to be in index 0 allows easy reading later.
+			//Forcing stationHBox  to be in index 0 allows easy reading later.
+			localStationDetailsVBox.getChildren().add(0, stationHBox);
 			localStationDetailsVBox.getChildren().add(1, stationDetailsHBox);
 			localStationDetailsVBox.getChildren().add(2, stationButtonsHBox);
 			btStation.setText(txNameOfStation.getText());
@@ -292,7 +293,7 @@ public class MasterGUI extends Application {
 			stationVBox.getChildren().add(localStationDetailsVBox);
 			
 
-			//remove function
+			//remove function event handler
 			miRemoveStation.setOnAction(arg0 -> removeSelectedStation());
 			
 			//create a receiver object with specified port number
@@ -303,6 +304,7 @@ public class MasterGUI extends Application {
 			}
 		}
 	}
+	
 	
 	/**
 	 * Method allows the removal of a station when its corresponding check box is selected
@@ -333,6 +335,7 @@ public class MasterGUI extends Application {
 			}
 		}
 	}
+	
 	
 	/**
 	 * @param stationName : the name of each station set up by the user
@@ -429,6 +432,7 @@ public class MasterGUI extends Application {
         });
 	}
 	
+	
 	/**
 	 * @param stationName : name of station chosen by the user
 	 * @param cbPlotXAxis : choice box option for x axis in plots
@@ -484,10 +488,12 @@ public class MasterGUI extends Application {
         	}
         }
 	}
+	
+	
 	/**
 	 * Data Frequency Window Displayed
 	 */
-	public void DataSincFerq(){
+	public void DataSyncFerq(){
 		//instructions
 		final String descriptionText = "Input the value for the time equal to the amount of data rcieved from ground station:";
 		// Create the text label
@@ -513,6 +519,7 @@ public class MasterGUI extends Application {
 		stage.setResizable(false);
 		stage.show();
 	}
+	
 	
 	/**
 	 * Displays Help window
@@ -544,4 +551,5 @@ public class MasterGUI extends Application {
 		stage.setResizable(false);
 		stage.show();
 	}	
-}
+	
+} // end of class

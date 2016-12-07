@@ -22,11 +22,10 @@ import javafx.embed.swing.SwingNode;
  * SwingNode is a swing-based plotter, which allows to plot the data and update the plots in real-time
  * Real-time plotting is done using threads
  * Also plotting update rate can be delayed by specified amount of milliseconds
+ * 
  * @author Erik Parker, Victor Wong
  * @version 2.0 
  */
-
-
 public class Station {
 	
 	//create a receiver for the station to receive incoming connection and files
@@ -153,9 +152,15 @@ public class Station {
 		return swingNode;
 	} // end of SwingNode
     
+    
+    /**
+     * Method to start executing receiver thread
+     * Implements connect() method start running the thread
+     */
     public void connect(){
 		receiver.connect();
 	}
+    
     
     /**
      * Method to close the socket to stop communication
@@ -167,10 +172,12 @@ public class Station {
     	
     }
     
+    
     /**
      * Method to check if receiver thread is alive
      */
     public boolean isConnected(){
     	return receiver.isAlive();
     }
-}
+    
+} // end of class

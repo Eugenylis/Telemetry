@@ -1,7 +1,5 @@
 package Masterstation;
 
-//Some code from http://howtodoinjava.com/core-java/io/how-to-create-a-new-file-in-java/
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +12,19 @@ import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+/**
+* Class for handling all operations performed on newly received data
+* Unzipps the data archive
+* Filters data
+* Get data ready for plotting
+* 
+* Based upon:
+* http://howtodoinjava.com/core-java/io/how-to-create-a-new-file-in-java/
+* 
+* @author Erik Parker
+* @version 2.0
+*
+*/
 public class DataHandler {
 	
 	String stationDataLocation;
@@ -21,6 +32,11 @@ public class DataHandler {
 	String savedDataExt = ".txt";
 	ArrayList<String> sensorDataTypes = new ArrayList<String>();
 	
+	/**
+	 * Constructor used for creating data handling object based upon given station name and location of the data
+	 * @param dataSaveLocation - location where data is saved
+	 * @param name - name of the particular station
+	 */
 	public DataHandler(String dataSaveLocation, String name) {
 		this.stationDataLocation = dataSaveLocation + "\\" + name; //assumed to not have an ending \\
 		this.plotDataLocation = stationDataLocation + "\\plotData";
@@ -38,6 +54,11 @@ public class DataHandler {
 		}
 	}
 	
+	
+	/**
+	 * @param inputStream
+	 * @throws IOException
+	 */
 	public void addNewData(InputStream inputStream) throws IOException {
 		
 	        // create a buffer to store received data.
@@ -47,9 +68,7 @@ public class DataHandler {
 	        // open the zip file stream
 	        ZipInputStream stream = new ZipInputStream(inputStream);
 
-	        try
-	        {
-
+	        try{
 	            // Now iterate through each item in the stream. The getNextEntry 
 	        	// call will return a ZipEntry for each file in the stream.
 	        	// A ZipEntry is a file inside the zip folder/stream
@@ -89,6 +108,12 @@ public class DataHandler {
 	}
 	
 	
+	/**
+	 * 
+	 * @param filePath
+	 * @return
+	 * @throws IOException
+	 */
 	private String[] filterData(String filePath) throws IOException {
 		String[] filteredData = new String[3];
 		String[] linePart;
@@ -121,7 +146,7 @@ public class DataHandler {
 			FileWriter writer = new FileWriter(file, true);
 			writer.write(filteredData[0] + ",");
 			writer.close();
-			/////////////////////////////////////////////////////////
+			
 			System.out.println("Stopped it!!!!!");
 		}
 		
@@ -129,6 +154,12 @@ public class DataHandler {
 		return filteredData;
 	}
 	
+	
+	/**
+	 * 
+	 * @param dataArray
+	 * @throws IOException
+	 */
 	private void addPlotdata(String[] dataArray) throws IOException{
 		
 		String fileDataWillBeAddedTo = plotDataLocation + "\\" + dataArray[0] + savedDataExt;
@@ -152,14 +183,4 @@ public class DataHandler {
 		
 	}
 	
-	
-	
 } // end of class
-	
-	
-	
-	
-	
-	
-	
-	
