@@ -14,7 +14,7 @@ import java.net.Socket;
  * Based upon example from Oracle:
  * https://docs.oracle.com/javase/tutorial/networking/datagrams/clientServer.html
  * @author Yevgeniy Lischuk
- * @version 2.0 of the Receiver
+ * @version 2.0
  */
 
 

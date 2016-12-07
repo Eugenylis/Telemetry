@@ -18,7 +18,7 @@ import javafx.application.Application;
  * Allows to remove all stations from the array at once
  * 
  * @author Yevgeniy Lischuk
- * @version 1.0
+ * @version 2.0
  *
  */
 public abstract class MS_Manager{

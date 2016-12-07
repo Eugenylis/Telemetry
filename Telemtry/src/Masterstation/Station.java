@@ -23,7 +23,7 @@ import javafx.embed.swing.SwingNode;
  * Real-time plotting is done using threads
  * Also plotting update rate can be delayed by specified amount of milliseconds
  * @author Erik Parker, Victor Wong
- * @version 1.0 
+ * @version 2.0 
  */
 
 

@@ -38,26 +38,36 @@ import java.io.*;
 import java.util.*;
 
 /**
+ * Class for creating a watchdog listener for any file additions and modifications in specified directory
  * Example to watch a directory (or tree) for changes to files.
+ * 
+ * Based upon:
+ * WatchDir for directory watcher by Oracle
+ * 
  * @author Erik Parker, Yevgeniy Lischuk
  * @version 2.0
+ * 
  */
-
 public class WatchDir implements Runnable{
 
+	//declare a watcher
     private final WatchService watcher;
+    //declare a mapper for watcher and path to file
     private final Map<WatchKey,Path> keys;
     private final boolean recursive;
     private boolean trace = false;
-    private boolean moreData = true;
+    //initialize variable to control the loop of directory watcher thread
+    private boolean watching = true;
     
+    //Suppress warnings
     @SuppressWarnings("unchecked")
     static <T> WatchEvent<T> cast(WatchEvent<?> event) {
         return (WatchEvent<T>)event;
     }
 
+    
     /**
-     * Register the given directory with the WatchService
+     * Method to register the given directory with the WatchService
      * @throws IOException
      */
     private void register(Path dir) throws IOException {
@@ -75,9 +85,9 @@ public class WatchDir implements Runnable{
         keys.put(key, dir);
     }
 
+    
     /**
-     * Register the given directory, and all its sub-directories, with the
-     * WatchService.
+     * Method register the given directory, and all its sub-directories, with the WatchService
      * @throws IOException
      */
     private void registerAll(final Path start) throws IOException {
@@ -93,6 +103,7 @@ public class WatchDir implements Runnable{
         });
     }
 
+    
     /**
      * Creates a WatchService and registers the given directory
      * @throws IOException
@@ -114,6 +125,7 @@ public class WatchDir implements Runnable{
         this.trace = true;
     }
 
+    
     /**
      * Process all events for keys queued to the watcher
      * @throws IOException
@@ -194,15 +206,25 @@ public class WatchDir implements Runnable{
 //        }
     }
 
+    /**
+     * Method to print out usage of WatchDir
+     */
     static void usage() {
         System.err.println("usage: java WatchDir [-r] dir");
         System.exit(-1);
     }
 
+    
+    /*
+     * Implementation of the WatchDir thread
+     * Process all events for keys queued to the watcher
+     * Monitors specified directory for any file additions and changes
+     * @override run method in thread
+     */
 	@Override
 	public void run() {
 		
-		 while(moreData) {
+		 while(watching) {
 
 	        	// wait for key to be signalled
 	            WatchKey key;
@@ -232,16 +254,19 @@ public class WatchDir implements Runnable{
 	                Path name = ev.context();
 	                Path child = dir.resolve(name);
 
-	                // print out event
-	                if (event.kind().name() == ENTRY_CREATE.toString()){ //Triggers when new file is created
-	                	
+	                //Triggers when new file is created
+	                if (event.kind().name() == ENTRY_CREATE.toString()){
 	                	//System.out.format("%s: %s\n", event.kind().name(), child);
-	                	GS_Manager.zipTimer.addFile(child.toString());//Adds file to list to be sent
+	                	
+	                	//Adds file to list to be sent
+	                	GS_Manager.zipTimer.addFile(child.toString());
 	                
-	                }else if (event.kind().name() == ENTRY_MODIFY.toString()){ //Triggers when new file is modified
-	                
+	                //Triggers when new file is modified
+	                }else if (event.kind().name() == ENTRY_MODIFY.toString()){
 	                	//System.out.format("%s\n", event.kind().name());
-	                	GS_Manager.zipTimer.addFile(child.toString());//Adds file to list to be sent
+	                	
+	                	//Adds file to list to be sent
+	                	GS_Manager.zipTimer.addFile(child.toString());
 	                	
 	                }else { //Probably ENTRY_DELETE
 	                    
@@ -249,9 +274,8 @@ public class WatchDir implements Runnable{
 	                	
 	                }
 	                
-	                	
-	                // if directory is created, and watching recursively, then
-	                // register it and its sub-directories
+	                
+	                // if directory is created, and watching recursively, then register it and its sub-directories
 	                if (recursive && (kind == ENTRY_CREATE)) {
 	                    try {
 	                        if (Files.isDirectory(child, NOFOLLOW_LINKS)) {
@@ -276,22 +300,23 @@ public class WatchDir implements Runnable{
 	        }
 	}
 	
+	
 	/**
      * Method to set value used to control the loop inside the thread
-     * moreData - boolean value to determine if any additional data is being received
-     * @param data - true is more data incoming, false otherwise
+     * watching - boolean value to determine if watcher thread needs to be executed
+     * @param needWatch - true if need to monitor directory, false if not
      */
-    public void setMoreData(boolean data){
-    	this.moreData = data;
+    public void setWatching(boolean needWatch){
+    	this.watching = needWatch;
     }
 
     
     /**
      * Method to return value used to control the loop inside the thread
-     * @return moreData - boolean value to determine if any additional data is being received
+     * @return watching - boolean value to determine if watcher thread needs to be executed
      */
-    public boolean getMoreData(){
-    	return this.moreData;
+    public boolean getWatching(){
+    	return this.watching;
     }
     
-}
+} // end of class
