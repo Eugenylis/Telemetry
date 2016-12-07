@@ -10,7 +10,7 @@ import javafx.application.Application;
 /**
  * GS_Manager manages the file sender, GUI, and the directory watcher.
  * 
- * @author Erik Parker
+ * @author Erik Parker, Victor Wong
  * @version 1.0
  *
  */

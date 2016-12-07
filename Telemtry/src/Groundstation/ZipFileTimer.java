@@ -3,20 +3,33 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * @author Erik
+ *
+ */
 public class ZipFileTimer {
 	private ArrayList<File> files;
 	private final ReentrantLock lock=new ReentrantLock(true);
 	private long waitTimeMillis;
 	
+	/**
+	 * 
+	 */
 	public ZipFileTimer(){
 		files=new ArrayList<File>();
 		waitTimeMillis=5000;
 	}
+	/**
+	 * @param waitTimeMillis
+	 */
 	public ZipFileTimer(long waitTimeMillis){
 		files=new ArrayList<File>();
 		this.waitTimeMillis=waitTimeMillis;
 	}
 	
+	/**
+	 * @param filePath
+	 */
 	public void addFile(String filePath){
 		File file = new File(filePath);
 		try{
@@ -35,6 +48,9 @@ public class ZipFileTimer {
 		}
 	}
 
+	/**
+	 * @return
+	 */
 	private ArrayList<File> getAndClearFiles(){
 		ArrayList<File> tempFiles=null;
 		
@@ -49,6 +65,8 @@ public class ZipFileTimer {
 		return tempFiles;
 	}
 
+
+
 	class ZipRunnable implements Runnable{
 		ArrayList<File> toZip=null;
 		public void run(){
@@ -62,6 +80,9 @@ public class ZipFileTimer {
 		}
 	}
 	
+	/**
+	 * @param waitTime
+	 */
 	public void setwaitTimeMillis(long waitTime) {
 		this.waitTimeMillis = waitTime;
 	}

@@ -39,7 +39,7 @@ import java.util.*;
 
 /**
  * Example to watch a directory (or tree) for changes to files.
- * @author parkere2
+ * @author Erik Parker  
  */
 
 public class WatchDir {

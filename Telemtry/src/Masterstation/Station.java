@@ -22,7 +22,7 @@ import javafx.embed.swing.SwingNode;
  * SwingNode is a swing-based plotter, which allows to plot the data and update the plots in real-time
  * Real-time plotting is done using threads
  * Also plotting update rate can be delayed by specified amount of milliseconds
- * @author Erik Parker
+ * @author Erik Parker, Victor Wong
  * @version 1.0 
  */
 
@@ -47,6 +47,7 @@ public class Station {
      * @param name - station name as a string
      * @param saveLocation - location to save received files
      */
+
     public Station(int portNumber, String name, String saveLocation) {
     	//set name of the station by changing the string
     	setStationName(name);
@@ -83,15 +84,18 @@ public class Station {
     	//create new swingNone object 
     	SwingNode swingNode = new SwingNode();
     	
-    	//invoke new thread
-    	SwingUtilities.invokeLater(new Runnable() {
+    	
+    	SwingUtilities.invokeLater(new Runnable() {   		
     		
-    		//run the thread
             @Override
             public void run() {
+            	//create plot and plot tittle
             	XYSeries series = new XYSeries(properTitle);
+            	//create array for data
             	XYSeriesCollection dataset = new XYSeriesCollection(series);
+            	//Create plot
         		JFreeChart chart = ChartFactory.createScatterPlot(properTitle + " plot", properTitle, "Altitude (m)", dataset);
+        		//add chart to pane
         		ChartPanel plot= new ChartPanel(chart);  
         		//add content to the plot
         		swingNode.setContent(plot);
@@ -111,8 +115,7 @@ public class Station {
         					//create a new file object to get the data received by the master station
 	        				File temp = new File(receiver.dataHandler.plotDataLocation + "\\" + sensorTypes + ".txt");
         					double number[] = new double[2];
-        					String[] data;// = new String[2];
-        					
+        					String[] data;// = new String[2];        					
 	        				try (BufferedReader br = new BufferedReader(new FileReader(temp))) {
 	        					String line;
 	        					int tempCount = 0;
@@ -127,7 +130,9 @@ public class Station {
 		        			        	data = line.split(",");
 		        			        	number[0] = Double.parseDouble(data[0]);			
 										number[1] = Double.parseDouble(data[1]);
+										//add data to array
 										series.add(number[0], number[1]);
+										// update plot
 										plot.repaint();
 	        						}  
 	        			        }

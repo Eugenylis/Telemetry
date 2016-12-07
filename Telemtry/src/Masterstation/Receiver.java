@@ -33,12 +33,19 @@ public class Receiver extends Thread {
 
 
     //no-argument constructor
+    /**
+     * @throws IOException
+     */
     public Receiver() throws IOException {
     }
 
     
     /*
      * Constructor which creates socket with specified port number, specified name and location to save the data
+     *   
+     * @param portNumber
+     * @param name
+     * @param saveLocation
      */
     public Receiver(int portNumber, String name, String saveLocation) {
     
@@ -100,7 +107,7 @@ public class Receiver extends Thread {
     
     /**
      * Method to set the port number to a new value
-     * @param portNum number of the port
+     * @param portNum
      */
     public void setPortNum(int portNum){
     	this.portNum = portNum;

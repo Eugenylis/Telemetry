@@ -18,6 +18,10 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
+/**
+ * @author Victor Wong
+ *
+ */
 public class GS_GUI extends Application {
 
     Stage window;
@@ -33,6 +37,7 @@ public class GS_GUI extends Application {
 	 * 
 	 * @return file location in string and IPaddress,socketNum,Freq in Int
 	 */
+
     public void start(Stage primaryStage) throws Exception {
         window = primaryStage;
         window.setTitle("Ground station");
@@ -110,13 +115,9 @@ public class GS_GUI extends Application {
         //Add everything to grid
         grid.getChildren().addAll(Step1, IPaddresslabel, ipaddressInput, Step2, portnumberlabel, 
         		portInput, Step3, timelabel, timeInput, Step4, filedirectorylabel, filedirectoryinput, OpenButton, SendButton,DisconnectButton);
-
+        
+        // button will open up file directory 
 		OpenButton.setOnAction(new EventHandler<ActionEvent>() {
-			/**
-			 * Method allow user to choose file directory for ground station to read
-			 * 
-			 * @return file location in string
-			 */
             @Override public void handle(ActionEvent e) {            	
         		DirectoryChooser openDirectoryChooser = new DirectoryChooser();        		
         		File selectedDirectory = openDirectoryChooser.showDialog(null);   
@@ -124,15 +125,9 @@ public class GS_GUI extends Application {
         		filename = selectedDirectory.getAbsolutePath().toString();
 
 		}});
-		
+		// button will run the whole ground station gui 
 		SendButton.setOnAction(new EventHandler<ActionEvent>() {
-			/**
-			 * Method send inputed value to main
-			 * 
-			 * 
-			 * 
-			 * @return file location in string and IPaddress,socketNum,Freq in Int
-			 */
+
             @Override public void handle(ActionEvent e) {
             	
 				if(GS_Manager.isPortCorrect(portInput.getText(),10) && GS_Manager.ipValid(ipaddressInput.getText())){
@@ -159,6 +154,7 @@ public class GS_GUI extends Application {
 				}
 		}});
 		
+		// button will disconnect the ground station 
 		DisconnectButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override public void handle(ActionEvent e) { 
