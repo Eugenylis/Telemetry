@@ -56,8 +56,8 @@ public class DataHandler {
 	
 	
 	/**
-	 * @param inputStream
-	 * @throws IOException
+	 * @param inputStream Stream to read from
+	 * @throws IOException error in reading data
 	 */
 	public void addNewData(InputStream inputStream) throws IOException {
 		

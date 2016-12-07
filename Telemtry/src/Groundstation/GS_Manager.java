@@ -30,6 +30,8 @@ public abstract class GS_Manager{
     
 	/**
 	 * Main method, launches Ground Station GUI
+	 * @throws IOException failure to launch GUI
+	 * @param args starting arguments
 	 */
 	public static void main(String[] args) throws IOException {
 		Application.launch(GS_GUI.class, args);
@@ -42,7 +44,7 @@ public abstract class GS_Manager{
 	 * @param IPaddress The IP address of the Master Station
 	 * @param socketNum The socket number of the Master station to transfer files to
 	 * @param freq timer of how often to send data packets
-	 * @throws IOException
+	 * @throws IOException failure to change settings
 	 */
 	public static void setSettings(String listenerDir, String IPaddress, int socketNum, int freq) throws IOException{
 		//set the path to the directory to listen to 
@@ -68,7 +70,7 @@ public abstract class GS_Manager{
 	 * Checks each character in a string for being an integer
 	 * Checks if the string is empty
 	 * 
-	 * @param str - a string to check
+	 * @param portString - a string to check
 	 * @param radix - radix, range
 	 * @return verify that string is a 4-digit integer number
 	 */

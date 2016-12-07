@@ -33,7 +33,6 @@ public abstract class MS_Manager{
 	/**
 	 * Main method to launch Master Station GUI
 	 * @param args Standard variable
-	 * @throws IOException
 	 */
 	public static void main(String[] args){
 		//launch MS GUI
@@ -43,7 +42,9 @@ public abstract class MS_Manager{
 	
 	/**
 	 * Method to create a file receiver with specified port number
-	 * @throws IOException
+	 * @param portNum port number
+	 * @param name name of station
+	 * @throws IOException failure to create station
 	 */
 	public static void createStation(int portNum, String name) throws IOException{
 		//dataLocation = (new File(".")).getAbsoluteFile().getParentFile().getPath() + "\\Extras\\data"; ////////////////////This sets the data save location to be the project directory under lib/data/////////////////ELIZA WILL HAVE THE USER GIVE THIS.

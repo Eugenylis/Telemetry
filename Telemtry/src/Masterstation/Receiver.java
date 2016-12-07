@@ -66,15 +66,14 @@ public class Receiver extends Thread {
     }
 
     
-    /**
+    /*
 	 * Method to implement the thread
 	 * Accepts incoming connections
 	 * Uses dataHandler to process the received data
 	 * Allows to continuously run and receive files
 	 * @override run method in Thread class
-	 * @throws IOException if something went wrong
 	 */
-    public void run() {
+    public void run(){
     
         while (getMoreData()) {
             try {      
@@ -106,7 +105,7 @@ public class Receiver extends Thread {
     
     /**
      * Method to set the port number to a new value
-     * @param portNum
+     * @param portNum porn number to set as station number
      */
     public void setPortNum(int portNum){
     	this.portNum = portNum;

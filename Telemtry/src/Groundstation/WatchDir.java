@@ -147,7 +147,6 @@ public class WatchDir implements Runnable{
      * Implementation of the WatchDir thread
      * Process all events for keys queued to the watcher
      * Monitors specified directory for any file additions and changes
-     * @override run method in thread
      */
 	@Override
 	public void run() {

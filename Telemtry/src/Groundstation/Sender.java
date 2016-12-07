@@ -49,8 +49,7 @@ public class Sender {
 	/**
 	 * Method to handle all things required to send a file to the Master Station
 	 * Uses sockets to send streams of data
-	 * @param fileLocation The path of the file to be transfered
-	 * @throws IOException
+	 * @param files The list of the file to be transfered
 	 */
 	public void send(ArrayList<File> files) {
 		
@@ -87,7 +86,6 @@ public class Sender {
 	 * Method to zip several files into archive file
 	 * @param inputFile file to be zipped
 	 * @param zipOutputStream object for zipping file streams
-	 * @throws IOException
 	 */
 	public static void zipFile(File inputFile, ZipOutputStream zipOutputStream) {
 

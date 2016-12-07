@@ -60,7 +60,7 @@ public class Station {
     /**
      * Method to set the station name
      * Replaces existing string name with a new one
-     * @param name of the station 
+     * @param newName name of the station 
      */
     public void setStationName(String newName){
     	stationName = stationName.replace(stationName, newName);
@@ -74,6 +74,7 @@ public class Station {
      * Plots the data in real-time by updating the plots
      * @param sensorTypes type of the sensor data to plot, which is the first line for received data packet. Ex: altitude, GPS location, pressure, etc.
      * @param listIndex index number of the list
+     * @return a node created from the swing chart
      */
     public SwingNode getNewSwingNodePlot(String sensorTypes, int listIndex) {
         
@@ -175,6 +176,7 @@ public class Station {
     
     /**
      * Method to check if receiver thread is alive
+     * @return status of startion's receiver thread
      */
     public boolean isConnected(){
     	return receiver.isAlive();
