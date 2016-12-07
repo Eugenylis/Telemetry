@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author Erik
+ * @author Erik Parker
  *
  */
 public class ZipFileTimer {

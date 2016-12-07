@@ -1,6 +1,3 @@
-//Some code pulled from https://examples.javacodegeeks.com/core-java/util/zip/zipoutputstream/java-zip-file-example/
-
-
 package Groundstation;
 
 import java.net.*;
@@ -11,6 +8,8 @@ import java.io.*;
 
 /**
  * This class enables sending files to the Master system using TCP/IP through sockets.
+ * 
+ * https://examples.javacodegeeks.com/core-java/util/zip/zipoutputstream/java-zip-file-example/
  * @author Erik Parker
  * @version 1.0
  *

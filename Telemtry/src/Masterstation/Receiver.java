@@ -11,6 +11,8 @@ import java.net.Socket;
  * It also allows to receive multiple files and store each at a different name
  * All communication is done through the use of sockets like server socket with specified port number
  * 
+ * Based upon example from Oracle:
+ * https://docs.oracle.com/javase/tutorial/networking/datagrams/clientServer.html
  * @author Yevgeniy Lischuk
  * @version 2.0 of the Receiver
  */

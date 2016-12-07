@@ -39,7 +39,8 @@ import java.util.*;
 
 /**
  * Example to watch a directory (or tree) for changes to files.
- * @author Erik Parker  
+ * @author Erik Parker, Yevgeniy Lischuk
+ * @version 2.0
  */
 
 public class WatchDir implements Runnable{
@@ -235,12 +236,12 @@ public class WatchDir implements Runnable{
 	                if (event.kind().name() == ENTRY_CREATE.toString()){ //Triggers when new file is created
 	                	
 	                	//System.out.format("%s: %s\n", event.kind().name(), child);
-	                	GS_Manager.Timer.addFile(child.toString());//Adds file to list to be sent
+	                	GS_Manager.zipTimer.addFile(child.toString());//Adds file to list to be sent
 	                
 	                }else if (event.kind().name() == ENTRY_MODIFY.toString()){ //Triggers when new file is modified
 	                
 	                	//System.out.format("%s\n", event.kind().name());
-	                	GS_Manager.Timer.addFile(child.toString());//Adds file to list to be sent
+	                	GS_Manager.zipTimer.addFile(child.toString());//Adds file to list to be sent
 	                	
 	                }else { //Probably ENTRY_DELETE
 	                    
@@ -274,4 +275,23 @@ public class WatchDir implements Runnable{
 	            }
 	        }
 	}
+	
+	/**
+     * Method to set value used to control the loop inside the thread
+     * moreData - boolean value to determine if any additional data is being received
+     * @param data - true is more data incoming, false otherwise
+     */
+    public void setMoreData(boolean data){
+    	this.moreData = data;
+    }
+
+    
+    /**
+     * Method to return value used to control the loop inside the thread
+     * @return moreData - boolean value to determine if any additional data is being received
+     */
+    public boolean getMoreData(){
+    	return this.moreData;
+    }
+    
 }

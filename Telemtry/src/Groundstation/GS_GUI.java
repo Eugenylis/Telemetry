@@ -4,7 +4,6 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
-import Masterstation.MS_Manager;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,11 +22,9 @@ import javafx.stage.WindowEvent;
 /**
  * GS_GUI is the class used to create GUI for Ground Station
  * Creates GUI with text boxes for IP address, port number and data sync frequency
- * Contains buttons to send data and disconnect station to stop communication
- * 
- * 
+ * Contains buttons to send data and open file directory to listen for file additions
  * @author Victor Wong
- *
+ * @version 2.0
  */
 public class GS_GUI extends Application {
 
@@ -35,30 +32,32 @@ public class GS_GUI extends Application {
     private Stage window;
     //path to file
     private String pathName;
+    //label for file directory
     private Label filedirectoryinput = new Label();	
     //IP address of the master station
 	private String IPaddress;
-	//port number
+	//port (socket) number
 	private int socketNum;
 	//data sync frequency
 	private int syncFreq;
 
   
 	/**
-	 * Method create Gui for ground station  
-	 * 
-	 * @return file location in string and IPaddress,socketNum,Freq in Int
+	 * Method create and display GUI for Ground Station  
 	 */
-
     public void start(Stage primaryStage) throws Exception {
+    	
+    	//create primary stage
         window = primaryStage;
         window.setTitle("Ground station");
-
+        
+        //event handler stop executing everything when primary stage is closed
         window.setOnCloseRequest(new EventHandler<WindowEvent>() {
 	          public void handle(WindowEvent we) {
+	        	//close main window
 	            window.close();
+	            //exit the system
 	  	        System.exit(0);
-
 	          }
 	      });  
         
@@ -68,7 +67,7 @@ public class GS_GUI extends Application {
         grid.setVgap(8);
         grid.setHgap(10);
 
-       //Step 1 label
+        //Step 1 label
         Label Step1 = new Label("Step 1");        
         GridPane.setConstraints(Step1, 0, 0);  
         
@@ -114,8 +113,7 @@ public class GS_GUI extends Application {
         Label filedirectorylabel = new Label("Choose Directory to listen to:");        
         GridPane.setConstraints(filedirectorylabel, 1, 3);
 
-        //File directory Input            
-        
+        //File directory Input text         
         filedirectoryinput.setFont(Font.font("Ariel", FontWeight.BOLD, 15));             
         GridPane.setConstraints(filedirectoryinput, 2, 3);
         
@@ -127,51 +125,60 @@ public class GS_GUI extends Application {
         Button SendButton = new Button("Send");
         GridPane.setConstraints(SendButton, 1, 4);         
         
-
+        
         //Add everything to grid
         grid.getChildren().addAll(Step1, IPaddresslabel, ipaddressInput, Step2, portnumberlabel, 
         		portInput, Step3, timelabel, timeInput, Step4, filedirectorylabel, filedirectoryinput, OpenButton, SendButton);
         
-        // button will open up file directory 
+        
+        //event handler for the Open button
+        //opens up a window to sear file directory
 		OpenButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {            	
+            @Override public void handle(ActionEvent e) {
+            	//create a window to choose directory
         		DirectoryChooser openDirectoryChooser = new DirectoryChooser();        		
         		File selectedDirectory = openDirectoryChooser.showDialog(null);   
         		filedirectoryinput.setText(selectedDirectory.getAbsolutePath());   	    
         		pathName = selectedDirectory.getAbsolutePath().toString();
-
 		}});
 		
-		// button will run the whole ground station gui 
+		
+		//Event handler for the Send button
+		//Sends data to the master station using socket
 		SendButton.setOnAction(new EventHandler<ActionEvent>() {
-
             @Override public void handle(ActionEvent e) {
             	
+            	//check is port and IP numbers are correct
 				if(GS_Manager.isPortCorrect(portInput.getText(),10) && GS_Manager.ipValid(ipaddressInput.getText())){
+					//get text input from IP address text box
 					IPaddress = ipaddressInput.getText();
-					syncFreq=Integer.parseInt(timeInput.getText());
-					
-					socketNum=Integer.parseInt(portInput.getText());
+					//get text input from syncFreq text box
+					syncFreq = Integer.parseInt(timeInput.getText());
+					//get text input from socket number text box
+					socketNum = Integer.parseInt(portInput.getText());
 	
+					//start creating all objects needed for sending data in GS_Manager class
 					try{
-						//System.out.println("Within GUI " + filename + " " + IPaddress + " " + socketNum);
 						GS_Manager.setSettings(pathName, IPaddress, socketNum,syncFreq);
 	
 					} catch(Exception e3){
-						System.out.print("Broke1");
+						e3.printStackTrace();
 					}
 					
+				//if port is not correct, display box with an error message	
 				} else if(GS_Manager.isPortCorrect(portInput.getText(),10)){
 					JOptionPane.showMessageDialog(null, "Your IP number format is incorrect, please enter valid IP number");
+				//if IP address is not correct, display box with an error message	
 				} else if(GS_Manager.ipValid(ipaddressInput.getText())){
 					JOptionPane.showMessageDialog(null, "Your Port number format is incorrect, please enter valid Port number");
 				}
+				//if port and IP are not correct, display box with an error message	
 				else{
 					JOptionPane.showMessageDialog(null, "Your IP and Port number format is incorrect, please enter valid IP and Port number");
 				}
 		}});
 		
-
+		//set scene onto the main stage
         Scene scene = new Scene(grid, 600, 200);
         window.setScene(scene);
         window.show();

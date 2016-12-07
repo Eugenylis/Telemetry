@@ -8,42 +8,55 @@ import java.util.regex.Pattern;
 import javafx.application.Application;
 
 /**
- * GS_Manager manages the file sender, GUI, and the directory watcher.
+ * GS_Manager is the class to manage and encompass all ground station classes
+ * Starts GS_GUI
+ * Manages file sender, file zipper and zip file timer
+ * Starts and manager directory watcher thread
  * 
- * @author Erik Parker, Victor Wong
- * @version 1.0
+ * @author Erik Parker, Victor Wong, Yevgeniy Lischuk
+ * @version 2.0
  *
  */
 public abstract class GS_Manager{
-    static public Sender zipSender; 
-    static public ZipFileTimer Timer;
-    static public int datSendFreqMiliseconds;
+	//sender object to transmit files
+    public static Sender zipSender; 
+    //object to zip multiple files together based on data sending frequency
+    public static ZipFileTimer zipTimer;
+    //data sending frequency
+    public static int datSendFreqMiliseconds;
+    
     
 	/**
-	 * @param args Standard variable
-	 * @throws IOException
+	 * Main method, launches Ground Station GUI
 	 */
 	public static void main(String[] args) throws IOException {
 		Application.launch(GS_GUI.class, args);
 	}
 	
+	
 	/**
-	 * @param listenerDir The location of the directory being watched for changes.
-	 * @param IPaddress The IP address of the Master side.
-	 * @param socketNum The socket number of the Master station to transfer files to.
-	 * @param freq 
-	 * @param freq 
+	 * Method to create objects for sending data, based on setting set by the user in GS_GUI
+	 * @param listenerDir The location of the directory being watched for changes
+	 * @param IPaddress The IP address of the Master Station
+	 * @param socketNum The socket number of the Master station to transfer files to
+	 * @param freq timer of how often to send data packets
 	 * @throws IOException
 	 */
 	public static void setSettings(String listenerDir, String IPaddress, int socketNum, int freq) throws IOException{
+		//set the path to the directory to listen to 
 		Path dir = Paths.get(listenerDir);
-		zipSender = new Sender(IPaddress, socketNum);
-		datSendFreqMiliseconds = freq*1000;
-		Timer = new ZipFileTimer(datSendFreqMiliseconds);
-		WatchDir wt = new WatchDir(dir, false);
-		Thread thread = new Thread(wt);
-		thread.start();
 		
+		//create new sender object based on IP an socket number
+		zipSender = new Sender(IPaddress, socketNum);
+		
+		//initialize zip file timer
+		datSendFreqMiliseconds = freq*1000;
+		zipTimer = new ZipFileTimer(datSendFreqMiliseconds);
+		
+		//create new watcher (directory listener) and start the thread
+		WatchDir watcher = new WatchDir(dir, false);
+		Thread thread = new Thread(watcher);
+		thread.start();
 	}
 	
 	
@@ -58,7 +71,6 @@ public abstract class GS_Manager{
 	 * @return verify that string is a 4-digit integer number
 	 */
 	public static boolean isPortCorrect(String portString, int radix) {
-		
 		//variable to return if port is correct
 		boolean correct = true;
 		
