@@ -150,8 +150,9 @@ public class MasterGUI extends Application {
 		stage.show();
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 	          public void handle(WindowEvent we) {
-	              MS_Manager.disconnectAllStations();
+	            MS_Manager.disconnectAllStations();
 	  	        stage.close();
+	  	        System.exit(0);
 
 	          }
 	      });        
