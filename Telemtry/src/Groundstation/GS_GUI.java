@@ -124,7 +124,7 @@ public class GS_GUI extends Application {
         GridPane.setConstraints(OpenButton, 3, 3);  
         
         //Send Button
-        Button SendButton = new Button("Send");
+        Button SendButton = new Button("Start");
         GridPane.setConstraints(SendButton, 1, 4);         
         
         
