@@ -190,9 +190,8 @@ public class MasterGUI extends Application {
 		txPortNum = new TextField();
 		Button btAddStation = new Button("Add");
 		
-		//button adds stations to the main GUI view
-		btAddStation.setOnAction(arg0-> addStations());
 		
+				
 		//pane for the features
 		GridPane addStationPane = new GridPane();
 		addStationPane.setHgap(10);
@@ -210,6 +209,13 @@ public class MasterGUI extends Application {
 		stage.setTitle("Add Station to View");
 		stage.setResizable(false);
 		stage.show();
+		
+		//button adds stations to the main GUI view
+				btAddStation.setOnAction(new EventHandler<ActionEvent>() {
+		            @Override public void handle(ActionEvent e) {
+		            	addStations();
+						stage.close();
+		            }});
 	}
 	
 	
